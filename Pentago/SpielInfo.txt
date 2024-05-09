@@ -5,7 +5,8 @@ Regeln: Das Spiel besteht aus einem Board das in Vier Kästhen aufgeteilt ist. I
 Der Spieler platziert einen Punkt und darf dann eines der Vier Kästchen auswählen und um 90Grad drehen. 
 Danach ist der nächste dran.
 
-Das Spiel ist beendet wenn der erste Spieler 5 Punke in einer Reihe hat. Horizontal Vertikal, oder Schräg. 
+Gewinner ist der Spieler, der es als erster schafft, fünf seiner Spielsteine waagerecht, senkrecht oder diagonal in eine Linie zu bringen. 
+Das Spiel endet unentschieden, wenn durch Drehen eines Quadranten beide Spieler fünf Spielsteine in einer Reihe erhalten, oder wenn das Spielbrett komplett gefüllt ist, ohne dass ein Spieler gewonnen hat.
 
 
 Oberfläche: 

@@ -20,10 +20,14 @@ namespace Pentago
     /// </summary>
     public partial class MainWindow : Window
     {
+        
         public MainWindow()
         {
             InitializeComponent();
+            
         }
+
+        
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -34,13 +38,13 @@ namespace Pentago
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            GridTopR.RenderTransform = new RotateTransform(90);
+            GridTopR.RenderTransform = new RotateTransform();
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
 
-            GridTopR.RenderTransform = new TranslateTransform(GridTopR.get + 90)
+            GridTopR.RenderTransform = new RotateTransform(-90);
         }
     }
 }
