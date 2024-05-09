@@ -29,22 +29,6 @@ namespace Pentago
 
         
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-            Button_1.Background = Brushes.Yellow;
-
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            GridTopR.RenderTransform = new RotateTransform();
-        }
-
-        private void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-
-            GridTopR.RenderTransform = new RotateTransform(-90);
-        }
+        
     }
 }
