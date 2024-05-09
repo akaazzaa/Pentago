@@ -1,0 +1,23 @@
+﻿Projekt : Pentago Spiel 
+
+Regeln: Das Spiel besteht aus einem Board das in Vier Kästhen aufgeteilt ist. In den Kästhen sind Punkte aufgeteilt in 3x3.
+2 Spieler : Jeder Spieler darf einen Zug machen bevor der nächste dran ist.
+Der Spieler platziert einen Punkt und darf dann eines der Vier Kästchen auswählen und um 90Grad drehen. 
+Danach ist der nächste dran.
+
+Das Spiel ist beendet wenn der erste Spieler 5 Punke in einer Reihe hat. Horizontal Vertikal, oder Schräg. 
+
+
+Oberfläche: 
+Oberfäche entwerfen und darstlung des Speilfeldes.
+Animationen der Punkte und Drehung der Kästchen.
+Rücksetzen nach dem Spiel. 
+Button zum Drehen 
+
+Logik: 
+Spiel Logik einbauen. Pro Zug ein Punkt + Drehung 
+Überprüfung der Reihen in alle Richtungen 
+Gewinn oder Verloren Logik 
+
+Coputer:
+Einzelspierlermodus gegen einen Algoryhtmus einabuen 
