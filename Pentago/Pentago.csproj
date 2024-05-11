@@ -58,8 +58,8 @@
     <Compile Include="Game.cs" />
     <Compile Include="Grid.cs" />
     <Compile Include="Player.cs" />
-    <Compile Include="GridQuadnrant.xaml.cs">
-      <DependentUpon>GridQuadnrant.xaml</DependentUpon>
+    <Compile Include="save.xaml.cs">
+      <DependentUpon>save.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -73,7 +73,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="GridQuadnrant.xaml">
+    <Page Include="save.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

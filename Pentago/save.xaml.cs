@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Pentago
 {
     /// <summary>
-    /// Interaktionslogik für UserControl1.xaml
+    /// Interaktionslogik für save.xaml
     /// </summary>
-    public partial class UserControl1 : UserControl
+    public partial class save : UserControl
     {
-        public UserControl1()
+        public save()
         {
             InitializeComponent();
         }

@@ -27,8 +27,9 @@ namespace Pentago
             
         }
 
-        
+        private void Button_4_Click(object sender, RoutedEventArgs e)
+        {
 
-        
+        }
     }
 }
