@@ -10,18 +10,26 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace Pentago
 {
     /// <summary>
-    /// Interaktionslogik für Window1.xaml
+    /// Interaktionslogik für Menu.xaml
     /// </summary>
-    public partial class Window1 : Window
+    public partial class Menu : UserControl
     {
-        public Window1()
+        
+        public Menu()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MainModel.SetNewContent(new Board());
+            
         }
     }
 }

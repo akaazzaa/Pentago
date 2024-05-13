@@ -10,19 +10,21 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace Pentago
 {
     /// <summary>
-    /// Interaktionslogik für save.xaml
+    /// Interaktionslogik für Main.xaml
     /// </summary>
-    public partial class save : UserControl
+    public partial class Main : Window
     {
-        public save()
+        
+        public Main()
         {
             InitializeComponent();
-        }
+            MainModel.SetGrid(FormLoader);
+            MainModel.SetNewContent(new Menu());
+        }  
     }
 }
