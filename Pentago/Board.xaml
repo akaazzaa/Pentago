@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:Pentago"
         xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" x:Class="Pentago.Board"
         mc:Ignorable="d"
-         d:DesignHeight="1093" d:DesignWidth="2004" Background="White" >
+         d:DesignHeight="1093" Background="White" Width="2000" Height="1100" >
     <UserControl.Resources>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
@@ -66,136 +66,41 @@
         </Style>
     </UserControl.Resources>
 
-    <Canvas RenderTransformOrigin="0.501,0.518">
+    <Canvas x:Name="canvas" RenderTransformOrigin="0.5,0.5" Height="1100" Margin="0,0,0,-7" HorizontalAlignment="Left" Width="2000">
         <Canvas.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                <GradientStop Color="#FF400101"/>
-                <GradientStop Color="#FFFF1700"/>
-                <GradientStop Color="#FF00381D"/>
-                <GradientStop Color="#FF2F3400"/>
-                <GradientStop Color="#FF0C1F25"/>
-                <GradientStop Color="#FF281F13"/>
-                <GradientStop Color="#FF1A1B1F"/>
-                <GradientStop Color="#FF041E46" Offset="1"/>
-                <GradientStop Color="#FF3A0707"/>
+                <GradientStop Color="#FF073E92" Offset="0"/>
+                <GradientStop Color="#FF6B0808" Offset="1"/>
+                <GradientStop Color="#FF68090B" Offset="1"/>
             </LinearGradientBrush>
         </Canvas.Background>
-        <Grid x:Name="GridBotL" Height="416" RenderTransformOrigin="0.5,0.5" Width="488" Canvas.Left="497" Canvas.Top="548" HorizontalAlignment="Left" VerticalAlignment="Center">
-            <Grid.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#FF3A0707" Offset="0.327"/>
-                    <GradientStop Color="#FF041E46" Offset="1"/>
-                </LinearGradientBrush>
-            </Grid.Background>
-            <Grid.Effect>
-                <DropShadowEffect/>
-            </Grid.Effect>
-            <Grid.LayoutTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform/>
-                    <TranslateTransform X="0"/>
-                </TransformGroup>
-            </Grid.LayoutTransform>
-            <Grid.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform AngleX="0"/>
-                    <RotateTransform Angle="0"/>
-                    <TranslateTransform Y="0" X="0"/>
-                </TransformGroup>
-            </Grid.RenderTransform>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
+        <Grid HorizontalAlignment="Left" Height="880" Canvas.Left="560" Canvas.Top="110" VerticalAlignment="Center" Width="880">
+            <Rectangle Height="840" Stroke="Black" Width="20" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" Fill="Black" Opacity="0.7" RadiusX="10" RadiusY="10">
+                <Rectangle.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="0"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Rectangle.RenderTransform>
+            </Rectangle>
+            <Rectangle Height="840" Stroke="Black" Width="20" HorizontalAlignment="Left" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" Fill="Black" Opacity="0.7" RadiusX="10" RadiusY="10" Margin="436,0,0,0">
+                <Rectangle.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="90"/>
+                        <TranslateTransform X="0" Y="0"/>
+                    </TransformGroup>
+                </Rectangle.RenderTransform>
+            </Rectangle>
         </Grid>
-        <Grid x:Name="GridBotR" Height="416" Width="488" RenderTransformOrigin="0.5,0.5" Canvas.Left="990" Canvas.Top="548" HorizontalAlignment="Left" VerticalAlignment="Center">
+        <Grid x:Name="GridTopL" Height="430" RenderTransformOrigin="0.5,0.5" Width="430" HorizontalAlignment="Left" Canvas.Left="560" Canvas.Top="110" VerticalAlignment="Top">
             <Grid.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#FF041E46" Offset="0"/>
-                    <GradientStop Color="#FF3A0707" Offset="0.73"/>
-                </LinearGradientBrush>
-            </Grid.Background>
-            <Grid.Effect>
-                <DropShadowEffect/>
-            </Grid.Effect>
-            <Grid.LayoutTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform/>
-                    <TranslateTransform X="0"/>
-                </TransformGroup>
-            </Grid.LayoutTransform>
-            <Grid.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform AngleX="0"/>
-                    <RotateTransform Angle="0"/>
-                    <TranslateTransform Y="0" X="0"/>
-                </TransformGroup>
-            </Grid.RenderTransform>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-        </Grid>
-        <Grid x:Name="GridTopR" Height="416" RenderTransformOrigin="0.5,0.5" Width="488" Canvas.Left="990" Canvas.Top="123" HorizontalAlignment="Left" VerticalAlignment="Center">
-            <Grid.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#FF3A0707" Offset="0.313"/>
-                    <GradientStop Color="#FF041E46" Offset="0.997"/>
-                </LinearGradientBrush>
-            </Grid.Background>
-            <Grid.Effect>
-                <DropShadowEffect/>
-            </Grid.Effect>
-            <Grid.LayoutTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform/>
-                    <TranslateTransform X="0"/>
-                </TransformGroup>
-            </Grid.LayoutTransform>
-            <Grid.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform AngleX="0"/>
-                    <RotateTransform Angle="0"/>
-                    <TranslateTransform Y="0" X="0"/>
-                </TransformGroup>
-            </Grid.RenderTransform>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-        </Grid>
-        <Grid x:Name="GridTopL" Height="412" RenderTransformOrigin="0.5,0.5" Width="488" Canvas.Left="497" Canvas.Top="127" HorizontalAlignment="Left" VerticalAlignment="Center">
-            <Grid.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#FF041E46" Offset="0"/>
-                    <GradientStop Color="#FF3A0707" Offset="0.813"/>
+                    <GradientStop Color="#FF073E92" Offset="0"/>
+                    <GradientStop Color="#FF6B0808" Offset="1"/>
                 </LinearGradientBrush>
             </Grid.Background>
             <Grid.Effect>
@@ -228,7 +133,117 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
         </Grid>
-        <Button Content="Button" Canvas.Left="266" Canvas.Top="127" HorizontalAlignment="Left" Height="57" VerticalAlignment="Top" Width="78" Click="Button_Click"/>
+        <Grid x:Name="GridTopR" Height="430" RenderTransformOrigin="0.5,0.5" Width="430" HorizontalAlignment="Center" Canvas.Left="1010" Canvas.Top="110" VerticalAlignment="Top" >
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF6B0808" Offset="0"/>
+                    <GradientStop Color="#FF073E92" Offset="1"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Grid.Effect>
+                <DropShadowEffect/>
+            </Grid.Effect>
+            <Grid.LayoutTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="0"/>
+                </TransformGroup>
+            </Grid.LayoutTransform>
+            <Grid.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform AngleX="0"/>
+                    <RotateTransform Angle="0"/>
+                    <TranslateTransform Y="0" X="0"/>
+                </TransformGroup>
+            </Grid.RenderTransform>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+        </Grid>
+        <Grid x:Name="GridBotR" Height="430" Width="430" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Canvas.Left="1010" Canvas.Top="560" VerticalAlignment="Center" >
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF073E92" Offset="0"/>
+                    <GradientStop Color="#FF6B0808" Offset="1"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Grid.Effect>
+                <DropShadowEffect/>
+            </Grid.Effect>
+            <Grid.LayoutTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="0"/>
+                </TransformGroup>
+            </Grid.LayoutTransform>
+            <Grid.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform AngleX="0"/>
+                    <RotateTransform Angle="0"/>
+                    <TranslateTransform Y="0" X="0"/>
+                </TransformGroup>
+            </Grid.RenderTransform>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+        </Grid>
+        <Grid x:Name="GridBotL" Height="430" RenderTransformOrigin="0.5,0.5" Width="430" HorizontalAlignment="Left" Canvas.Left="560" Canvas.Top="560" VerticalAlignment="Top" >
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF6B0808" Offset="0"/>
+                    <GradientStop Color="#FF073E92" Offset="1"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Grid.Effect>
+                <DropShadowEffect/>
+            </Grid.Effect>
+            <Grid.LayoutTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform X="0"/>
+                </TransformGroup>
+            </Grid.LayoutTransform>
+            <Grid.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform AngleX="0"/>
+                    <RotateTransform Angle="0"/>
+                    <TranslateTransform Y="0" X="0"/>
+                </TransformGroup>
+            </Grid.RenderTransform>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+        </Grid>
     </Canvas>
 
 </UserControl>

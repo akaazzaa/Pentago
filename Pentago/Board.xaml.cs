@@ -31,7 +31,8 @@ namespace Pentago
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            TopLeft.gridrotate();
+            TopLeft.ChangePosition(100,100);
+            TopLeft.RotateGrid(-90);
         }
     }
 }
