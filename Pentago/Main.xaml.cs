@@ -25,6 +25,7 @@ namespace Pentago
             InitializeComponent();
             MainModel.SetGrid(FormLoader);
             MainModel.SetNewContent(new Menu());
+            
         }  
     }
 }

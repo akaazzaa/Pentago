@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pentago.Klassen;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,13 @@ namespace Pentago
 {
     public class Player
     {
+        public bool isOnTurn = false;
+        public Site site = Site.None;
+
+       
+
+
+
 
     }
 }

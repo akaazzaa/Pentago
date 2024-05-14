@@ -61,7 +61,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Klassen\Grids.cs" />
+    <Compile Include="Klassen\GameButton.cs" />
+    <Compile Include="Klassen\GameGrid.cs" />
+    <Compile Include="Klassen\Logik.cs" />
+    <Compile Include="Klassen\Site.cs" />
     <Compile Include="Main.xaml.cs">
       <DependentUpon>Main.xaml</DependentUpon>
     </Compile>
