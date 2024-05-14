@@ -22,6 +22,7 @@ namespace Pentago
                     button.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
                     button.VerticalAlignment = System.Windows.VerticalAlignment.Center;
                     button.RenderTransformOrigin = new System.Windows.Point(0.5, 0.5);
+                    button.Tag = $"{row},{col}";
                     button.Height = 80;
                     button.Width = 80;
 
