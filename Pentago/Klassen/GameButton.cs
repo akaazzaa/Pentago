@@ -13,11 +13,12 @@ namespace Pentago.Klassen
         public Button Button { get; set; }
         public int row { get; set; }
         public int col { get; set; }
-        
+        Logik logik;
 
         public GameButton(int row, int col)
         {
             Button = GetNewGameButton();
+            logik = new Logik();
             this.row = row;
             this.col = col;
         }
@@ -28,8 +29,9 @@ namespace Pentago.Klassen
                     button.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
                     button.VerticalAlignment = System.Windows.VerticalAlignment.Center;
                     button.RenderTransformOrigin = new System.Windows.Point(0.5, 0.5);
-                    button.Height = 80;
-                    button.Width = 80;
+                    button.Height = 50;
+                    button.Width = 50;
+                    
 
                     LinearGradientBrush borderBrush = new LinearGradientBrush();
                     borderBrush.StartPoint = new Point(0.5, 0);
@@ -58,7 +60,7 @@ namespace Pentago.Klassen
             var button = sender as Button;
             button.Background = new SolidColorBrush(Colors.Blue);
             button.IsEnabled = false;
-            Logik.SetPressedStone(button.Parent as Grid, row, col);
+            logik.SetPressedStone(button.Parent as Grid, row, col);
         }
     }
 }
