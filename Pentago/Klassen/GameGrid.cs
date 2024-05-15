@@ -16,78 +16,13 @@ namespace Pentago
         DoubleAnimation rotateAnimation;
         double currentRotation = 0;
         Logik logik;
-
         public Grid Grid { get => _grid; set => _grid = value; }
-       
-        public GameGrid() 
-        {
-            _grid = SetGrid();
-            
-        }
         public GameGrid(Grid grid)
         {
-
-
-            
             _grid = grid;
             SetButtons();
-          
-        
         }
-        private Grid SetGrid()
-        {
-            // Erstellen des Grid-Objekts
-            Grid gridBotR = new Grid();
-
-            // Setzen des Namens des Grids
-            gridBotR.Name = "GridBotR";
-            gridBotR.Height = 250;
-            gridBotR.Width = 250;
-            // Setzen des RenderTransformOrigin
-            gridBotR.RenderTransformOrigin = new System.Windows.Point(1, 0);
-
-            // Setzen des Margins
-            //gridBotR.Margin = new System.Windows.Thickness(1468, 341, 202, 489);
-
-            // Hinzufügen des linearen Farbverlaufs zur Hintergrundfarbe des Grids
-            LinearGradientBrush linearGradient = new LinearGradientBrush();
-            linearGradient.StartPoint = new System.Windows.Point(0.5, 0);
-            linearGradient.EndPoint = new System.Windows.Point(0.5, 1);
-            linearGradient.GradientStops.Add(new GradientStop(Colors.Blue, 0));
-            linearGradient.GradientStops.Add(new GradientStop(Colors.Red, 1));
-            gridBotR.Background = linearGradient;
-
-            // Hinzufügen des DropShadowEffects zum Grid
-            gridBotR.Effect = new DropShadowEffect();
-
-            // Erstellen und Hinzufügen des TransformGroup für LayoutTransform
-            TransformGroup layoutTransformGroup = new TransformGroup();
-            layoutTransformGroup.Children.Add(new ScaleTransform());
-            layoutTransformGroup.Children.Add(new SkewTransform());
-            layoutTransformGroup.Children.Add(new RotateTransform());
-            layoutTransformGroup.Children.Add(new TranslateTransform());
-            gridBotR.LayoutTransform = layoutTransformGroup;
-
-            // Erstellen und Hinzufügen des TransformGroup für RenderTransform
-            TransformGroup renderTransformGroup = new TransformGroup();
-            renderTransformGroup.Children.Add(new ScaleTransform());
-            renderTransformGroup.Children.Add(new SkewTransform() { AngleX = 0 });
-            renderTransformGroup.Children.Add(new RotateTransform() { Angle = 0 });
-            renderTransformGroup.Children.Add(new TranslateTransform() { X = 0, Y = 0 });
-            gridBotR.RenderTransform = renderTransformGroup;
-
-            // Hinzufügen der Zeilendefinitionen zum Grid
-            gridBotR.RowDefinitions.Add(new RowDefinition());
-            gridBotR.RowDefinitions.Add(new RowDefinition());
-            gridBotR.RowDefinitions.Add(new RowDefinition());
-
-            // Hinzufügen der Spaltendefinitionen zum Grid
-            gridBotR.ColumnDefinitions.Add(new ColumnDefinition());
-            gridBotR.ColumnDefinitions.Add(new ColumnDefinition());
-            gridBotR.ColumnDefinitions.Add(new ColumnDefinition());
-
-            return gridBotR;
-        }
+       
         private void SetButtons()
         {
             for (int i = 0; i < _grid.RowDefinitions.Count; i++)
@@ -115,7 +50,7 @@ namespace Pentago
             DoubleAnimation rotationAnimation = new DoubleAnimation();
             rotationAnimation.From = currentRotation;
             rotationAnimation.To = currentRotation + angle;
-            rotationAnimation.Duration = new Duration(TimeSpan.FromSeconds(10));
+            rotationAnimation.Duration = new Duration(TimeSpan.FromSeconds(1));
 
             // Füge der Transformation die Animation hinzu
             rotateTransform.BeginAnimation(RotateTransform.AngleProperty, rotationAnimation);

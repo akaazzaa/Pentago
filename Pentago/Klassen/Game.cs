@@ -11,18 +11,15 @@ namespace Pentago.Klassen
     public class Game
     {
 
-        GameGrid GridTL;
-        GameGrid GridTR;
-        GameGrid GridBL;
-        GameGrid GridBR;
         bool isRunnig = false;
         Player player;
         Site site;
 
-        public Game(Grid main) 
+        public Game() 
         {
-           GameGrid gameGrid = new GameGrid();
-            main.Children.Add(gameGrid.Grid);
+            
+           
+           
         }
 
         internal void Run()

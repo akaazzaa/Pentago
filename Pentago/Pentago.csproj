@@ -61,6 +61,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Board.xaml.cs">
+      <DependentUpon>Board.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Klassen\Game.cs" />
     <Compile Include="Klassen\GameButton.cs" />
     <Compile Include="Klassen\GameGrid.cs" />
@@ -70,9 +73,10 @@
       <DependentUpon>Main.xaml</DependentUpon>
     </Compile>
     <Compile Include="Klassen\Player.cs" />
-    <Compile Include="Board.xaml.cs">
-      <DependentUpon>Board.xaml</DependentUpon>
-    </Compile>
+    <Page Include="Board.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Main.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -85,13 +89,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Board.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MainModel.cs" />
+    <Compile Include="Klassen\MainModel.cs" />
     <Compile Include="Menu.xaml.cs">
       <DependentUpon>Menu.xaml</DependentUpon>
     </Compile>

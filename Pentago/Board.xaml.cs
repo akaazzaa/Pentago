@@ -1,32 +1,37 @@
-﻿using Pentago.Klassen;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows.Controls;
 
 namespace Pentago
 {
     /// <summary>
-    /// Interaktionslogik für UserControl1.xaml
+    /// Interaktionslogik für Board.xaml
     /// </summary>
     public partial class Board : UserControl
     {
+       Klassen.Game game;
+        GameGrid gridTL ;
+        GameGrid gridTR ;
+        GameGrid gridBL ;
+        GameGrid gridBr ;
         public Board()
         {
             InitializeComponent();
+           
+            game = new Klassen.Game();
+             gridTL = new GameGrid(GridTL);
+             gridTR = new GameGrid(GridTR);
+             gridBL = new GameGrid(GridBL);
+             gridBr = new GameGrid(GridBR);
 
-            Game game = new Game(MainGrid);
-            game.Run();
+        }
+
+        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            gridTL.RotateGrid(-90);
+        }
+
+        private void Button_Click_1(object sender, System.Windows.RoutedEventArgs e)
+        {
+
         }
     }
 }

@@ -5,6 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Pentago"
         mc:Ignorable="d"
-        Title="Main"  Height="{x:Static SystemParameters.PrimaryScreenHeight}" Width="{x:Static SystemParameters.PrimaryScreenWidth}" WindowState="Maximized">
+        Title="Main"  Height="1000" Width="2000" WindowState="Normal" Topmost="True">
     <Grid x:Name="FormLoader" Background="Black"/>
 </Window>

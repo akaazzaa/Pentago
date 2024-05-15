@@ -29,8 +29,8 @@ namespace Pentago.Klassen
                     button.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
                     button.VerticalAlignment = System.Windows.VerticalAlignment.Center;
                     button.RenderTransformOrigin = new System.Windows.Point(0.5, 0.5);
-                    button.Height = 50;
-                    button.Width = 50;
+                    button.Height = 70;
+                    button.Width = 70;
                     
 
                     LinearGradientBrush borderBrush = new LinearGradientBrush();

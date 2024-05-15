@@ -6,7 +6,13 @@
              xmlns:local="clr-namespace:Pentago"
              mc:Ignorable="d" 
              d:DesignHeight="1000" d:DesignWidth="1000">
-    <Grid x:Name="Maingrid" Background="#FFB32A2A">
+    <Grid x:Name="Maingrid">
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FFDE1A1A"/>
+                <GradientStop Color="#FF134098" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
         <Button Content="Button" HorizontalAlignment="Center" Margin="0,526,0,0" VerticalAlignment="Top" Width="84" Height="24" RenderTransformOrigin="0.525,1.568" Click="Button_Click" />
 
     </Grid>
