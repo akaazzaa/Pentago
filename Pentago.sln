@@ -5,6 +5,8 @@ VisualStudioVersion = 17.9.34701.34
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pentago", "Pentago\Pentago.csproj", "{F2D50CE0-A847-4FF0-9330-413386236E1D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tEST", "tEST\tEST.csproj", "{82A1FE94-8E88-43A1-A45B-700EDD91FD36}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{F2D50CE0-A847-4FF0-9330-413386236E1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2D50CE0-A847-4FF0-9330-413386236E1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2D50CE0-A847-4FF0-9330-413386236E1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82A1FE94-8E88-43A1-A45B-700EDD91FD36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82A1FE94-8E88-43A1-A45B-700EDD91FD36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82A1FE94-8E88-43A1-A45B-700EDD91FD36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82A1FE94-8E88-43A1-A45B-700EDD91FD36}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
