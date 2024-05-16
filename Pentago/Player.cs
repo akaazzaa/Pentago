@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace tEST
+namespace Pentago
 {
-    public enum GameWin
+    public enum Player
     {
-        Row,Column,DiagonalTL,DiagonalTR
+        None,Blue,Red
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using Pentago.Klassen;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace Pentago
@@ -17,7 +18,6 @@ namespace Pentago
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             MainModel.SetNewContent(new Board());
-            
         }
     }
 }
