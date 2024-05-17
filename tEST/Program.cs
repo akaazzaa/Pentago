@@ -8,9 +8,24 @@ namespace tEST
 {
     class Program
     {
+
         static void Main(string[] args)
         {
+           GameState state = new GameState();
            
+            for (int r = 0; r < state.GameGrid.Length ; r++)
+            {
+                for (int c = 0;c< state.GameGrid.Length ; c++)
+                {
+                    if (state.CkeckWin(r, c))
+                    {
+                        break;
+                    }
+                }
+            }
+
+           
+            
         }
     }
 }

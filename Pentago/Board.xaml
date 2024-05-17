@@ -648,8 +648,8 @@ VerticalAlignment="Center" BorderBrush="#FF130303" Grid.Column="2"  Grid.Row="2"
                 <Button Height="70" 
          Width="70" 
          HorizontalAlignment="Center" 
-         VerticalAlignment="Center" BorderBrush="#FF130303" Grid.Column="2"  Grid.Row="2"
-                    Click="Button_Click" x:Uid="2,2"
+         VerticalAlignment="Top" BorderBrush="#FF130303" Grid.Column="2"  Grid.Row="2"
+                    Click="Button_Click" x:Uid="2,2" Margin="0,15,0,0"
              >
 
                     <Button.Background>
@@ -675,7 +675,7 @@ VerticalAlignment="Center" BorderBrush="#FF130303" Grid.Column="2"  Grid.Row="2"
                         <TranslateTransform/>
                     </TransformGroup>
                 </TextBlock.RenderTransform><Run Text=" P"/><Run Language="de-de" Text="l"/><Run Text="ayer Blue wähle ein Feld"/></TextBlock>
-            <Button  x:Uid="1,1"  Width="50" Height="50" HorizontalAlignment="Left" Margin="366,252,0,0" VerticalAlignment="Top" Click="Button_Click_Rotation" Visibility="Hidden"/>
+            <Button  x:Uid="1,1"  Width="50" Height="50" HorizontalAlignment="Left" Margin="366,252,0,0" VerticalAlignment="Top" Click="Button_Click_Rotation" Visibility="Visible"/>
             <Button  x:Uid="1,2" Width="50" Height="50" HorizontalAlignment="Left"  Margin="515,93,0,0" VerticalAlignment="Top" Click="Button_Click_Rotation" Visibility="Hidden"/>
 
             <Button  x:Uid="3,2" Width="50" Height="50" HorizontalAlignment="Left" Margin="391,762,0,0" VerticalAlignment="Top" Click="Button_Click_Rotation" Visibility="Hidden"/>
@@ -691,5 +691,5 @@ VerticalAlignment="Center" BorderBrush="#FF130303" Grid.Column="2"  Grid.Row="2"
 
         </Grid>
     </Viewbox>
-    
+
 </UserControl>
