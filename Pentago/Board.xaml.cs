@@ -16,14 +16,19 @@ namespace Pentago
     public partial class Board : UserControl
     {
         Game game;
-        
+
         public Board()
         {
             InitializeComponent();
+             game = new Game();
+            Setbutton();
+            
 
-            var paath = new System.Drawing.Drawing2D.GraphicsPath();
-            paath.AddEllipse(0,0,100,100);
-            this.Background = new SolidColorBrush(Colors.BlueViolet);
+        }
+
+        private void Setbutton()
+        {
+            for (int i = 0;i< grid.)
         }
 
         private void Button_Click_Rotation(object sender, RoutedEventArgs e)
@@ -33,9 +38,26 @@ namespace Pentago
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            var button = (Button)sender;
+            string[] buttonpos = button.Uid.Split(',');
+            int row = int.Parse(buttonpos[0]);
+            int col = int.Parse(buttonpos[1]);
+
+            game.GameGrid[row, col] = game.currentPlayer;
+
+            if (game.currentPlayer == Player.Blue)
+            {
+                button.Background = new SolidColorBrush(Colors.Blue);
+            }
+            else
+            {
+                button.Background = new SolidColorBrush(Colors.Red);
+            }
+
 
         }
-    }
 
-   
+
+
+    }
 }
