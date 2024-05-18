@@ -130,8 +130,7 @@ namespace Pentago.Klassen
 
             return false;
         }
-        
-
+     
 
     }
 

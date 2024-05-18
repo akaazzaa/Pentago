@@ -12,16 +12,16 @@ namespace Pentago
     public class GameButton
     {
 
-        Button button;
-        
+        public Button Button {  get; set; }
         public GameButton() 
         {
-            Button button = new Button();
-            button.HorizontalAlignment = HorizontalAlignment.Center;
-            button.VerticalAlignment = VerticalAlignment.Center;
-            button.RenderTransformOrigin = new Point(0.5, 0.5);
-            button.Height = 80;
-            button.Width = 80;
+            
+            Button = new Button();
+            Button.HorizontalAlignment = HorizontalAlignment.Center;
+            Button.VerticalAlignment = VerticalAlignment.Center;
+            Button.RenderTransformOrigin = new Point(0.5, 0.5);
+            Button.Height = 80;
+            Button.Width = 80;
 
             // BorderBrush setzen
             LinearGradientBrush borderBrush = new LinearGradientBrush();
@@ -29,7 +29,7 @@ namespace Pentago
             borderBrush.EndPoint = new Point(0.5, 1);
             borderBrush.GradientStops.Add(new GradientStop(Colors.Black, 0));
             borderBrush.GradientStops.Add(new GradientStop(Colors.Black, 1));
-            button.BorderBrush = borderBrush;
+            Button.BorderBrush = borderBrush;
 
             // Background setzen
             LinearGradientBrush backgroundBrush = new LinearGradientBrush();
@@ -37,8 +37,20 @@ namespace Pentago
             backgroundBrush.EndPoint = new Point(0.5, 1);
             backgroundBrush.GradientStops.Add(new GradientStop(Colors.Black, 1));
             backgroundBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0x67, 0x67, 0x67), 0));
-            button.Background = backgroundBrush;
+            Button.Background = backgroundBrush;
 
+           
         }
+
+       
+
+        public (int,int) IntParse(string[] value)
+        {
+            
+            int row = int.Parse(value[0]);
+            int col = int.Parse(value[1]);
+            return (row, col);
+        }
+        
     }
 }
