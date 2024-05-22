@@ -5,7 +5,59 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Pentago"
              mc:Ignorable="d" d:DesignHeight="1000" d:DesignWidth="1500">
-    <Grid x:Name="MainGrid" Background="#FF903333">
+    <Grid x:Name="MainGrid" Background="White">
+
+
+        <Rectangle Height="600"  Stroke="Black" Width="600" RadiusX="64.5" RadiusY="64.5" Margin="450,200,450,200" Grid.RowSpan="2" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="2" Fill="#FF0F4800">
+            <Rectangle.Effect>
+                <DropShadowEffect/>
+            </Rectangle.Effect>
+        </Rectangle>
+        <Button Content="Button" Margin="0,0,360,210" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Right" Width="40" Height="20" VerticalAlignment="Bottom" Click="Button_Click_Rotation">
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="90"/>
+                    <TranslateTransform X="0" Y="0"/>
+                </TransformGroup>
+            </Button.RenderTransform>
+        </Button>
+        <Button Content="Button" Margin="500,0,210,360" RenderTransformOrigin="0.268,0.55" Height="20" VerticalAlignment="Bottom" Click="Button_Click_Rotation"/>
+        <Button Content="Button" Margin="0,210,360,0" RenderTransformOrigin="0.5,0.5" Grid.Row="1" HorizontalAlignment="Right" Width="40" Height="20" VerticalAlignment="Top" Click="Button_Click_Rotation">
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="90"/>
+                    <TranslateTransform X="0" Y="0"/>
+                </TransformGroup>
+            </Button.RenderTransform>
+        </Button>
+        <Button Content="Button" Margin="0,360,210,0" RenderTransformOrigin="0.268,0.55" Height="20" VerticalAlignment="Top" Grid.Row="1" HorizontalAlignment="Right" Width="40" Click="Button_Click_Rotation"/>
+        <Button Content="Button" Margin="210,360,0,0" RenderTransformOrigin="0.268,0.55" Height="20" VerticalAlignment="Top" Grid.Row="1" HorizontalAlignment="Left" Width="40" Grid.Column="1" Click="Button_Click_Rotation"/>
+        <Button Content="Button" Margin="360,210,0,0" RenderTransformOrigin="0.475,-0.2" Grid.Row="1" Height="20" VerticalAlignment="Top" Grid.Column="1" HorizontalAlignment="Left" Width="40" Click="Button_Click_Rotation" >
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="90"/>
+                    <TranslateTransform X="15" Y="13"/>
+                </TransformGroup>
+            </Button.RenderTransform>
+        </Button>
+        <Button Content="Button" Margin="210,0,0,360" RenderTransformOrigin="0.268,0.55" HorizontalAlignment="Left" Width="40" Grid.Column="1" Height="20" VerticalAlignment="Bottom" Click="Button_Click_Rotation"/>
+        <Button Content="Button" Margin="360,0,0,210" RenderTransformOrigin="0.475,-0.2" Height="20" VerticalAlignment="Bottom" Grid.Column="1" HorizontalAlignment="Left" Width="40" Click="Button_Click_Rotation">
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="90"/>
+                    <TranslateTransform X="15" Y="13"/>
+                </TransformGroup>
+            </Button.RenderTransform>
+        </Button>
+        <Button Content="Reset" HorizontalAlignment="Left" Margin="112,440,0,0" VerticalAlignment="Top" Click="Button_Click"/>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
@@ -14,6 +66,7 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
+
 
     </Grid>
 </UserControl>

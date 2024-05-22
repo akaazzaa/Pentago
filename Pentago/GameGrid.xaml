@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Pentago"
-             mc:Ignorable="d" Width="323" Height="318">
+             mc:Ignorable="d" Width="310" Height="310">
     <UserControl.Resources>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
@@ -72,10 +72,11 @@
             </TransformGroup>
         </Grid.RenderTransform>
         <Grid.Background>
-            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                <GradientStop Color="#FF134098"/>
-                <GradientStop Color="#FFDE1A1A" Offset="1"/>
-            </LinearGradientBrush>
+            <RadialGradientBrush>
+                <GradientStop Color="#FA000000" Offset="1"/>
+                <GradientStop Offset="0.007" Color="#FF1703F7"/>
+                <GradientStop Color="#FF134098" Offset="1"/>
+            </RadialGradientBrush>
         </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -90,8 +91,8 @@
         <Grid.Effect>
             <DropShadowEffect/>
         </Grid.Effect>
-        
-        
-       
+
+
+
     </Grid>
 </UserControl>

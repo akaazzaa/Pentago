@@ -21,19 +21,22 @@ namespace Pentago
     /// </summary>
     public partial class GameGrid : UserControl
     {
-        
+        public event EventHandler<GridButtonClickEventArgs> GridButtonClick;
+        public List<Button> buttons {  get; set; }  
         public GameGrid()
         {
             InitializeComponent();
+            buttons = new List<Button>();
             Process();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
+            
             var row = Grid.GetRow(button);
             var column = Grid.GetColumn(button);
-            
+            GridButtonClick?.Invoke(this, new GridButtonClickEventArgs(row, column,button));
 
         }
         private void Process()
@@ -42,7 +45,7 @@ namespace Pentago
             {
                 for (int col = 0; col < grid.ColumnDefinitions.Count; col++)
                 {
-                    Button button = new Button();
+                   Button button = new Button();
                     button.HorizontalAlignment = HorizontalAlignment.Center;
                     button.VerticalAlignment = VerticalAlignment.Center;
                     button.RenderTransformOrigin = new Point(0.5, 0.5);
@@ -73,12 +76,37 @@ namespace Pentago
                     grid.Children.Add(button);
 
                     button.Click += Button_Click;
-
+                    buttons.Add(button);
                 }
 
             }
         }
+        public void Reset()
+        {
+            foreach(Button button in buttons)
+            {
+                button.HorizontalAlignment = HorizontalAlignment.Center;
+                button.VerticalAlignment = VerticalAlignment.Center;
+                button.RenderTransformOrigin = new Point(0.5, 0.5);
+                button.Content = button.Name;
 
+                // BorderBrush setzen
+                LinearGradientBrush borderBrush = new LinearGradientBrush();
+                borderBrush.StartPoint = new Point(0.5, 0);
+                borderBrush.EndPoint = new Point(0.5, 1);
+                borderBrush.GradientStops.Add(new GradientStop(Colors.Black, 0));
+                borderBrush.GradientStops.Add(new GradientStop(Colors.Black, 1));
+                button.BorderBrush = borderBrush;
+
+                // Background setzen
+                LinearGradientBrush backgroundBrush = new LinearGradientBrush();
+                backgroundBrush.StartPoint = new Point(0.5, 0);
+                backgroundBrush.EndPoint = new Point(0.5, 1);
+                backgroundBrush.GradientStops.Add(new GradientStop(Colors.Black, 1));
+                backgroundBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0x67, 0x67, 0x67), 0));
+                button.Background = backgroundBrush;
+            }
+        }
 
         
     }
