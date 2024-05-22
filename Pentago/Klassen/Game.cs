@@ -14,6 +14,7 @@ namespace Pentago.Klassen
     {  
         public Player currentPlayer;
         public int WinCondition;
+        
         public Player[,] GameGrid {  get; set; }
         
         public Game() 
@@ -130,25 +131,21 @@ namespace Pentago.Klassen
 
             return false;
         }
-        private void ChangeButtonColor(Button button)
+     
+        public void Playerturned(bool hasTurned)
         {
+            if (hasTurned)
+            {
+                SwitchPlayer();
+            }
+            hasTurned = false;
+        }
 
+        private void SwitchPlayer()
+        {
             if (currentPlayer == Player.Blue)
             {
-                button.Background = new SolidColorBrush(Colors.Blue);
-            }
-            else
-            {
-                button.Background = new SolidColorBrush(Colors.Red);
-            }
-
-        }
-        public void SwitchPlayer(Button button)
-        {
-            if(currentPlayer == Player.Blue)
-            {
                 currentPlayer = Player.Red;
-                
             }
             else
             {

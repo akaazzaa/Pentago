@@ -44,13 +44,7 @@ namespace Pentago
 
        
 
-        public (int,int) IntParse(string[] value)
-        {
-            
-            int row = int.Parse(value[0]);
-            int col = int.Parse(value[1]);
-            return (row, col);
-        }
+       
         
     }
 }
