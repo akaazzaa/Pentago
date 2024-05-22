@@ -13,6 +13,7 @@ namespace Pentago.Klassen
     {  
         public Player currentPlayer;
         public int WinCondition;
+        
         public Player[,] GameGrid {  get; set; }
         
         public Game() 
@@ -131,7 +132,26 @@ namespace Pentago.Klassen
             return false;
         }
      
+        public void Playerturned(bool hasTurned)
+        {
+            if (hasTurned)
+            {
+                SwitchPlayer();
+            }
+            hasTurned = false;
+        }
 
+        private void SwitchPlayer()
+        {
+            if (currentPlayer == Player.Blue)
+            {
+                currentPlayer = Player.Red;
+            }
+            else
+            {
+                currentPlayer = Player.Blue;
+            }
+        }
     }
 
 }

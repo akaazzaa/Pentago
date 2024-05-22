@@ -17,7 +17,7 @@ namespace Pentago
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            MainModel.SetNewContent(new Board());
+            
         }
     }
 }

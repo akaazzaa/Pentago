@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Pentago
 {
     /// <summary>
-    /// Interaktionslogik für Board.xaml
+    /// Interaktionslogik für GridTL.xaml
     /// </summary>
-    public partial class Board : UserControl
+    public partial class GridTL : UserControl
     {
-        public Board()
+        public GridTL()
         {
             InitializeComponent();
         }
