@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -112,7 +113,6 @@ namespace Pentago.Klassen
             }
             return false;
         }
-
         public bool CheckWin()
         {
             if (CheckRow())
@@ -130,8 +130,31 @@ namespace Pentago.Klassen
 
             return false;
         }
-     
+        private void ChangeButtonColor(Button button)
+        {
 
+            if (currentPlayer == Player.Blue)
+            {
+                button.Background = new SolidColorBrush(Colors.Blue);
+            }
+            else
+            {
+                button.Background = new SolidColorBrush(Colors.Red);
+            }
+
+        }
+        public void SwitchPlayer(Button button)
+        {
+            if(currentPlayer == Player.Blue)
+            {
+                currentPlayer = Player.Red;
+                
+            }
+            else
+            {
+                currentPlayer = Player.Blue;
+            }
+        }
     }
 
 }
