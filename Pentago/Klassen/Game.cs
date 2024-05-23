@@ -14,7 +14,10 @@ namespace Pentago.Klassen
     {
         public Player currentPlayer;
         public int WinCondition;
-
+        public int ArrayRowLenght;
+        public int HalfArrayRowLenght;
+        public int ArrayColLenght;
+        public int HalfArrayColLenght;
         public Player[,] TopLeft { get; set; }
         public Player[,] TopRight { get; set; }
         public Player[,] BotLeft { get; set; }
@@ -28,6 +31,10 @@ namespace Pentago.Klassen
             TopRight = new Player[3, 3];
             BotLeft = new Player[3, 3];
             BotRight = new Player[3, 3];
+            ArrayRowLenght = TopLeft.GetLength(0) + TopRight.GetLength(0);
+            HalfArrayRowLenght = TopLeft.GetLength(0);
+            ArrayColLenght = ArrayRowLenght;
+            HalfArrayColLenght = HalfArrayRowLenght;
         }
 
         public void Changbuttoncolor(Button button)
@@ -44,36 +51,32 @@ namespace Pentago.Klassen
         private bool IsMarked(int r, int c)
         {
 
-            int rowsTop = TopLeft.GetLength(0);
-            int colsLeft = TopLeft.GetLength(1);
-
-            if (r < rowsTop && c < colsLeft)
+            if (r < HalfArrayRowLenght  && c < HalfArrayColLenght )
             {
                 return TopLeft[r, c] == currentPlayer;
             }
-            else if (r < rowsTop && c >= colsLeft)
+            
+            else if (r < HalfArrayRowLenght && c > HalfArrayRowLenght - 1 && c < ArrayColLenght)
             {
-                return TopRight[r, c - colsLeft] == currentPlayer;
+                return TopRight[r, c - HalfArrayColLenght] == currentPlayer;
             }
-            else if (r >= rowsTop && c < colsLeft)
+
+            
+            if (r >= HalfArrayRowLenght && c < HalfArrayColLenght)
             {
-                return BotLeft[r - rowsTop, c] == currentPlayer;
+                return BotLeft[r - HalfArrayRowLenght, c] == currentPlayer;
             }
             else
-            {
-                return BotRight[r - rowsTop, c - colsLeft] == currentPlayer;
+            { 
+               return BotRight[r - HalfArrayRowLenght, c - HalfArrayColLenght] == currentPlayer;
             }
-
+           
         }
-
         private bool CheckRow()
         {
-            int rows = TopLeft.GetLength(0) + BotLeft.GetLength(0);
-            int cols = TopLeft.GetLength(1) + TopRight.GetLength(1);
-
-            for (int r = 0; r < rows; r++)
+            for (int r = 0; r < ArrayRowLenght; r++)
             {
-                for (int c = 0; c < cols; c++)
+                for (int c = 0; c < ArrayColLenght; c++)
                 {
                     if (IsMarked(r, c))
                     {
@@ -86,21 +89,20 @@ namespace Pentago.Klassen
                     else
                     {
                         WinCondition = 0;
+                        return false;
                     }
                 }
-                WinCondition = 0;
+
             }
             return false;
         }
-
         private bool CheckColumn()
         {
-            int rows = TopLeft.GetLength(0) + BotLeft.GetLength(0);
-            int cols = TopLeft.GetLength(1) + TopRight.GetLength(1);
 
-            for (int c = 0; c < cols; c++)
+
+            for (int c = 0; c < ArrayColLenght; c++)
             {
-                for (int r = 0; r < rows; r++)
+                for (int r = 0; r < ArrayRowLenght; r++)
                 {
                     if (IsMarked(r, c))
                     {
@@ -113,47 +115,64 @@ namespace Pentago.Klassen
                     else
                     {
                         WinCondition = 0;
+                        return false;
                     }
+
                 }
-                WinCondition = 0; // Reset WinCondition after each column
+
             }
             return false;
         }
-
-
-        public bool CheckDiagonal()
+        private bool IsDigonalPossible()
         {
-            int rows = TopLeft.GetLength(0) + BotLeft.GetLength(0);
-            int cols = TopLeft.GetLength(1) + TopRight.GetLength(1);
-
-            // Diagonal from top-left to bottom-right
-            for (int r = 0; r < rows; r++)
+            //TopLeft to BotRight
+            for (int row = 0; row < HalfArrayRowLenght - 1; row++)
             {
-                for (int c = 0; c < cols; c++)
+                for (int col = 0; col < HalfArrayColLenght - 1; col++)
                 {
-                    if (r == c && IsMarked(r, c))
+                    if (IsMarked(row, col))
                     {
-                        WinCondition++;
-                        if (WinCondition == 5)
+                        if (CheckDiagonal(row, col))
                         {
                             return true;
                         }
                     }
                     else
                     {
-                        WinCondition = 0;
+                        continue;
                     }
+
                 }
             }
 
-            WinCondition = 0;
-
-            // Diagonal from top-right to bottom-left
-            for (int r = 0; r < rows; r++)
+            //BotRight to TopLeft
+            for (int row = 0; row < HalfArrayRowLenght - 1; row++)
             {
-                for (int c = 0; c < cols; c++)
+                for (int col = 5; col > HalfArrayColLenght; col--)
                 {
-                    if (r + c == cols - 1 && IsMarked(r, c))
+
+                    if (IsMarked(row, col))
+                    {
+                        if (CheckAntiDiagonal(row, col))
+                        {
+                            return true;
+                        }
+                    }
+
+                }
+            }
+
+
+            return false;
+        }
+        public bool CheckDiagonal(int row, int col)
+        {
+ 
+            for (int r = row; r < ArrayRowLenght;)
+            {
+                for (int c = col; c < ArrayColLenght;)
+                {
+                    if (IsMarked(row, col))
                     {
                         WinCondition++;
                         if (WinCondition == 5)
@@ -164,57 +183,56 @@ namespace Pentago.Klassen
                     else
                     {
                         WinCondition = 0;
+                        return false;
                     }
+                    row++;
+                    col++;
+                }
+            }
+            return false;
+        }
+        public bool CheckAntiDiagonal(int row, int col)
+        {
+            for (int r = row; r < ArrayRowLenght;)
+            {
+                for (int c = col; c >= 0;)
+                {
+                    if (IsMarked(r, c))
+                    {
+                        WinCondition++;
+                        if (WinCondition == 5)
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        WinCondition = 0;
+                        return false;
+                    }
+                    r++;
+                    c--;
                 }
             }
 
             return false;
         }
-
         public bool CheckWin()
         {
-            
-            return CheckRow() || CheckColumn() || CheckDiagonal();
+            if (CheckRow())
+            {
+                return true;
+            }
+            if (CheckColumn())
+            {
+                return true;
+            }
+            if (IsDigonalPossible()) 
+            {
+                return true;
+            }
+            return false;
         }
-
-        public void Ausgabe()
-        {
-            for (int i = 0; i < TopLeft.GetLength(0); i++)
-            {
-                for (int j = 0; j < TopLeft.GetLength(1); j++)
-                {
-                    Console.Write(TopLeft[i, j] + " ");
-                }
-                Console.WriteLine();
-            }
-
-            for (int i = 0; i < TopRight.GetLength(0); i++)
-            {
-                for (int j = 0; j < TopRight.GetLength(1); j++)
-                {
-                    Console.Write(TopRight[i, j] + " ");
-                }
-                Console.WriteLine();
-            }
-            for (int i = 0; i < BotLeft.GetLength(0); i++)
-            {
-                for (int j = 0; j < BotLeft.GetLength(1); j++)
-                {
-                    Console.Write(BotLeft[i, j] + " ");
-                }
-                Console.WriteLine();
-            }
-            for (int i = 0; i < BotRight.GetLength(0); i++)
-            {
-                for (int j = 0; j < BotRight.GetLength(1); j++)
-                {
-                    Console.Write(BotRight[i, j] + " ");
-                }
-                Console.WriteLine();
-            }
-        }
-
-
         public void SwitchPlayer()
         {
             if (currentPlayer == Player.Blue)

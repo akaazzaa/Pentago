@@ -103,7 +103,7 @@ namespace Pentago
            if (game.CheckWin())
             {
                 MessageBox.Show("Win");
-                game.Ausgabe();
+               
             }
         }
 
@@ -143,7 +143,7 @@ namespace Pentago
             TopRight.Reset();
             BotLeft.Reset();
             BotRight.Reset();
-            
+            game.WinCondition = 0;
 
            
         }
