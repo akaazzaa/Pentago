@@ -64,6 +64,7 @@
     <Compile Include="Board.xaml.cs">
       <DependentUpon>Board.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GameResult.cs" />
     <Compile Include="Klassen\GridButtonClickEventArgs.cs" />
     <Compile Include="Klassen\GameButton.cs" />
     <Compile Include="GameGrid.xaml.cs">
@@ -73,6 +74,8 @@
     <Compile Include="Main.xaml.cs">
       <DependentUpon>Main.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WinInfo.cs" />
+    <Compile Include="WinType.cs" />
     <Page Include="Board.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

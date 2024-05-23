@@ -26,7 +26,7 @@ namespace Pentago
         GameGrid TopRight;
         GameGrid BotLeft;
         GameGrid BotRight;
-        bool hasTurned = false;
+        
         public Board()
         {
             InitializeComponent();
@@ -34,7 +34,6 @@ namespace Pentago
             SetGrids();
 
         }
-
         private void SetGrids()
         {
             TopLeft = new GameGrid();
@@ -73,55 +72,20 @@ namespace Pentago
             Grid.SetColumn(BotRight, 1);
             MainGrid.Children.Add(BotRight);
         }
-
         private void GridButton_Click(object sender, GridButtonClickEventArgs e)
         {
             var grid = (GameGrid)sender;
-            game.Changbuttoncolor(e.Button);
+            game.MakeMove(e.Row,e.Column,grid,e.Button);
 
-            if (hasTurned)
-            {
-                return;
-            }
-            switch (grid.Name)
-            {
-                case ("GridTopLeft"):
-                    game.TopLeft[e.Row, e.Column] = game.currentPlayer;
-                    break;
-                case ("GridTopRight"):
-                    game.TopRight[e.Row, e.Column] = game.currentPlayer;
-                    break;
-                case ("GridBotLeft"):
-                    game.BotLeft[e.Row, e.Column] = game.currentPlayer;
-                    break;
-                case ("GridBotRight"):
-                    game.BotRight[e.Row, e.Column] = game.currentPlayer;
-                    break;
-            }
-            PlayerTurned();
-
-           if (game.CheckWin())
-            {
-                MessageBox.Show("Win");
-               
-            }
-        }
-
-        
-
-        private void PlayerTurned()
-        {
-                hasTurned = true;
-                //game.SwitchPlayer();
-                hasTurned = false;
             
-        }
+           
+            
 
+        }
         private void Button_Click_Rotation(object sender, RoutedEventArgs e)
         {
 
         }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             for (int i = 0; i < 3; i++)

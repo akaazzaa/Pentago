@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,21 +13,30 @@ namespace Pentago.Klassen
 {
     public class Game
     {
-        public Player currentPlayer;
-        public int WinCondition;
-        public int ArrayRowLenght;
-        public int HalfArrayRowLenght;
-        public int ArrayColLenght;
-        public int HalfArrayColLenght;
         public Player[,] TopLeft { get; set; }
         public Player[,] TopRight { get; set; }
         public Player[,] BotLeft { get; set; }
         public Player[,] BotRight { get; set; }
+        public Player CurrentPlayer { get; set; }
+        public int WinCondition { get; set; }
+        public int ArrayRowLenght { get; set; }
+        public int HalfArrayRowLenght { get; set; }
+        public int ArrayColLenght { get; set; }
+        public int HalfArrayColLenght { get; set; }
+        public bool GameOver { get; set; }
+        public int TurnsPassed { get; set; }  
+        public WinInfo WinInfo { get; set; }
+        public GameResult GameResult { get; set; }
+
+        public event Action<GameResult> GameEnded;
+        public event Action GameRestarted;
+    
 
         public Game()
         {
-            currentPlayer = Player.Blue;
+            CurrentPlayer = Player.Blue;
             WinCondition = 0;
+            GameOver = false;
             TopLeft = new Player[3, 3];
             TopRight = new Player[3, 3];
             BotLeft = new Player[3, 3];
@@ -36,10 +46,29 @@ namespace Pentago.Klassen
             ArrayColLenght = ArrayRowLenght;
             HalfArrayColLenght = HalfArrayRowLenght;
         }
-
-        public void Changbuttoncolor(Button button)
+        private bool IsGridFull()
         {
-            if (currentPlayer == Player.Blue)
+            return TurnsPassed == 36;
+        }
+        private bool CanMove(GameGrid grid,int r,int c)
+        {
+            switch (grid.Name)
+            {
+                case ("GridTopLeft"):
+                    return !GameOver && TopLeft[r, c] == Player.None;
+                case ("GridTopRight"):
+                    return !GameOver && TopRight[r, c] == Player.None;
+                case ("GridBotLeft"):
+                    return !GameOver && BotLeft[r, c] == Player.None;
+                case ("GridBotRight"):
+                    return !GameOver && BotRight[r, c] == Player.None;
+                    
+            }
+            return false;
+        }
+        private void Changbuttoncolor(Button button)
+        {
+            if (CurrentPlayer == Player.Blue)
             {
                 button.Background = new SolidColorBrush(Colors.Blue);
             }
@@ -53,27 +82,28 @@ namespace Pentago.Klassen
 
             if (r < HalfArrayRowLenght  && c < HalfArrayColLenght )
             {
-                return TopLeft[r, c] == currentPlayer;
+                return TopLeft[r, c] == CurrentPlayer;
             }
             
             else if (r < HalfArrayRowLenght && c > HalfArrayRowLenght - 1 && c < ArrayColLenght)
             {
-                return TopRight[r, c - HalfArrayColLenght] == currentPlayer;
+                return TopRight[r, c - HalfArrayColLenght] == CurrentPlayer;
             }
 
             
             if (r >= HalfArrayRowLenght && c < HalfArrayColLenght)
             {
-                return BotLeft[r - HalfArrayRowLenght, c] == currentPlayer;
+                return BotLeft[r - HalfArrayRowLenght, c] == CurrentPlayer;
             }
             else
             { 
-               return BotRight[r - HalfArrayRowLenght, c - HalfArrayColLenght] == currentPlayer;
+               return BotRight[r - HalfArrayRowLenght, c - HalfArrayColLenght] == CurrentPlayer;
             }
            
         }
         private bool CheckRow()
         {
+            WinCondition = 0;
             for (int r = 0; r < ArrayRowLenght; r++)
             {
                 for (int c = 0; c < ArrayColLenght; c++)
@@ -81,25 +111,26 @@ namespace Pentago.Klassen
                     if (IsMarked(r, c))
                     {
                         WinCondition++;
+
                         if (WinCondition == 5)
                         {
+                            WinInfo = new WinInfo{ WinType = WinType.Row, r = r , c= c };
                             return true;
                         }
+                        
                     }
                     else
                     {
                         WinCondition = 0;
-                        return false;
                     }
                 }
-
+                WinCondition = 0;
             }
             return false;
         }
         private bool CheckColumn()
         {
-
-
+            WinCondition = 0;
             for (int c = 0; c < ArrayColLenght; c++)
             {
                 for (int r = 0; r < ArrayRowLenght; r++)
@@ -109,33 +140,29 @@ namespace Pentago.Klassen
                         WinCondition++;
                         if (WinCondition == 5)
                         {
+                            WinInfo = new WinInfo { WinType=WinType.Column, r = r ,c = c };
                             return true;
                         }
                     }
                     else
                     {
                         WinCondition = 0;
-                        return false;
-                    }
 
+                    }   
                 }
-
+                WinCondition = 0;
             }
             return false;
         }
-        private bool IsDigonalPossible()
+        private bool IsDiagonalWin()
         {
-            //TopLeft to BotRight
             for (int row = 0; row < HalfArrayRowLenght - 1; row++)
             {
                 for (int col = 0; col < HalfArrayColLenght - 1; col++)
                 {
                     if (IsMarked(row, col))
                     {
-                        if (CheckDiagonal(row, col))
-                        {
-                            return true;
-                        }
+                        return (CheckDiagonal(row, col));
                     }
                     else
                     {
@@ -144,30 +171,47 @@ namespace Pentago.Klassen
 
                 }
             }
-
-            //BotRight to TopLeft
             for (int row = 0; row < HalfArrayRowLenght - 1; row++)
             {
                 for (int col = 5; col > HalfArrayColLenght; col--)
                 {
-
                     if (IsMarked(row, col))
                     {
-                        if (CheckAntiDiagonal(row, col))
-                        {
-                            return true;
-                        }
+                        return (CheckAntiDiagonal(row, col));
                     }
-
                 }
             }
-
-
             return false;
         }
-        public bool CheckDiagonal(int row, int col)
+        private bool IsWin()
         {
- 
+            if (CheckRow())
+            {
+                GameResult = new GameResult { Winner = CurrentPlayer, WinInfo = this.WinInfo };
+                return true;
+            }
+            else if (CheckColumn())
+            {
+                GameResult = new GameResult { Winner = CurrentPlayer, WinInfo = this.WinInfo };
+                return true;
+            }
+            else if (IsDiagonalWin())
+            {
+                GameResult = new GameResult { Winner = CurrentPlayer, WinInfo = this.WinInfo };
+                return true;
+            }else if (IsGridFull())
+            {
+                GameResult = new GameResult { Winner = Player.None };
+                return true;
+            }
+
+            GameResult = null; 
+            return false;
+
+        }                
+         private bool CheckDiagonal(int row, int col)
+        {
+            WinCondition = 0;
             for (int r = row; r < ArrayRowLenght;)
             {
                 for (int c = col; c < ArrayColLenght;)
@@ -177,6 +221,7 @@ namespace Pentago.Klassen
                         WinCondition++;
                         if (WinCondition == 5)
                         {
+                            WinInfo = new WinInfo { WinType = WinType.Diagonal, c = c ,r = r };
                             return true;
                         }
                     }
@@ -189,10 +234,12 @@ namespace Pentago.Klassen
                     col++;
                 }
             }
+
             return false;
         }
-        public bool CheckAntiDiagonal(int row, int col)
+        private bool CheckAntiDiagonal(int row, int col)
         {
+            WinCondition = 0;
             for (int r = row; r < ArrayRowLenght;)
             {
                 for (int c = col; c >= 0;)
@@ -202,6 +249,7 @@ namespace Pentago.Klassen
                         WinCondition++;
                         if (WinCondition == 5)
                         {
+                            WinInfo = new WinInfo { WinType = WinType.Antidiagonal, c = col ,r = row};
                             return true;
                         }
                     }
@@ -217,33 +265,53 @@ namespace Pentago.Klassen
 
             return false;
         }
-        public bool CheckWin()
+        
+        private void SwitchPlayer()
         {
-            if (CheckRow())
+            if (CurrentPlayer == Player.Blue)
             {
-                return true;
-            }
-            if (CheckColumn())
-            {
-                return true;
-            }
-            if (IsDigonalPossible()) 
-            {
-                return true;
-            }
-            return false;
-        }
-        public void SwitchPlayer()
-        {
-            if (currentPlayer == Player.Blue)
-            {
-                currentPlayer = Player.Red;
+                CurrentPlayer = Player.Red;
 
             }
             else
             {
-                currentPlayer = Player.Blue;
+                CurrentPlayer = Player.Blue;
             }
+        }
+        public void MakeMove(int row, int col,GameGrid grid,Button button)
+        {
+            if (!CanMove(grid,row, col))
+            {
+                return;
+            }
+            Changbuttoncolor(button);
+            switch (grid.Name)
+            {
+                case ("GridTopLeft"):
+                    TopLeft[row, col] = CurrentPlayer;
+                    break;
+                case ("GridTopRight"):
+                    TopRight[row, col] = CurrentPlayer;
+                    break;
+                case ("GridBotLeft"):
+                    BotLeft[row, col] = CurrentPlayer;
+                    break;
+                case ("GridBotRight"):
+                    BotRight[row, col] = CurrentPlayer;
+                    break;
+            }
+            TurnsPassed++;
+            if (IsWin())
+            {
+                GameOver = true;
+                GameEnded?.Invoke(GameResult);
+            }
+            else
+            {
+                SwitchPlayer();
+                Changbuttoncolor(button);
+            }
+
         }
     }
 }
