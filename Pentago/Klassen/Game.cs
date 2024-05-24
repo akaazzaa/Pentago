@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 
 namespace Pentago.Klassen
 {
@@ -24,18 +26,21 @@ namespace Pentago.Klassen
         public int ArrayColLenght { get; set; }
         public int HalfArrayColLenght { get; set; }
         public bool GameOver { get; set; }
-        public int TurnsPassed { get; set; }  
+        public int TurnsPassed { get; set; } 
+        public bool Turned { get; set; }
         public WinInfo WinInfo { get; set; }
         public GameResult GameResult { get; set; }
+        
 
         public event Action<GameResult> GameEnded;
         public event Action GameRestarted;
-    
+        public event Action MoveMade;
 
         public Game()
         {
             CurrentPlayer = Player.Blue;
             WinCondition = 0;
+            Turned = false;
             GameOver = false;
             TopLeft = new Player[3, 3];
             TopRight = new Player[3, 3];
@@ -55,18 +60,18 @@ namespace Pentago.Klassen
             switch (grid.Name)
             {
                 case ("GridTopLeft"):
-                    return !GameOver && TopLeft[r, c] == Player.None;
+                    return !GameOver && Turned == false && TopLeft[r, c] == Player.None;
                 case ("GridTopRight"):
-                    return !GameOver && TopRight[r, c] == Player.None;
+                    return !GameOver && Turned == false && TopRight[r, c] == Player.None;
                 case ("GridBotLeft"):
-                    return !GameOver && BotLeft[r, c] == Player.None;
+                    return !GameOver && Turned == false && BotLeft[r, c] == Player.None;
                 case ("GridBotRight"):
-                    return !GameOver && BotRight[r, c] == Player.None;
+                    return !GameOver && Turned == false && BotRight[r, c] == Player.None;
                     
             }
             return false;
         }
-        private void Changbuttoncolor(Button button)
+        public void Changbuttoncolor(Button button)
         {
             if (CurrentPlayer == Player.Blue)
             {
@@ -265,7 +270,6 @@ namespace Pentago.Klassen
 
             return false;
         }
-        
         private void SwitchPlayer()
         {
             if (CurrentPlayer == Player.Blue)
@@ -277,6 +281,7 @@ namespace Pentago.Klassen
             {
                 CurrentPlayer = Player.Blue;
             }
+            
         }
         public void MakeMove(int row, int col,GameGrid grid,Button button)
         {
@@ -308,10 +313,118 @@ namespace Pentago.Klassen
             }
             else
             {
-                SwitchPlayer();
-                Changbuttoncolor(button);
+                MoveMade?.Invoke();
             }
+        }
+        public void Reset()
+        {
 
+            TopLeft = new Player[3, 3];
+            TopRight = new Player[3, 3];
+            BotLeft = new Player[3, 3];
+            BotRight = new Player[3, 3];
+            WinCondition = 0;
+            CurrentPlayer = Player.Blue;
+            TurnsPassed = 0;
+            GameOver = false;
+            GameRestarted?.Invoke();
+        }
+        public async void RotateArray(string buttonname,GameGrid topLeft,GameGrid topRight,GameGrid botLeft,GameGrid botRight)
+        {
+            switch (buttonname)
+            {
+                case ("BTLL"):
+                    TopLeft = RotateArrayLeft(TopLeft);
+                    Move(topLeft,-90,0);
+                    break;
+                case ("BTLR"):
+                   TopLeft = RotateArrayRight(TopLeft);
+                    Move(topLeft,90,0);
+                    break;
+                case ("BTRL"):
+                    TopRight = RotateArrayLeft(TopRight);
+                    Move(topRight,-90, 0);
+                    break;
+                case ("BTRR"):
+                   TopRight = RotateArrayRight(TopRight);
+                    Move(topRight,90, 0);
+                    break;
+                case ("BBLL"):
+                    BotLeft = RotateArrayRight(BotLeft);
+                    Move(botLeft,90, 0);
+                    break;
+                case ("BBLR"):
+                    BotLeft = RotateArrayLeft(BotLeft);
+                    Move(botLeft,-90, 0);
+                    break;
+                case ("BBRL"):
+                    BotRight = RotateArrayRight(BotRight);
+                    Move(botRight,90, 0);
+                    break;
+                case ("BBRR"):
+                    BotRight = RotateArrayLeft(BotRight);
+                    Move(botRight,-90, 0);
+                    break;
+            }
+            Turned = false;
+            SwitchPlayer();
+        }
+        /// <summary>
+        ///  Fehler in der Rotation Animation 
+        /// </summary>
+        /// <param name="gameGrid"></param>
+        /// <param name="angle"></param>
+        /// <param name="currentRotation"></param>
+        private void Move(GameGrid gameGrid, double angle, double currentRotation)
+        {
+            RotateTransform rotateTransformTopLeft = new RotateTransform();
+            rotateTransformTopLeft.Angle = currentRotation;
+            rotateTransformTopLeft.CenterX = 155;
+            rotateTransformTopLeft.CenterY = 155;
+            gameGrid.RenderTransform = rotateTransformTopLeft;
+            DoubleAnimation rotationAnimation = new DoubleAnimation();
+            rotationAnimation.From = currentRotation;
+            rotationAnimation.To = currentRotation + angle;
+            rotationAnimation.Duration = new Duration(TimeSpan.FromSeconds(1));
+
+            gameGrid.RenderTransform.BeginAnimation(RotateTransform.AngleProperty, rotationAnimation);
+            
+            currentRotation += angle;
+            
+        }
+        private Player[,] RotateArrayRight(Player[,] array)
+        {
+               if (array == null)
+               {
+                 return null;
+                }
+                int size = 3;
+                Player[,] tmp = new Player[size, size];
+
+                for (int i = 0; i < size; ++i)
+                {
+
+                    for (int j = 0; j < size; ++j)
+                    {
+                        tmp[i, j] = array[size - j - 1, i];
+                    }
+
+                }
+                return tmp;
+        }
+        private Player[,] RotateArrayLeft(Player[,] array)
+        {
+            int size = 3;
+            Player[,] tmp = new Player[size, size];
+
+            for(int i = 0;i < size; ++i)
+            {
+                for(int j = 0;j < size; ++j)
+                {
+                    tmp[i,j] = array[j, size - i - 1];
+                }
+            }
+            return tmp;
         }
     }
 }

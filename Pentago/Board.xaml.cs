@@ -1,18 +1,11 @@
 ﻿using Pentago.Klassen;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Windows.Media.Animation;
 
 namespace Pentago
 {
@@ -26,13 +19,20 @@ namespace Pentago
         GameGrid TopRight;
         GameGrid BotLeft;
         GameGrid BotRight;
+        List<Button> RotationButtons;
         
         public Board()
         {
             InitializeComponent();
 
             SetGrids();
-
+            RotationButtons = new List<Button>();
+            game.GameEnded += OnGameEnded;
+            game.GameRestarted += OnGameRestarted;
+            game.MoveMade += OnMoveMade;
+            AddButtons();
+            ChangePlayerIcon();
+            ChangeVisibilityRotationButton();
         }
         private void SetGrids()
         {
@@ -43,7 +43,7 @@ namespace Pentago
             TopLeft.GridButtonClick += GridButton_Click;
             Grid.SetRow(TopLeft, 0);
             Grid.SetColumn(TopLeft, 0);
-            MainGrid.Children.Add(TopLeft);
+            GameGrid.Children.Add(TopLeft);
 
             TopRight = new GameGrid();
             TopRight.Name = "GridTopRight";
@@ -52,7 +52,7 @@ namespace Pentago
             TopRight.GridButtonClick += GridButton_Click;
             Grid.SetRow(TopRight, 0);
             Grid.SetColumn(TopRight, 1);
-            MainGrid.Children.Add(TopRight);
+            GameGrid.Children.Add(TopRight);
 
             BotLeft = new GameGrid();
             BotLeft.Name = "GridBotLeft";
@@ -61,7 +61,7 @@ namespace Pentago
             BotLeft.GridButtonClick += GridButton_Click;
             Grid.SetRow(BotLeft, 1);
             Grid.SetColumn(BotLeft, 0);
-            MainGrid.Children.Add(BotLeft);
+            GameGrid.Children.Add(BotLeft);
 
             BotRight = new GameGrid();
             BotRight.Name = "GridBotRight";
@@ -70,46 +70,104 @@ namespace Pentago
             BotRight.GridButtonClick += GridButton_Click;
             Grid.SetRow(BotRight, 1);
             Grid.SetColumn(BotRight, 1);
-            MainGrid.Children.Add(BotRight);
+            GameGrid.Children.Add(BotRight);
         }
+        private void AddButtons()
+        {
+            RotationButtons.Add(BTLL);
+            RotationButtons.Add(BTLR);
+
+            RotationButtons.Add(BTRL);
+            RotationButtons.Add(BTRR);
+
+            RotationButtons.Add(BBLL);
+            RotationButtons.Add(BBLR);
+
+            RotationButtons.Add(BBRL);
+            RotationButtons.Add(BBRR);
+
+
+        }
+        private void ChangeVisibilityRotationButton()
+        {
+            foreach (Button b in RotationButtons)
+            {
+              
+                if (b.Visibility == Visibility.Visible)
+                {
+                    b.Visibility = Visibility.Hidden;
+                }
+                else
+                {
+                    b.Visibility = Visibility.Visible;
+                }
+            }
+        }
+        private void EndScreening(string text,SolidColorBrush colorBrush)
+        {
+            GameGrid.Visibility = Visibility.Hidden;
+            ResultText.Text = text;
+            WinnerIcon.Fill = colorBrush;
+            EndScreen.Visibility = Visibility.Visible;
+        }
+        private void OnMoveMade()
+        {
+            game.Turned = true;
+            ChangeVisibilityRotationButton();
+        }
+        private void ChangePlayerIcon()
+        {
+            if (game.CurrentPlayer == Player.Blue)
+            {
+                PlayerIcon.Fill = new SolidColorBrush(Colors.Blue);
+            }
+            else
+            {
+                PlayerIcon.Fill = new SolidColorBrush(Colors.Red);
+            }
+        }
+        private async void OnGameEnded(GameResult gameResult)
+        {
+            await Task.Delay(1000);
+           if (gameResult.Winner == Player.None)
+            {
+                EndScreening("Unentschieden", null);
+            }
+            else if (gameResult.Winner == Player.Blue)
+            {
+                EndScreening("Winner:", new SolidColorBrush(Colors.Blue));
+            }
+            else
+            {
+                EndScreening("Winner:", new SolidColorBrush(Colors.Red));
+            }
+            
+        }
+
+        private void OnGameRestarted()
+        {
+
+        }
+
         private void GridButton_Click(object sender, GridButtonClickEventArgs e)
         {
             var grid = (GameGrid)sender;
             game.MakeMove(e.Row,e.Column,grid,e.Button);
-
-            
-           
-            
-
         }
         private void Button_Click_Rotation(object sender, RoutedEventArgs e)
         {
-
+            Button button = (Button)sender;
+            game.RotateArray(button.Name,TopLeft,TopRight,BotLeft,BotRight);
+            ChangePlayerIcon();
+            ChangeVisibilityRotationButton();
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    game.TopLeft[i,j] = Player.None;
-                    
-                    game.TopRight[i,j] = Player.None;
-                    
-                    game.BotLeft[i,j] = Player.None;
-                    
-                    game.BotRight[i,j] = Player.None;
-                    
-
-                }
-            }
-            TopLeft.Reset();
-            TopRight.Reset();
-            BotLeft.Reset();
-            BotRight.Reset();
-            game.WinCondition = 0;
-
-           
+            SetGrids();
+            game.Reset();
+    
         }
+
+
     }
 }

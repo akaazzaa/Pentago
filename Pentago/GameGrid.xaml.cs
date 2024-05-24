@@ -54,7 +54,7 @@ namespace Pentago
                     button.Name = $"B{row}{col}";
                     button.Content = button.Name;
 
-                    // BorderBrush setzen
+                    
                     LinearGradientBrush borderBrush = new LinearGradientBrush();
                     borderBrush.StartPoint = new Point(0.5, 0);
                     borderBrush.EndPoint = new Point(0.5, 1);
@@ -62,7 +62,7 @@ namespace Pentago
                     borderBrush.GradientStops.Add(new GradientStop(Colors.Black, 1));
                     button.BorderBrush = borderBrush;
 
-                    // Background setzen
+                    
                     LinearGradientBrush backgroundBrush = new LinearGradientBrush();
                     backgroundBrush.StartPoint = new Point(0.5, 0);
                     backgroundBrush.EndPoint = new Point(0.5, 1);
