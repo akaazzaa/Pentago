@@ -64,7 +64,7 @@
     <Compile Include="Board.xaml.cs">
       <DependentUpon>Board.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GameResult.cs" />
+    <Compile Include="Klassen\GameResult.cs" />
     <Compile Include="Klassen\GridButtonClickEventArgs.cs" />
     <Compile Include="Klassen\GameButton.cs" />
     <Compile Include="GameGrid.xaml.cs">
