@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.RightsManagement;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -31,6 +32,7 @@ namespace Pentago.Klassen
         public WinInfo WinInfo { get; set; }
         public GameResult GameResult { get; set; }
         
+        
 
         public event Action<GameResult> GameEnded;
         public event Action GameRestarted;
@@ -50,6 +52,7 @@ namespace Pentago.Klassen
             HalfArrayRowLenght = TopLeft.GetLength(0);
             ArrayColLenght = ArrayRowLenght;
             HalfArrayColLenght = HalfArrayRowLenght;
+           
         }
         private bool IsGridFull()
         {
@@ -309,7 +312,7 @@ namespace Pentago.Klassen
             if (IsWin())
             {
                 GameOver = true;
-                GameEnded?.Invoke(GameResult);
+               
             }
             else
             {
@@ -328,68 +331,77 @@ namespace Pentago.Klassen
             TurnsPassed = 0;
             GameOver = false;
             GameRestarted?.Invoke();
+
         }
-        public async void RotateArray(string buttonname,GameGrid topLeft,GameGrid topRight,GameGrid botLeft,GameGrid botRight)
+        public  void RotateArray(string buttonname,GameGrid topLeft,GameGrid topRight,GameGrid botLeft,GameGrid botRight)
         {
             switch (buttonname)
             {
                 case ("BTLL"):
                     TopLeft = RotateArrayLeft(TopLeft);
-                    Move(topLeft,-90,0);
+                    ChangeButtonspositionLeft(topLeft);
+                    Move(topLeft,-90);
                     break;
                 case ("BTLR"):
                    TopLeft = RotateArrayRight(TopLeft);
-                    Move(topLeft,90,0);
+                    ChangeButtonspositionRight(topLeft);
+                    Move(topLeft,90);
                     break;
                 case ("BTRL"):
                     TopRight = RotateArrayLeft(TopRight);
-                    Move(topRight,-90, 0);
+                    ChangeButtonspositionLeft(topRight);
+                    Move(topRight,-90);
                     break;
                 case ("BTRR"):
                    TopRight = RotateArrayRight(TopRight);
-                    Move(topRight,90, 0);
+                    ChangeButtonspositionRight(topRight);
+                    Move(topRight,90);
                     break;
                 case ("BBLL"):
                     BotLeft = RotateArrayRight(BotLeft);
-                    Move(botLeft,90, 0);
+                    ChangeButtonspositionRight(botLeft);
+                    Move(botLeft,90);
                     break;
                 case ("BBLR"):
                     BotLeft = RotateArrayLeft(BotLeft);
-                    Move(botLeft,-90, 0);
+                    ChangeButtonspositionLeft(botLeft);
+                    Move(botLeft,-90);
                     break;
                 case ("BBRL"):
                     BotRight = RotateArrayRight(BotRight);
-                    Move(botRight,90, 0);
+                    ChangeButtonspositionRight(botRight);
+                    Move(botRight,90);
                     break;
                 case ("BBRR"):
                     BotRight = RotateArrayLeft(BotRight);
-                    Move(botRight,-90, 0);
+                    ChangeButtonspositionLeft(botRight);
+                    Move(botRight,-90);
                     break;
             }
             Turned = false;
             SwitchPlayer();
         }
         /// <summary>
-        ///  Fehler in der Rotation Animation 
+        ///  Fehler in der Rotation Animation Lösung Grid muss sich mit drehen sonst geben die Button den Falschen wert zurück 
         /// </summary>
         /// <param name="gameGrid"></param>
         /// <param name="angle"></param>
         /// <param name="currentRotation"></param>
-        private void Move(GameGrid gameGrid, double angle, double currentRotation)
+        private void Move(GameGrid gameGrid, double angle)
         {
             RotateTransform rotateTransformTopLeft = new RotateTransform();
-            rotateTransformTopLeft.Angle = currentRotation;
+            rotateTransformTopLeft.Angle = gameGrid.currentRotation;
             rotateTransformTopLeft.CenterX = 155;
             rotateTransformTopLeft.CenterY = 155;
             gameGrid.RenderTransform = rotateTransformTopLeft;
             DoubleAnimation rotationAnimation = new DoubleAnimation();
-            rotationAnimation.From = currentRotation;
-            rotationAnimation.To = currentRotation + angle;
+            rotationAnimation.From = gameGrid.currentRotation;
+            rotationAnimation.To = gameGrid.currentRotation + angle;
             rotationAnimation.Duration = new Duration(TimeSpan.FromSeconds(1));
 
             gameGrid.RenderTransform.BeginAnimation(RotateTransform.AngleProperty, rotationAnimation);
-            
-            currentRotation += angle;
+
+            gameGrid.currentRotation += angle;
             
         }
         private Player[,] RotateArrayRight(Player[,] array)
@@ -412,8 +424,13 @@ namespace Pentago.Klassen
                 }
                 return tmp;
         }
+
         private Player[,] RotateArrayLeft(Player[,] array)
         {
+            if (array == null)
+            {
+                return null;
+            }
             int size = 3;
             Player[,] tmp = new Player[size, size];
 
@@ -425,6 +442,29 @@ namespace Pentago.Klassen
                 }
             }
             return tmp;
+        }
+
+        public void ChangeButtonspositionRight(GameGrid gameGrid)
+        {
+           
+
+        }
+        public void ChangeButtonspositionLeft(GameGrid gameGrid)
+        {
+            int size = 3;
+
+
+            for (int i = 0; i < size; ++i)
+            {
+
+                for (int j = 0; j < size; ++j)
+                {
+                    Grid.SetRow(gameGrid.buttons[j],size - i - 1);
+                    Grid.SetColumn(gameGrid.buttons[j], j);
+                }
+
+            }
+
         }
     }
 }
