@@ -20,6 +20,8 @@ namespace Pentago
         GameGrid BotLeft;
         GameGrid BotRight;
         List<Button> RotationButtons;
+
+       
         
         public Board()
         {
@@ -159,7 +161,6 @@ namespace Pentago
             Button button = (Button)sender;
             game.RotateArray(button.Name,TopLeft,TopRight,BotLeft,BotRight);
             ChangePlayerIcon();
-            
             ChangeVisibilityRotationButton();
         }
         private void Button_Click(object sender, RoutedEventArgs e)

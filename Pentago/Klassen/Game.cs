@@ -37,6 +37,8 @@ namespace Pentago.Klassen
         public event Action<GameResult> GameEnded;
         public event Action GameRestarted;
         public event Action MoveMade;
+        public static event Action RotateButtonsLeft;
+        public static event Action RotateButtonsRight;
 
         public Game()
         {
@@ -321,7 +323,6 @@ namespace Pentago.Klassen
         }
         public void Reset()
         {
-
             TopLeft = new Player[3, 3];
             TopRight = new Player[3, 3];
             BotLeft = new Player[3, 3];
@@ -331,7 +332,6 @@ namespace Pentago.Klassen
             TurnsPassed = 0;
             GameOver = false;
             GameRestarted?.Invoke();
-
         }
         public  void RotateArray(string buttonname,GameGrid topLeft,GameGrid topRight,GameGrid botLeft,GameGrid botRight)
         {
@@ -339,47 +339,47 @@ namespace Pentago.Klassen
             {
                 case ("BTLL"):
                     TopLeft = RotateArrayLeft(TopLeft);
-                    ChangeButtonspositionLeft(topLeft);
+                    topLeft.SetNewPositions(Direction.Left);
                     Move(topLeft,-90);
                     break;
                 case ("BTLR"):
                    TopLeft = RotateArrayRight(TopLeft);
-                    ChangeButtonspositionRight(topLeft);
+                    topLeft.SetNewPositions(Direction.Right);
                     Move(topLeft,90);
                     break;
                 case ("BTRL"):
                     TopRight = RotateArrayLeft(TopRight);
-                    ChangeButtonspositionLeft(topRight);
+                    topRight.SetNewPositions(Direction.Left);
                     Move(topRight,-90);
                     break;
                 case ("BTRR"):
-                   TopRight = RotateArrayRight(TopRight);
-                    ChangeButtonspositionRight(topRight);
+                    TopRight = RotateArrayRight(TopRight);
+                    topRight.SetNewPositions(Direction.Right);
                     Move(topRight,90);
                     break;
                 case ("BBLL"):
                     BotLeft = RotateArrayRight(BotLeft);
-                    ChangeButtonspositionRight(botLeft);
+                    RotateButtonsRight?.Invoke();
                     Move(botLeft,90);
                     break;
                 case ("BBLR"):
                     BotLeft = RotateArrayLeft(BotLeft);
-                    ChangeButtonspositionLeft(botLeft);
+                    RotateButtonsLeft?.Invoke();
                     Move(botLeft,-90);
                     break;
                 case ("BBRL"):
                     BotRight = RotateArrayRight(BotRight);
-                    ChangeButtonspositionRight(botRight);
+                    RotateButtonsRight?.Invoke();
                     Move(botRight,90);
                     break;
                 case ("BBRR"):
                     BotRight = RotateArrayLeft(BotRight);
-                    ChangeButtonspositionLeft(botRight);
+                    RotateButtonsLeft?.Invoke();
                     Move(botRight,-90);
                     break;
             }
             Turned = false;
-            SwitchPlayer();
+            //SwitchPlayer();
         }
         /// <summary>
         ///  Fehler in der Rotation Animation Lösung Grid muss sich mit drehen sonst geben die Button den Falschen wert zurück 
@@ -390,18 +390,18 @@ namespace Pentago.Klassen
         private void Move(GameGrid gameGrid, double angle)
         {
             RotateTransform rotateTransformTopLeft = new RotateTransform();
-            rotateTransformTopLeft.Angle = gameGrid.currentRotation;
+            rotateTransformTopLeft.Angle = gameGrid.CurrentRotation;
             rotateTransformTopLeft.CenterX = 155;
             rotateTransformTopLeft.CenterY = 155;
             gameGrid.RenderTransform = rotateTransformTopLeft;
             DoubleAnimation rotationAnimation = new DoubleAnimation();
-            rotationAnimation.From = gameGrid.currentRotation;
-            rotationAnimation.To = gameGrid.currentRotation + angle;
+            rotationAnimation.From = gameGrid.CurrentRotation;
+            rotationAnimation.To = gameGrid.CurrentRotation + angle;
             rotationAnimation.Duration = new Duration(TimeSpan.FromSeconds(1));
 
             gameGrid.RenderTransform.BeginAnimation(RotateTransform.AngleProperty, rotationAnimation);
 
-            gameGrid.currentRotation += angle;
+            gameGrid.CurrentRotation += angle;
             
         }
         private Player[,] RotateArrayRight(Player[,] array)
@@ -413,12 +413,12 @@ namespace Pentago.Klassen
                 int size = 3;
                 Player[,] tmp = new Player[size, size];
 
-                for (int i = 0; i < size; ++i)
+                for (int r = 0; r < size; ++r)
                 {
 
-                    for (int j = 0; j < size; ++j)
+                    for (int c = 0; c < size; ++c)
                     {
-                        tmp[i, j] = array[size - j - 1, i];
+                        tmp[c, size - 1 - r] = array[r,c];
                     }
 
                 }
@@ -434,38 +434,17 @@ namespace Pentago.Klassen
             int size = 3;
             Player[,] tmp = new Player[size, size];
 
-            for(int i = 0;i < size; ++i)
+            for(int r = 0;r < size; ++r)
             {
-                for(int j = 0;j < size; ++j)
+                for(int c = 0;c < size; ++c)
                 {
-                    tmp[i,j] = array[j, size - i - 1];
+                    tmp[size - 1  - c,r] = array[r,c];
                 }
             }
             return tmp;
         }
 
-        public void ChangeButtonspositionRight(GameGrid gameGrid)
-        {
-           
-
-        }
-        public void ChangeButtonspositionLeft(GameGrid gameGrid)
-        {
-            int size = 3;
-
-
-            for (int i = 0; i < size; ++i)
-            {
-
-                for (int j = 0; j < size; ++j)
-                {
-                    Grid.SetRow(gameGrid.buttons[j],size - i - 1);
-                    Grid.SetColumn(gameGrid.buttons[j], j);
-                }
-
-            }
-
-        }
+    
     }
 }
 

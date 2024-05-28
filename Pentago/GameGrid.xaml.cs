@@ -1,5 +1,8 @@
-﻿using System;
+﻿
+using Pentago.Klassen;
+using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -12,22 +15,53 @@ namespace Pentago
     public partial class GameGrid : UserControl
     {
         public event EventHandler<GridButtonClickEventArgs> GridButtonClick;
-        public double currentRotation;
-        public List<Button> buttons {  get; set; }  
+        public double CurrentRotation;
+        public List<Button> Buttons {  get; set; }  
         public GameGrid()
         {
             InitializeComponent();
-            buttons = new List<Button>();
-            currentRotation = 0;
+            Buttons = new List<Button>();
+            CurrentRotation = 0;
             Process();
+
+        }
+
+        public void SetNewPositions(Direction direction)
+        {    foreach (var button in Buttons)
+            {
+                switch (direction)
+                {
+                    case Direction.Left:
+                        RotateLeft(button);
+                        break;
+                    case Direction.Right:
+                        RotateRight(button);
+                        break;
+                }
+            }       
+        }
+
+        private void RotateRight(Button button)
+        {
+            int size = 3;
+            var pos = (Positions)button.Tag;
+            button.Tag = new Positions(pos.Column, size - 1 - pos.Row);
+
+        }
+
+        private void RotateLeft(Button button)
+        {
+            int size = 3;
+            var pos = (Positions)button.Tag;
+            button.Tag = new Positions(size - 1 - pos.Column, pos.Row);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
-            
-            var row = Grid.GetRow(button);
-            var column = Grid.GetColumn(button);
+            var pos = (Positions)button.Tag;
+            var row = pos.Row;
+            var column = pos.Column;
             GridButtonClick?.Invoke(this, new GridButtonClickEventArgs(row, column,button));
 
         }
@@ -44,8 +78,8 @@ namespace Pentago
                     button.Height = 80;
                     button.Width = 80;
                     button.Name = $"B{row}{col}";
+                    button.Tag = new Positions(row, col);
                     button.Content = button.Name;
-
                     
                     LinearGradientBrush borderBrush = new LinearGradientBrush();
                     borderBrush.StartPoint = new Point(0.5, 0);
@@ -62,20 +96,21 @@ namespace Pentago
                     backgroundBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0x67, 0x67, 0x67), 0));
                     button.Background = backgroundBrush;
 
-                    Grid.SetColumn(button, col);
                     Grid.SetRow(button, row);
+                    Grid.SetColumn(button, col);
+                    
 
                     grid.Children.Add(button);
 
                     button.Click += Button_Click;
-                    buttons.Add(button);
+                    Buttons.Add(button);
                 }
 
             }
         }
         public void Reset()
         {
-            foreach(Button button in buttons)
+            foreach(Button button in Buttons)
             {
                 button.HorizontalAlignment = HorizontalAlignment.Center;
                 button.VerticalAlignment = VerticalAlignment.Center;
@@ -100,6 +135,16 @@ namespace Pentago
             }
         }
 
+        private class Positions
+        {
+            public Positions(int row, int column) { this.Row = row; this.Column = column; }
+
+            public int Row = 0;
+            public int Column = 0;
+
+           
+            
+        }
         
     }
 
