@@ -132,5 +132,23 @@
   <ItemGroup>
     <Resource Include="SpielInfo.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Test1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="borad.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Designer.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Designer %281%29.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Designer %282%29.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Designer %284%29.jpeg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

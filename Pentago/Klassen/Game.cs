@@ -1,12 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.RightsManagement;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -314,7 +306,7 @@ namespace Pentago.Klassen
             if (IsWin())
             {
                 GameOver = true;
-               
+                GameEnded?.Invoke(GameResult);
             }
             else
             {
@@ -359,34 +351,29 @@ namespace Pentago.Klassen
                     break;
                 case ("BBLL"):
                     BotLeft = RotateArrayRight(BotLeft);
-                    RotateButtonsRight?.Invoke();
+                    botLeft.SetNewPositions(Direction.Right);
                     Move(botLeft,90);
                     break;
                 case ("BBLR"):
                     BotLeft = RotateArrayLeft(BotLeft);
-                    RotateButtonsLeft?.Invoke();
+                    botLeft.SetNewPositions(Direction.Left);
                     Move(botLeft,-90);
                     break;
                 case ("BBRL"):
                     BotRight = RotateArrayRight(BotRight);
-                    RotateButtonsRight?.Invoke();
+                    botRight.SetNewPositions(Direction.Right);
                     Move(botRight,90);
                     break;
                 case ("BBRR"):
                     BotRight = RotateArrayLeft(BotRight);
-                    RotateButtonsLeft?.Invoke();
+                    botRight.SetNewPositions(Direction.Left);
                     Move(botRight,-90);
                     break;
             }
             Turned = false;
-            //SwitchPlayer();
+            SwitchPlayer();
         }
-        /// <summary>
-        ///  Fehler in der Rotation Animation Lösung Grid muss sich mit drehen sonst geben die Button den Falschen wert zurück 
-        /// </summary>
-        /// <param name="gameGrid"></param>
-        /// <param name="angle"></param>
-        /// <param name="currentRotation"></param>
+       
         private void Move(GameGrid gameGrid, double angle)
         {
             RotateTransform rotateTransformTopLeft = new RotateTransform();

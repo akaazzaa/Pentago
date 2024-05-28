@@ -71,13 +71,6 @@
                 <TranslateTransform/>
             </TransformGroup>
         </Grid.RenderTransform>
-        <Grid.Background>
-            <RadialGradientBrush>
-                <GradientStop Color="#FA000000" Offset="1"/>
-                <GradientStop Offset="0.007" Color="#FF1703F7"/>
-                <GradientStop Color="#FF134098" Offset="1"/>
-            </RadialGradientBrush>
-        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>

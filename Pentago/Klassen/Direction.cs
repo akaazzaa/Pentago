@@ -12,6 +12,6 @@ namespace Pentago
         Left = 1,
         Right = 2,
 
-        none = 0;
+        none = 0
     }
 }
