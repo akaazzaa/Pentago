@@ -288,7 +288,7 @@ namespace Pentago.Klassen
             {
                 return;
             }
-            //Computer.AllPossibleMoves(TopLeft, TopRight, BotLeft, BotRight, CurrentPlayer);
+            Computer.AllPossibleMoves(TopLeft, TopRight, BotLeft, BotRight, CurrentPlayer);
             Changbuttoncolor(button);
             switch (grid.Name)
             {
