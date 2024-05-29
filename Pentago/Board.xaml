@@ -6,9 +6,13 @@
              xmlns:local="clr-namespace:Pentago"
              mc:Ignorable="d" d:DesignHeight="1000" d:DesignWidth="1500">
 
-    <Grid x:Name="MainGrid" RenderTransformOrigin="0.506,0.523" >
+    <Grid x:Name="MainGrid" RenderTransformOrigin="0.506,0.523" HorizontalAlignment="Left" Width="1500" >
         <Grid.Background>
-            <ImageBrush Stretch="Fill"/>
+            <RadialGradientBrush>
+                <GradientStop Color="Black" Offset="0.41"/>
+                <GradientStop Color="#FF18B385" Offset="1"/>
+                <GradientStop Color="#FF004832" Offset="0.507"/>
+            </RadialGradientBrush>
         </Grid.Background>
         <Grid.OpacityMask>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -18,13 +22,14 @@
         </Grid.OpacityMask>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="249*"/>
+            <RowDefinition Height="251*"/>
         </Grid.RowDefinitions>
         <StackPanel x:Name="PlayerTurnPanel"
                     Orientation="Horizontal"
-                    HorizontalAlignment="Left" Margin="624,10,0,892" Grid.RowSpan="2">
+                    HorizontalAlignment="Left" Margin="624,10,0,400" Grid.RowSpan="2" Width="288">
             <TextBlock FontSize="72"
-                       Text="Player:" Height="109"
+                       Text="Player:" Height="88"
                        />
             <Rectangle x:Name="PlayerIcon"
                        Height="80"
@@ -34,18 +39,18 @@
                        Fill="Blue"/>
         </StackPanel>
 
-        <Canvas x:Name="GameCanvas" Margin="150,146,150,2" Grid.RowSpan="2" RenderTransformOrigin="0.5,0.5">
+        <Canvas x:Name="GameCanvas" Margin="138,84,0,0" Grid.RowSpan="3" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="1162" Height="814" VerticalAlignment="Top">
             <Canvas.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
-                    <SkewTransform AngleY="0.083"/>
+                    <SkewTransform AngleY="-0.065"/>
                     <RotateTransform/>
-                    <TranslateTransform Y="0.816"/>
+                    <TranslateTransform Y="2.316"/>
                 </TransformGroup>
             </Canvas.RenderTransform>
             <Grid x:Name="GameGrid"
-                  Width="1159"
-                  Height="857" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="29" Canvas.Top="-1">
+                  Width="1015"
+                  Height="818" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.Left="173" Canvas.Top="-13">
                 <Button x:Name="BTLL" Content="Button" Margin="0,0,360,210" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Right" Width="40" Height="20" VerticalAlignment="Bottom" Click="Button_Click_Rotation">
                     <Button.RenderTransform>
                         <TransformGroup>
@@ -101,7 +106,7 @@
             </Grid>
         </Canvas>
         <Grid x:Name="EndScreen"
-              Grid.RowSpan="2"
+              Grid.RowSpan="3"
               Visibility="Hidden"
               Background="Red">
             <StackPanel Orientation="Vertical"
