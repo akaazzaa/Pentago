@@ -23,6 +23,7 @@ namespace Pentago.Klassen
         public bool Turned { get; set; }
         public WinInfo WinInfo { get; set; }
         public GameResult GameResult { get; set; }
+        public Computer Computer { get; set; }
         
         
 
@@ -46,6 +47,7 @@ namespace Pentago.Klassen
             HalfArrayRowLenght = TopLeft.GetLength(0);
             ArrayColLenght = ArrayRowLenght;
             HalfArrayColLenght = HalfArrayRowLenght;
+            Computer = new Computer();
            
         }
         private bool IsGridFull()
@@ -286,6 +288,7 @@ namespace Pentago.Klassen
             {
                 return;
             }
+            //Computer.AllPossibleMoves(TopLeft, TopRight, BotLeft, BotRight, CurrentPlayer);
             Changbuttoncolor(button);
             switch (grid.Name)
             {

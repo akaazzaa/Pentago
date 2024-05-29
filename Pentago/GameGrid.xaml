@@ -62,7 +62,13 @@
             </Setter>
         </Style>
     </UserControl.Resources>
-    <Grid x:Name="grid"  Margin="0,0,0,0"  Width="300" Height="300" RenderTransformOrigin="0.5,0.5">
+    <UserControl.BorderBrush>
+        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="Black"/>
+            <GradientStop Color="#FF00FB8E" Offset="1"/>
+        </LinearGradientBrush>
+    </UserControl.BorderBrush>
+    <Grid x:Name="grid"  Margin="0,0,0,0"  Width="300" Height="300" RenderTransformOrigin="0.5,0.5" Background="#FF035B3D">
         <Grid.RenderTransform>
             <TransformGroup>
                 <ScaleTransform/>
@@ -81,9 +87,11 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Grid.Effect>
-            <DropShadowEffect/>
-        </Grid.Effect>
+        <Border BorderBrush="#FF004430" BorderThickness="5,5,5,5" Grid.ColumnSpan="3" Grid.RowSpan="3">
+            <Border.Effect>
+                <DropShadowEffect/>
+            </Border.Effect>
+        </Border>
 
 
 
