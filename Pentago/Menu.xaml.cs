@@ -17,7 +17,15 @@ namespace Pentago
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            MainModel.SetNewContent(new Board());
+            Game game = new Game();
+            MainModel.SetNewContent(new Board(game));
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            Game game = new Game();
+            game.IsComputer = true;
+            MainModel.SetNewContent(new Board(game));
         }
     }
 }

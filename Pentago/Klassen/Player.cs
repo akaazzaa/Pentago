@@ -8,6 +8,6 @@ namespace Pentago
 {
     public enum Player
     {
-      None,Computer,Blue,Red
+      None,Blue,Red
     }
 }

@@ -14,7 +14,7 @@ namespace Pentago
     /// </summary>
     public partial class Board : UserControl
     {
-        Game game = new Game(); 
+        Game Game;
         GameGrid TopLeft;
         GameGrid TopRight;
         GameGrid BotLeft;
@@ -23,10 +23,10 @@ namespace Pentago
 
        
         
-        public Board()
+        public Board(Game game)
         {
             InitializeComponent();
-
+            Game = game;
             SetGrids();
             RotationButtons = new List<Button>();
             game.GameEnded += OnGameEnded;
@@ -114,12 +114,12 @@ namespace Pentago
         }
         private void OnMoveMade()
         {
-            game.Turned = true;
+            Game.Turned = true;
             ChangeVisibilityRotationButton();
         }
         private void ChangePlayerIcon()
         {
-            if (game.CurrentPlayer == Player.Blue)
+            if (Game.CurrentPlayer == Player.Blue)
             {
                 PlayerIcon.Fill = new SolidColorBrush(Colors.Blue);
             }
@@ -154,19 +154,19 @@ namespace Pentago
         private void GridButton_Click(object sender, GridButtonClickEventArgs e)
         {
             var grid = (GameGrid)sender;
-            game.MakeMove(e.Row,e.Column,grid,e.Button);
+            Game.MakeMove(e.Row,e.Column,grid,e.Button);
         }
         private void Button_Click_Rotation(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
-            game.RotateArray(button.Name,TopLeft,TopRight,BotLeft,BotRight);
+            Game.RotateArray(button.Name,TopLeft,TopRight,BotLeft,BotRight);
             ChangePlayerIcon();
             ChangeVisibilityRotationButton();
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             SetGrids();
-            game.Reset();
+            Game.Reset();
     
         }
 

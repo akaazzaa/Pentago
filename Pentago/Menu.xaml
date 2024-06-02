@@ -13,7 +13,8 @@
                 <GradientStop Color="#FF134098" Offset="1"/>
             </LinearGradientBrush>
         </Grid.Background>
-        <Button Content="Button" HorizontalAlignment="Center" Margin="0,526,0,0" VerticalAlignment="Top" Width="84" Height="24" RenderTransformOrigin="0.525,1.568" Click="Button_Click" />
+        <Button Content="MultiPlayer" HorizontalAlignment="Center" Margin="0,526,0,0" VerticalAlignment="Top" Width="84" Height="24" RenderTransformOrigin="0.525,1.568" Click="Button_Click" />
+        <Button Content="SinglePlayer" HorizontalAlignment="Center" Margin="0,580,0,0" VerticalAlignment="Top" Width="84" Click="Button_Click_1"/>
 
     </Grid>
 </UserControl>

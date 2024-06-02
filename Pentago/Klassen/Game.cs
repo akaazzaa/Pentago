@@ -18,8 +18,9 @@ namespace Pentago.Klassen
         public int HalfArrayRowLenght { get; set; }
         public int ArrayColLenght { get; set; }
         public int HalfArrayColLenght { get; set; }
+        public int TurnsPassed { get; set; }
         public bool GameOver { get; set; }
-        public int TurnsPassed { get; set; } 
+        public bool IsComputer { get; set; }
         public bool Turned { get; set; }
         public WinInfo WinInfo { get; set; }
         public GameResult GameResult { get; set; }
@@ -35,6 +36,7 @@ namespace Pentago.Klassen
 
         public Game()
         {
+            IsComputer = false;
             CurrentPlayer = Player.Blue;
             WinCondition = 0;
             Turned = false;
@@ -288,7 +290,7 @@ namespace Pentago.Klassen
             {
                 return;
             }
-            Computer.AllPossibleMoves(TopLeft, TopRight, BotLeft, BotRight, CurrentPlayer);
+            
             Changbuttoncolor(button);
             switch (grid.Name)
             {
@@ -305,6 +307,7 @@ namespace Pentago.Klassen
                     BotRight[row, col] = CurrentPlayer;
                     break;
             }
+           
             TurnsPassed++;
             if (IsWin())
             {
@@ -315,6 +318,7 @@ namespace Pentago.Klassen
             {
                 MoveMade?.Invoke();
             }
+             Computer.EvaluateBoard(TopLeft, TopRight, BotLeft, BotRight);
         }
         public void Reset()
         {
