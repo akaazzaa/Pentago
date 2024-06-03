@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -13,13 +14,14 @@ namespace Pentago.Klassen
         public Player[,] BotLeft { get; set; }
         public Player[,] BotRight { get; set; }
         public Player CurrentPlayer { get; set; }
+        public int Suchtiefe = 1;
         public int WinCondition { get; set; }
         public int ArrayRowLenght { get; set; }
         public int HalfArrayRowLenght { get; set; }
         public int ArrayColLenght { get; set; }
         public int HalfArrayColLenght { get; set; }
         public int TurnsPassed { get; set; }
-        public bool GameOver { get; set; }
+        public  bool GameOver { get; set; }
         public bool IsComputer { get; set; }
         public bool Turned { get; set; }
         public WinInfo WinInfo { get; set; }
@@ -316,9 +318,10 @@ namespace Pentago.Klassen
             }
             else
             {
+                
                 MoveMade?.Invoke();
             }
-             Computer.EvaluateBoard(TopLeft, TopRight, BotLeft, BotRight);
+             
         }
         public void Reset()
         {
@@ -438,7 +441,104 @@ namespace Pentago.Klassen
             return tmp;
         }
 
-    
+        private List<Player[,]> AllPossibleMoves(Player player)
+        {
+            Player[,] board = GetGameArray();
+
+            List<Player[,]> moves = new List<Player[,]>();
+
+            for (int i = 0; i < board.GetLength(0); i++)
+            {
+                for (int j = 0; j < board.GetLength(1); j++)
+                {
+                    if (board[i, j] == Player.None)
+                    {
+                        Player[,] newgrid = (Player[,])board.Clone();
+                        newgrid[i, j] = player;
+                        moves.Add(newgrid);
+                    }
+                }
+            }
+            return moves;
+        }
+        private Player[,] GetGameArray()
+        {
+
+            Player[,] board = new Player[6, 6];
+            for (int r = 0; r < board.GetLength(0); r++)
+            {
+                for (int c = 0; c < board.GetLength(1); c++)
+                {
+                    if (r < 3 && c < 3)
+                    {
+                        board[r, c] = TopLeft[r, c];
+                    }
+
+                    else if (r < 3 && c > 3 - 1 && c < 6)
+                    {
+                        board[r, c] = TopRight[r, c - 3];
+                    }
+
+
+                    if (r >= 3 && c < 3)
+                    {
+                        board[r, c] = BotLeft[r - 3, c];
+                    }
+                    if (r > 3 && r < 6 && c > 3 && c < 6)
+                    {
+                        board[r, c] = BotRight[r - 3, c - 3];
+                    }
+                }
+            }
+
+            return board;
+        }
+
+        public int  Max(int searchrange)
+        {
+            int maxvalue = -1000;
+            int value = 1;
+
+            if (searchrange == 0 || GameOver == false)
+            {
+                return 0;
+            }
+            List<Player[,]> moves = AllPossibleMoves(Player.Red);
+
+            foreach (Player[,] move in moves)
+            {
+                
+                value = Min(Suchtiefe - 1);
+                if (value > maxvalue)
+                    maxvalue = value;
+            }
+            return maxvalue;
+
+        }
+
+       
+
+        public int  Min(int searchrange)
+        {
+            int maxvalue = -1000;
+            int value = 1;
+
+            if (searchrange == 0 || GameOver == false)
+            {
+                return 0;
+            }
+            List<Player[,]> moves = AllPossibleMoves(Player.Blue);
+
+            foreach (Player[,] move in moves)
+            {
+                value = Min(Suchtiefe - 1);
+                if (value > maxvalue)
+                    maxvalue = value;
+            }
+            return maxvalue;
+        }
+
+
     }
 }
 
