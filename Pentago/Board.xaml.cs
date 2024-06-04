@@ -32,10 +32,18 @@ namespace Pentago
             game.GameEnded += OnGameEnded;
             game.GameRestarted += OnGameRestarted;
             game.MoveMade += OnMoveMade;
+            game.ComputerMovemade += Game_ComputerMovemade;
             AddButtons();
             ChangePlayerIcon();
             ChangeVisibilityRotationButton();
         }
+
+        private void Game_ComputerMovemade()
+        {
+            
+
+        }
+
         private void SetGrids()
         {
             TopLeft = new GameGrid();
@@ -116,7 +124,7 @@ namespace Pentago
         }
         private void OnMoveMade()
         {
-            Game.Turned = true;
+            Game.Turned = false;
             ChangeVisibilityRotationButton();
         }
         private void ChangePlayerIcon()

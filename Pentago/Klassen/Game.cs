@@ -26,13 +26,12 @@ namespace Pentago.Klassen
         public bool Turned { get; set; }
         public WinInfo WinInfo { get; set; }
         public GameResult GameResult { get; set; }
-        public (Player[,], Player[,], Player[,], Player[,]) bestmove;
-        public (int, int, bool) bestrotation;
         public bool isSinglePlayer { get; set; }
 
         public event Action<GameResult> GameEnded;
         public event Action GameRestarted;
         public event Action MoveMade;
+        public event Action ComputerMovemade;
         public static event Action RotateButtonsLeft;
         public static event Action RotateButtonsRight;
 
@@ -88,8 +87,6 @@ namespace Pentago.Klassen
                 button.Background = new SolidColorBrush(Colors.Red);
             }
         }
-
-
         private Button GetButtonbyTag(int row, int col)
         {
             foreach (var button in Buttons)
@@ -103,7 +100,6 @@ namespace Pentago.Klassen
             }
             return null;
         }
-
         private bool IsMarked(int r, int c)
         {
 
@@ -111,21 +107,20 @@ namespace Pentago.Klassen
             {
                 return TopLeft[r, c] == CurrentPlayer;
             }
-
             else if (r < HalfArrayRowLenght && c > HalfArrayRowLenght - 1 && c < ArrayColLenght)
             {
                 return TopRight[r, c - HalfArrayColLenght] == CurrentPlayer;
             }
-
-
-            if (r >= HalfArrayRowLenght && c < HalfArrayColLenght)
+            else if (r >= HalfArrayRowLenght && c < HalfArrayColLenght)
             {
                 return BotLeft[r - HalfArrayRowLenght, c] == CurrentPlayer;
             }
-            else
+            else if (r >= HalfArrayRowLenght && r < ArrayRowLenght && c >= ArrayColLenght && c > ArrayColLenght)
             {
                 return BotRight[r - HalfArrayRowLenght, c - HalfArrayColLenght] == CurrentPlayer;
             }
+
+            return false;
 
         }
         private bool CheckRow()
@@ -402,52 +397,7 @@ namespace Pentago.Klassen
             }
             Turned = false;
             SwitchPlayer();
-            if (isSinglePlayer == true && CurrentPlayer == Player.Red)
-            {
-                Max(Suchtiefe);
-                ComputerTurn();
-                MoveMade?.Invoke();
-            }
         }
-
-        //private void ComputerTurn()
-        //{
-        //    for (int row = 0; row < bestmove.GetLength(0); row++)
-        //    {
-        //        for(int col = 0; col < bestmove.GetLength(1); col++) 
-        //        {
-
-
-        //                ComputerMakeMove(row, col);
-        //                Changbuttoncolor(row, col);
-        //                return;
-
-        //        } 
-        //    }
-        //}
-
-        private void ComputerMakeMove(int row, int col)
-        {
-
-            if (row < HalfArrayRowLenght && col < HalfArrayColLenght)
-            {
-                TopLeft[row, col] = CurrentPlayer;
-            }
-            else if (row < HalfArrayRowLenght && col > HalfArrayRowLenght - 1 && col < ArrayColLenght)
-            {
-                TopRight[row, col - HalfArrayColLenght] = CurrentPlayer;
-            }
-            else if (row >= HalfArrayRowLenght && col < HalfArrayColLenght)
-            {
-                BotLeft[row - HalfArrayRowLenght, col] = CurrentPlayer;
-            }
-
-            if (row >= HalfArrayRowLenght && col >= HalfArrayColLenght && row < ArrayRowLenght && col < ArrayColLenght)
-            {
-                BotRight[row - HalfArrayRowLenght, col - HalfArrayColLenght] = CurrentPlayer;
-            }
-        }
-
         private void Move(GameGrid gameGrid, double angle)
         {
             RotateTransform rotateTransformTopLeft = new RotateTransform();
@@ -485,7 +435,6 @@ namespace Pentago.Klassen
             }
             return tmp;
         }
-
         private Player[,] RotateArrayLeft(Player[,] array)
         {
             if (array == null)
@@ -504,260 +453,7 @@ namespace Pentago.Klassen
             }
             return tmp;
         }
-
-        public int Max(int searchrange)
-        {
-            int maxvalue = -100000;
-            int value = 0;
-
-            if (searchrange == 0 || GameOver)
-            {
-                return EvaluateBoard(Player.Red);
-            }
-
-            List<(Player[,], Player[,], Player[,], Player[,])> moves = AllPossibleMoves(Player.Red);
-
-            foreach (var move in moves)
-            {
-                ApplyMove(move, Player.Red); // Apply the move
-                value = Min(searchrange - 1);
-                UndoMove(move, Player.Red); // Undo the move
-
-                if (value > maxvalue)
-                {
-                    if (searchrange == Suchtiefe)
-                    {
-                        bestmove = move;
-                    }
-                    maxvalue = value;
-                }
-            }
-
-            // Check all possible rotations
-            for (int segment = 1; segment <= 4; segment++)
-            {
-                for (int direction = 0; direction <= 1; direction++)
-                {
-                    ApplyRotation(segment, direction == 1); // Apply rotation
-                    value = Min(searchrange - 1);
-                    UndoRotation(segment, direction == 1); // Undo rotation
-
-                    if (value > maxvalue)
-                    {
-                        if (searchrange == Suchtiefe)
-                        {
-                            bestrotation = (segment, direction, true);
-                        }
-                        maxvalue = value;
-                    }
-                }
-            }
-
-            return maxvalue;
-        }
-
-        public int Min(int searchrange)
-        {
-            int minvalue = 100000;
-            int value = 0;
-
-            if (searchrange == 0 || GameOver)
-            {
-                return EvaluateBoard(Player.Blue);
-            }
-
-            List<(Player[,], Player[,], Player[,], Player[,])> moves = AllPossibleMoves(Player.Blue);
-
-            foreach (var move in moves)
-            {
-                ApplyMove(move, Player.Blue); // Apply the move
-                value = Max(searchrange - 1);
-                UndoMove(move, Player.Blue); // Undo the move
-
-                if (value < minvalue)
-                {
-                    minvalue = value;
-                }
-            }
-
-            // Check all possible rotations
-            for (int segment = 1; segment <= 4; segment++)
-            {
-                for (int direction = 0; direction <= 1; direction++)
-                {
-                    ApplyRotation(segment, direction == 1); // Apply rotation
-                    value = Max(searchrange - 1);
-                    UndoRotation(segment, direction == 1); // Undo rotation
-
-                    if (value < minvalue)
-                    {
-                        minvalue = value;
-                    }
-                }
-            }
-
-            return minvalue;
-        }
-
-        public void ApplyMove((Player[,], Player[,], Player[,], Player[,]) move, Player player)
-        {
-            Array.Copy(move.Item1, TopLeft, move.Item1.Length);
-            Array.Copy(move.Item2, TopRight, move.Item2.Length);
-            Array.Copy(move.Item3, BotLeft, move.Item3.Length);
-            Array.Copy(move.Item4, BotRight, move.Item4.Length);
-        }
-
-        public void UndoMove((Player[,], Player[,], Player[,], Player[,]) move, Player player)
-        {
-            Array.Copy(move.Item1, TopLeft, move.Item1.Length);
-            Array.Copy(move.Item2, TopRight, move.Item2.Length);
-            Array.Copy(move.Item3, BotLeft, move.Item3.Length);
-            Array.Copy(move.Item4, BotRight, move.Item4.Length);
-        }
-
-        public void ApplyRotation(int segment, bool clockwise)
-        {
-            Player[,] board;
-            switch (segment)
-            {
-                case 1: board = TopLeft; break;
-                case 2: board = TopRight; break;
-                case 3: board = BotLeft; break;
-                case 4: board = BotRight; break;
-                default: throw new ArgumentException("Invalid segment");
-            }
-
-            RotateSegment(board, clockwise);
-        }
-
-        public void UndoRotation(int segment, bool clockwise)
-        {
-            ApplyRotation(segment, !clockwise);
-        }
-
-        public void RotateSegment(Player[,] segment, bool clockwise)
-        {
-            Player[,] temp = (Player[,])segment.Clone();
-
-            if (clockwise)
-            {
-                segment[0, 0] = temp[2, 0];
-                segment[0, 1] = temp[1, 0];
-                segment[0, 2] = temp[0, 0];
-                segment[1, 0] = temp[2, 1];
-                segment[1, 2] = temp[0, 1];
-                segment[2, 0] = temp[2, 2];
-                segment[2, 1] = temp[1, 2];
-                segment[2, 2] = temp[0, 2];
-            }
-            else
-            {
-                segment[0, 0] = temp[0, 2];
-                segment[0, 1] = temp[1, 2];
-                segment[0, 2] = temp[2, 2];
-                segment[1, 0] = temp[0, 1];
-                segment[1, 2] = temp[2, 1];
-                segment[2, 0] = temp[0, 0];
-                segment[2, 1] = temp[1, 0];
-                segment[2, 2] = temp[2, 0];
-            }
-        }
-
-        public List<(Player[,], Player[,], Player[,], Player[,])> AllPossibleMoves(Player player)
-        {
-            List<(Player[,], Player[,], Player[,], Player[,])> moves = new List<(Player[,], Player[,], Player[,], Player[,])>();
-
-            void AddMove(int i, int j, Player[,] board)
-            {
-                if (board[i, j] == Player.None)
-                {
-                    var newBoard1 = (Player[,])TopLeft.Clone();
-                    var newBoard2 = (Player[,])TopRight.Clone();
-                    var newBoard3 = (Player[,])BotLeft.Clone();
-                    var newBoard4 = (Player[,])BotRight.Clone();
-
-                    if (board == TopLeft) newBoard1[i, j] = player;
-                    if (board == TopRight) newBoard2[i, j] = player;
-                    if (board == BotLeft) newBoard3[i, j] = player;
-                    if (board == BotRight) newBoard4[i, j] = player;
-
-                    moves.Add((newBoard1, newBoard2, newBoard3, newBoard4));
-                }
-            }
-
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    AddMove(i, j, TopLeft);
-                    AddMove(i, j, TopRight);
-                    AddMove(i, j, BotLeft);
-                    AddMove(i, j, BotRight);
-                }
-            }
-
-            return moves;
-        }
-
-        public int EvaluateBoard(Player player)
-        {
-            if (CheckWin(Player.Red)) return 10;
-            if (CheckWin(Player.Blue)) return -10;
-            return 0;
-        }
-
-        public bool CheckWin(Player player)
-        {
-            // Flatten the 4 boards into a single 6x6 board for easier win checking
-            Player[,] fullBoard = new Player[6, 6];
-
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    fullBoard[i, j] = TopLeft[i, j];
-                    fullBoard[i, j + 3] = TopRight[i, j];
-                    fullBoard[i + 3, j] = BotLeft[i, j];
-                    fullBoard[i + 3, j + 3] = BotRight[i, j];
-                }
-            }
-
-            // Check rows, columns, and diagonals for a win
-            for (int i = 0; i < 6; i++)
-            {
-                for (int j = 0; j < 2; j++)
-                {
-                    // Check rows
-                    if (fullBoard[i, j] == player && fullBoard[i, j + 1] == player && fullBoard[i, j + 2] == player &&
-                        fullBoard[i, j + 3] == player && fullBoard[i, j + 4] == player)
-                        return true;
-
-                    // Check columns
-                    if (fullBoard[j, i] == player && fullBoard[j + 1, i] == player && fullBoard[j + 2, i] == player &&
-                        fullBoard[j + 3, i] == player && fullBoard[j + 4, i] == player)
-                        return true;
-                }
-            }
-
-            // Check diagonals
-            for (int i = 0; i < 2; i++)
-            {
-                for (int j = 0; j < 2; j++)
-                {
-                    // Top-left to bottom-right diagonals
-                    if (fullBoard[i, j] == player && fullBoard[i + 1, j + 1] == player && fullBoard[i + 2, j + 2] == player &&
-                        fullBoard[i + 3, j + 3] == player && fullBoard[i + 4, j + 4] == player)
-                        return true;
-
-                    // Bottom-left to top-right diagonals
-                    if (fullBoard[i + 4, j] == player && fullBoard[i + 3, j + 1] == player && fullBoard[i + 2, j + 2] == player &&
-                        fullBoard[i + 1, j + 3] == player && fullBoard[i, j + 4] == player)
-                        return true;
-                }
-            }
-
-            return false;
-        }
+        
     }
 }
 

@@ -29,7 +29,7 @@
                     Orientation="Horizontal"
                     HorizontalAlignment="Left" Margin="624,10,0,400" Grid.RowSpan="2" Width="288">
             <TextBlock FontSize="72"
-                       Text="Player:" Height="88"
+                       Text="Player:" Height="88" Foreground="White" FontFamily="Ink Free"
                        />
             <Rectangle x:Name="PlayerIcon"
                        Height="80"

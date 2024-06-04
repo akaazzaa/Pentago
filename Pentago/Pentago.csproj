@@ -64,6 +64,8 @@
     <Compile Include="Board.xaml.cs">
       <DependentUpon>Board.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ComputerRotation.cs" />
+    <Compile Include="ComputerTurn.cs" />
     <Compile Include="Klassen\Direction.cs" />
     <Compile Include="Klassen\GameResult.cs" />
     <Compile Include="Klassen\GridButtonClickEventArgs.cs" />
@@ -71,6 +73,7 @@
       <DependentUpon>GameGrid.xaml</DependentUpon>
     </Compile>
     <Compile Include="Klassen\Game.cs" />
+    <Compile Include="Klassen\Pentagoai.cs" />
     <Compile Include="Klassen\Positions.cs" />
     <Compile Include="Main.xaml.cs">
       <DependentUpon>Main.xaml</DependentUpon>
@@ -104,6 +107,7 @@
       <DependentUpon>Menu.xaml</DependentUpon>
     </Compile>
     <Compile Include="Klassen\Player.cs" />
+    <Compile Include="ComputerMark.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
