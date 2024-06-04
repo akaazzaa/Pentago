@@ -20,7 +20,7 @@ namespace Pentago
         GameGrid BotLeft;
         GameGrid BotRight;
         List<Button> RotationButtons;
-
+        List<Button> PlayButtons;
        
         
         public Board(Game game)
@@ -45,6 +45,7 @@ namespace Pentago
             TopLeft.GridButtonClick += GridButton_Click;
             Grid.SetRow(TopLeft, 0);
             Grid.SetColumn(TopLeft, 0);
+            
             GameGrid.Children.Add(TopLeft);
 
             TopRight = new GameGrid();
@@ -74,6 +75,7 @@ namespace Pentago
             Grid.SetColumn(BotRight, 1);
             GameGrid.Children.Add(BotRight);
         }
+        
         private void AddButtons()
         {
             RotationButtons.Add(BTLL);
@@ -154,7 +156,7 @@ namespace Pentago
         private void GridButton_Click(object sender, GridButtonClickEventArgs e)
         {
             var grid = (GameGrid)sender;
-            Game.MakeMove(e.Row,e.Column,grid,e.Button);
+            Game.MakeMove(e.Row,e.Column,grid,e.Buttons);
         }
         private void Button_Click_Rotation(object sender, RoutedEventArgs e)
         {

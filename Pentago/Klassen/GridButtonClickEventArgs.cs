@@ -11,13 +11,13 @@ namespace Pentago
     {
         public int Row { get; }
         public int Column { get; }
-        public Button Button { get; }
+        public List<Button> Buttons { get; }
 
-        public GridButtonClickEventArgs(int row, int column,Button button)
+        public GridButtonClickEventArgs(int row, int column,List<Button> button)
         {
             Row = row;
             Column = column;
-            Button = button;
+            Buttons = button;
         }
     }
 }
