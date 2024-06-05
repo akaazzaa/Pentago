@@ -12,30 +12,16 @@ namespace tEST
 
         static void Main(string[] args)
         {
-            CustomGame game = new CustomGame();
-            game.Max(game.Suchtiefe); // Start the Minimax algorithm
+           Logik logik = new Logik();
 
-            // Output the best move or other debugging info
-            Console.WriteLine("Best move found:");
-            void PrintBoard(Player[,] board)
-            {
-                for (int i = 0; i < 3; i++)
-                {
-                    for (int j = 0; j < 3; j++)
-                    {
-                        Console.Write(board[i, j] + " ");
-                    }
-                    Console.WriteLine();
-                }
-            }
+            logik.SetPoint(0, 0);
 
-            PrintBoard(game.bestmove.Item1);
-            PrintBoard(game.bestmove.Item2);
-            PrintBoard(game.bestmove.Item3);
-            PrintBoard(game.bestmove.Item4);
+            logik.Ausgabe();
+            logik.board = logik.RotateArrayLeft();
+            Console.WriteLine("");
+            logik.Ausgabe();
 
-            Console.ReadLine();
-
+                Console.ReadLine();
         }
     }
 }

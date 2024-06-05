@@ -20,8 +20,7 @@ namespace Pentago
         GameGrid BotLeft;
         GameGrid BotRight;
         List<Button> RotationButtons;
-        List<Button> PlayButtons;
-       
+        
         
         public Board(Game game)
         {

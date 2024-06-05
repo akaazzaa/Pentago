@@ -109,15 +109,15 @@ namespace Pentago.Klassen
             }
             else if (r < HalfArrayRowLenght && c > HalfArrayRowLenght - 1 && c < ArrayColLenght)
             {
-                return TopRight[r, c - HalfArrayColLenght] == CurrentPlayer;
+                return TopRight[r, c % 3] == CurrentPlayer;
             }
             else if (r >= HalfArrayRowLenght && c < HalfArrayColLenght)
             {
-                return BotLeft[r - HalfArrayRowLenght, c] == CurrentPlayer;
+                return BotLeft[r % 3, c] == CurrentPlayer;
             }
             else if (r >= HalfArrayRowLenght && r < ArrayRowLenght && c >= ArrayColLenght && c > ArrayColLenght)
             {
-                return BotRight[r - HalfArrayRowLenght, c - HalfArrayColLenght] == CurrentPlayer;
+                return BotRight[r % 3, c % 3] == CurrentPlayer;
             }
 
             return false;
