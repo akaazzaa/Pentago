@@ -14,10 +14,10 @@ namespace tEST
         {
            Logik logik = new Logik();
 
-            logik.SetPoint(0, 0);
+            logik.SetPoint(0, 3);
 
             logik.Ausgabe();
-            logik.board = logik.RotateArrayLeft();
+            logik.RotateCorner(Corner.Topleft, false);
             Console.WriteLine("");
             logik.Ausgabe();
 

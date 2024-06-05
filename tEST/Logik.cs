@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
@@ -214,7 +215,7 @@ namespace tEST
             }
             return tmp;
         }
-        public Player[,] RotateArrayLeft()
+        public Player[,] RotateTopLeftArrayLeft()
         {
             
             int size = board.GetLength(0) / 2;
@@ -229,6 +230,39 @@ namespace tEST
             }
             return tmp;
         }
+        public void RotateCorner(Corner corner, bool rotateLeft)
+        {
+            int size = board.GetLength(0) / 2;
+            Player[,] tmp = new Player[6, 6];
+
+            int startRow = 0, startCol = 0;
+
+            switch (corner)
+            {
+                case Corner.Topleft:
+                    startRow = 0;
+                    startCol = 0;
+                    break;
+                case Corner.Topright:
+                    startRow = 0;
+                    startCol = size;
+                    break;
+                case Corner.Botleft:
+                    startRow = size;
+                    startCol = 0;
+                    break;
+                case Corner.Botright:
+                    startRow = size;
+                    startCol = size;
+                    break;
+            }
+            // Temporäres Array zum Drehen vorbereiten
+            
+            
+        }
+
+    
+
         public void SetPoint(int x, int y)
         {
             board[x,y] = CurrentPlayer;
