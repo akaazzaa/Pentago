@@ -59,22 +59,22 @@ namespace Pentago.Klassen
         {
             return TurnsPassed == 36;
         }
-        private bool CanMove(GameGrid grid, int r, int c)
-        {
-            switch (grid.Name)
-            {
-                case ("GridTopLeft"):
-                    return !GameOver && Turned == false && TopLeft[r, c] == Player.None;
-                case ("GridTopRight"):
-                    return !GameOver && Turned == false && TopRight[r, c] == Player.None;
-                case ("GridBotLeft"):
-                    return !GameOver && Turned == false && BotLeft[r, c] == Player.None;
-                case ("GridBotRight"):
-                    return !GameOver && Turned == false && BotRight[r, c] == Player.None;
+        //private bool CanMove(int r, int c)
+        //{
+        //    switch (grid.Name)
+        //    {
+        //        case ("GridTopLeft"):
+        //            return !GameOver && Turned == false && TopLeft[r, c] == Player.None;
+        //        case ("GridTopRight"):
+        //            return !GameOver && Turned == false && TopRight[r, c] == Player.None;
+        //        case ("GridBotLeft"):
+        //            return !GameOver && Turned == false && BotLeft[r, c] == Player.None;
+        //        case ("GridBotRight"):
+        //            return !GameOver && Turned == false && BotRight[r, c] == Player.None;
 
-            }
-            return false;
-        }
+        //    }
+        //    return false;
+        //}
         public void Changbuttoncolor(int row, int col)
         {
             Button button = GetButtonbyTag(row, col);
@@ -114,8 +114,8 @@ namespace Pentago.Klassen
             else if (r >= HalfArrayRowLenght && c < HalfArrayColLenght)
             {
                 return BotLeft[r - HalfArrayRowLenght, c] == CurrentPlayer;
-            }
-            else if (r >= HalfArrayRowLenght && r < ArrayRowLenght && c >= ArrayColLenght && c > ArrayColLenght)
+            }          
+            else if (r >= HalfArrayRowLenght && r < ArrayRowLenght && c >= HalfArrayColLenght && c < ArrayColLenght)
             {
                 return BotRight[r - HalfArrayRowLenght, c - HalfArrayColLenght] == CurrentPlayer;
             }
@@ -302,11 +302,11 @@ namespace Pentago.Klassen
         }
         public void MakeMove(int row, int col, GameGrid grid, List<Button> buttons)
         {
-            if (!CanMove(grid, row, col))
+            if (!CanMove(row, col))
             {
                 return;
             }
-
+           
             Buttons = buttons;
 
             Changbuttoncolor(row, col);
@@ -325,6 +325,7 @@ namespace Pentago.Klassen
                     BotRight[row, col] = CurrentPlayer;
                     break;
             }
+           
 
             TurnsPassed++;
             if (IsWin())
