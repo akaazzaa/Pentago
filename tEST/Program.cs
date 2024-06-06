@@ -14,12 +14,13 @@ namespace tEST
         {
            Logik logik = new Logik();
 
+            logik.SetPoint(0, 2);
             logik.SetPoint(0, 3);
 
-            logik.Ausgabe();
-            logik.RotateCorner(Corner.Topleft, false);
+            logik.PrintArray();
+            logik.RotateField(Corner.Topright, Direction.Right);
             Console.WriteLine("");
-            logik.Ausgabe();
+            logik.PrintArray();
 
                 Console.ReadLine();
         }

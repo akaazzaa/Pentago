@@ -9,18 +9,10 @@ namespace Pentago.Klassen
 {
     public class Game
     {
-        public Player[,] TopLeft { get; set; }
-        public Player[,] TopRight { get; set; }
-        public Player[,] BotLeft { get; set; }
-        public Player[,] BotRight { get; set; }
+        public Player[,] GameBoard { get; set;}
         public Player CurrentPlayer { get; set; }
-        private List<Button> Buttons { get; set; }
-        public int Suchtiefe { get; set; }
+        public int depth { get; set; }
         public int WinCondition { get; set; }
-        public int ArrayRowLenght { get; set; }
-        public int HalfArrayRowLenght { get; set; }
-        public int ArrayColLenght { get; set; }
-        public int HalfArrayColLenght { get; set; }
         public int TurnsPassed { get; set; }
         public bool GameOver { get; set; }
         public bool Turned { get; set; }
@@ -30,221 +22,114 @@ namespace Pentago.Klassen
 
         public event Action<GameResult> GameEnded;
         public event Action GameRestarted;
-        public event Action MoveMade;
-        public event Action ComputerMovemade;
-        public static event Action RotateButtonsLeft;
-        public static event Action RotateButtonsRight;
-
+        public event Action<int,int,GameGrid> MoveMade;
+ 
         public Game()
         {
-
             CurrentPlayer = Player.Blue;
             WinCondition = 0;
             Turned = false;
             GameOver = false;
-            TopLeft = new Player[3, 3];
-            TopRight = new Player[3, 3];
-            BotLeft = new Player[3, 3];
-            BotRight = new Player[3, 3];
-            ArrayRowLenght = TopLeft.GetLength(0) + TopRight.GetLength(0);
-            HalfArrayRowLenght = TopLeft.GetLength(0);
-            ArrayColLenght = ArrayRowLenght;
-            HalfArrayColLenght = HalfArrayRowLenght;
-            isSinglePlayer = false;
-            Suchtiefe = 3;
-
-
+            GameBoard = new Player[6, 6];
+            isSinglePlayer = false; 
+            depth = 3;
         }
-        private bool IsGridFull()
+
+        #region Rotation
+        private Player[,] Rotate3x3(Player[,] tmp, Direction direction)
         {
-            return TurnsPassed == 36;
-        }
-        private bool CanMove(GameGrid grid, int r, int c)
-        {
-            switch (grid.Name)
+            Player[,] rotated = new Player[3, 3];
+            if (direction == Direction.Right)
             {
-                case ("GridTopLeft"):
-                    return !GameOver && Turned == false && TopLeft[r, c] == Player.None;
-                case ("GridTopRight"):
-                    return !GameOver && Turned == false && TopRight[r, c] == Player.None;
-                case ("GridBotLeft"):
-                    return !GameOver && Turned == false && BotLeft[r, c] == Player.None;
-                case ("GridBotRight"):
-                    return !GameOver && Turned == false && BotRight[r, c] == Player.None;
-
+                for (int r = 0; r < 3; r++)
+                {
+                    for (int c = 0; c < 3; c++)
+                    {
+                        rotated[r, c] = tmp[2 - c, r];
+                    }
+                }
             }
-            return false;
-        }
-        public void Changbuttoncolor(int row, int col)
-        {
-            Button button = GetButtonbyTag(row, col);
-            if (CurrentPlayer == Player.Blue)
+            else if (direction == Direction.Left)
             {
-                button.Background = new SolidColorBrush(Colors.Blue);
+                for (int r = 0; r < 3; r++)
+                {
+                    for (int c = 0; c < 3; c++)
+                    {
+                        rotated[r, c] = tmp[c, 2 - r];
+                    }
+                }
             }
             else
             {
-                button.Background = new SolidColorBrush(Colors.Red);
+                return null;
             }
+            return rotated;
         }
-        private Button GetButtonbyTag(int row, int col)
+        public Player[,] RotateField(Corner corner, Direction direction)
         {
-            foreach (var button in Buttons)
+            int rowStart, colStart;
+            switch (corner)
             {
-                var pos = (Positions)button.Tag;
-
-                if (pos.Row == row && pos.Column == col)
-                    return button;
-
-
-            }
-            return null;
-        }
-        private bool IsMarked(int r, int c)
-        {
-
-            if (r < HalfArrayRowLenght && c < HalfArrayColLenght)
-            {
-                return TopLeft[r, c] == CurrentPlayer;
-            }
-            else if (r < HalfArrayRowLenght && c > HalfArrayRowLenght - 1 && c < ArrayColLenght)
-            {
-                return TopRight[r, c % 3] == CurrentPlayer;
-            }
-            else if (r >= HalfArrayRowLenght && c < HalfArrayColLenght)
-            {
-                return BotLeft[r % 3, c] == CurrentPlayer;
-            }
-            else if (r >= HalfArrayRowLenght && r < ArrayRowLenght && c >= ArrayColLenght && c > ArrayColLenght)
-            {
-                return BotRight[r % 3, c % 3] == CurrentPlayer;
+                case Corner.Topleft:
+                    rowStart = 0;
+                    colStart = 0;
+                    break;
+                case Corner.Topright:
+                    rowStart = 0;
+                    colStart = 3;
+                    break;
+                case Corner.Botleft:
+                    rowStart = 3;
+                    colStart = 0;
+                    break;
+                case Corner.Botright:
+                    rowStart = 3;
+                    colStart = 3;
+                    break;
+                default:
+                    return null;
             }
 
-            return false;
 
-        }
-        private bool CheckRow()
-        {
-            WinCondition = 0;
-            for (int r = 0; r < ArrayRowLenght; r++)
+            Player[,] tmp = new Player[3, 3];
+            for (int r = 0; r < 3; r++)
             {
-                for (int c = 0; c < ArrayColLenght; c++)
+                for (int c = 0; c < 3; c++)
                 {
-                    if (IsMarked(r, c))
-                    {
-                        WinCondition++;
-
-                        if (WinCondition == 5)
-                        {
-                            WinInfo = new WinInfo { WinType = WinType.Row, r = r, c = c };
-                            return true;
-                        }
-
-                    }
-                    else
-                    {
-                        WinCondition = 0;
-                    }
-                }
-                WinCondition = 0;
-            }
-            return false;
-        }
-        private bool CheckColumn()
-        {
-            WinCondition = 0;
-            for (int c = 0; c < ArrayColLenght; c++)
-            {
-                for (int r = 0; r < ArrayRowLenght; r++)
-                {
-                    if (IsMarked(r, c))
-                    {
-                        WinCondition++;
-                        if (WinCondition == 5)
-                        {
-                            WinInfo = new WinInfo { WinType = WinType.Column, r = r, c = c };
-                            return true;
-                        }
-                    }
-                    else
-                    {
-                        WinCondition = 0;
-
-                    }
-                }
-                WinCondition = 0;
-            }
-            return false;
-        }
-        private bool IsDiagonalWin()
-        {
-            for (int row = 0; row < HalfArrayRowLenght - 1; row++)
-            {
-                for (int col = 0; col < HalfArrayColLenght - 1; col++)
-                {
-                    if (IsMarked(row, col))
-                    {
-                        return (CheckDiagonal(row, col));
-                    }
-                    else
-                    {
-                        continue;
-                    }
-
+                    tmp[r, c] = GameBoard[rowStart + r, colStart + c];
                 }
             }
-            for (int row = 0; row < HalfArrayRowLenght - 1; row++)
+
+
+            Player[,] rotatedarray = Rotate3x3(tmp, direction);
+
+
+            for (int r = 0; r < 3; r++)
             {
-                for (int col = 5; col > HalfArrayColLenght; col--)
+                for (int c = 0; c < 3; c++)
                 {
-                    if (IsMarked(row, col))
-                    {
-                        return (CheckAntiDiagonal(row, col));
-                    }
+                    GameBoard[rowStart + r, colStart + c] = rotatedarray[r, c];
                 }
             }
-            return false;
-        }
-        private bool IsWin()
-        {
-            if (CheckRow())
-            {
-                GameResult = new GameResult { Winner = CurrentPlayer, WinInfo = this.WinInfo };
-                return true;
-            }
-            else if (CheckColumn())
-            {
-                GameResult = new GameResult { Winner = CurrentPlayer, WinInfo = this.WinInfo };
-                return true;
-            }
-            else if (IsDiagonalWin())
-            {
-                GameResult = new GameResult { Winner = CurrentPlayer, WinInfo = this.WinInfo };
-                return true;
-            }
-            else if (IsGridFull())
-            {
-                GameResult = new GameResult { Winner = Player.None };
-                return true;
-            }
 
-            GameResult = null;
-            return false;
-
+            return GameBoard;
         }
+        #endregion
+
+        #region WinCkeck
         private bool CheckDiagonal(int row, int col)
         {
             WinCondition = 0;
-            for (int r = row; r < ArrayRowLenght;)
+            for (int r = row; r < GameBoard.GetLength(0);)
             {
-                for (int c = col; c < ArrayColLenght;)
+                for (int c = col; c < GameBoard.GetLength(1);)
                 {
                     if (IsMarked(row, col))
                     {
                         WinCondition++;
                         if (WinCondition == 5)
                         {
-                            WinInfo = new WinInfo { WinType = WinType.Diagonal, c = c, r = r };
+
                             return true;
                         }
                     }
@@ -263,7 +148,7 @@ namespace Pentago.Klassen
         private bool CheckAntiDiagonal(int row, int col)
         {
             WinCondition = 0;
-            for (int r = row; r < ArrayRowLenght;)
+            for (int r = row; r < GameBoard.GetLength(0);)
             {
                 for (int c = col; c >= 0;)
                 {
@@ -272,7 +157,7 @@ namespace Pentago.Klassen
                         WinCondition++;
                         if (WinCondition == 5)
                         {
-                            WinInfo = new WinInfo { WinType = WinType.Antidiagonal, c = col, r = row };
+
                             return true;
                         }
                     }
@@ -288,7 +173,156 @@ namespace Pentago.Klassen
 
             return false;
         }
-        private void SwitchPlayer()
+        private bool CheckRow()
+        {
+            WinCondition = 0;
+            for (int r = 0; r < GameBoard.GetLength(0); r++)
+            {
+                for (int c = 0; c < GameBoard.GetLength(1); c++)
+                {
+                    if (IsMarked(r, c))
+                    {
+                        WinCondition++;
+
+                        if (WinCondition == 5)
+                        {
+
+                            return true;
+                        }
+
+                    }
+                    else
+                    {
+                        WinCondition = 0;
+                    }
+                }
+                WinCondition = 0;
+            }
+            return false;
+        }
+        private bool CheckColumn()
+        {
+            WinCondition = 0;
+            for (int c = 0; c < GameBoard.GetLength(0); c++)
+            {
+                for (int r = 0; r < GameBoard.GetLength(1); r++)
+                {
+                    if (IsMarked(r, c))
+                    {
+                        WinCondition++;
+                        if (WinCondition == 5)
+                        {
+
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        WinCondition = 0;
+
+                    }
+                }
+                WinCondition = 0;
+            }
+            return false;
+        }
+        private bool IsDiagonalWin()
+        {
+            for (int row = 0; row < GameBoard.GetLength(0); row++)
+            {
+                for (int col = 0; col < GameBoard.GetLength(1); col++)
+                {
+                    if (IsMarked(row, col))
+                    {
+                        return (CheckDiagonal(row, col));
+                    }
+                    else
+                    {
+                        continue;
+                    }
+
+                }
+            }
+            for (int row = 0; row < GameBoard.GetLength(0); row++)
+            {
+                for (int col = 5; col > GameBoard.GetLength(1); col--)
+                {
+                    if (IsMarked(row, col))
+                    {
+                        return (CheckAntiDiagonal(row, col));
+                    }
+                }
+            }
+            return false;
+        }
+        private bool IsMarked(int r, int c)
+        {
+            return GameBoard[r, c] == CurrentPlayer;
+        }
+        private bool IsGridFull()
+        {
+            return TurnsPassed == 36;
+        }
+        private bool IsWin()
+        {
+            if (CheckRow())
+            {
+                GameResult = new GameResult { Winner = CurrentPlayer, WinInfo = this.WinInfo };
+                return true;
+            }
+            else if (CheckColumn())
+            {
+                GameResult = new GameResult { Winner = CurrentPlayer, WinInfo = this.WinInfo };
+                return true;
+            }
+            //else if (IsDiagonalWin())
+            //{
+            //    GameResult = new GameResult { Winner = CurrentPlayer, WinInfo = this.WinInfo };
+            //    return true;
+            //}
+            //else if (IsGridFull())
+            //{
+            //    GameResult = new GameResult { Winner = Player.None };
+            //    return true;
+            //}
+
+            GameResult = null;
+            return false;
+
+        }
+        #endregion
+
+        #region Gameloop
+        public void MakeMove(int row, int col, GameGrid grid)
+        {
+            if (!CanMove(row, col))
+            {
+                return;
+            }
+            SetPoint(row, col);
+
+            TurnsPassed++;
+
+            if (IsWin())
+            {
+                GameOver = true;
+                GameEnded?.Invoke(GameResult);
+            }
+            else
+            {
+                MoveMade?.Invoke(row, col, grid);
+            }
+
+        }
+        private bool CanMove(int r, int c)
+        {
+            return !GameOver && Turned == false && GameBoard[r, c] == Player.None;
+        }
+        public void SetPoint(int x, int y)
+        {
+            GameBoard[x, y] = CurrentPlayer;
+        }
+        public void SwitchPlayer()
         {
             if (CurrentPlayer == Player.Blue)
             {
@@ -300,160 +334,32 @@ namespace Pentago.Klassen
             }
 
         }
-        public void MakeMove(int row, int col, GameGrid grid, List<Button> buttons)
-        {
-            if (!CanMove(grid, row, col))
-            {
-                return;
-            }
-
-            Buttons = buttons;
-
-            Changbuttoncolor(row, col);
-            switch (grid.Name)
-            {
-                case ("GridTopLeft"):
-                    TopLeft[row, col] = CurrentPlayer;
-                    break;
-                case ("GridTopRight"):
-                    TopRight[row, col] = CurrentPlayer;
-                    break;
-                case ("GridBotLeft"):
-                    BotLeft[row, col] = CurrentPlayer;
-                    break;
-                case ("GridBotRight"):
-                    BotRight[row, col] = CurrentPlayer;
-                    break;
-            }
-
-            TurnsPassed++;
-            if (IsWin())
-            {
-                GameOver = true;
-                GameEnded?.Invoke(GameResult);
-            }
-            else
-            {
-                MoveMade?.Invoke();
-            }
-
-        }
         public void Reset()
         {
-            TopLeft = new Player[3, 3];
-            TopRight = new Player[3, 3];
-            BotLeft = new Player[3, 3];
-            BotRight = new Player[3, 3];
+            GameBoard = new Player[6, 6];
             WinCondition = 0;
             CurrentPlayer = Player.Blue;
             TurnsPassed = 0;
             GameOver = false;
             GameRestarted?.Invoke();
         }
-        public void RotateArray(string buttonname, GameGrid topLeft, GameGrid topRight, GameGrid botLeft, GameGrid botRight)
-        {
-            switch (buttonname)
-            {
-                case ("BTLL"):
-                    TopLeft = RotateArrayLeft(TopLeft);
-                    topLeft.SetNewPositions(Direction.Left);
-                    Move(topLeft, -90);
-                    break;
-                case ("BTLR"):
-                    TopLeft = RotateArrayRight(TopLeft);
-                    topLeft.SetNewPositions(Direction.Right);
-                    Move(topLeft, 90);
-                    break;
-                case ("BTRL"):
-                    TopRight = RotateArrayLeft(TopRight);
-                    topRight.SetNewPositions(Direction.Left);
-                    Move(topRight, -90);
-                    break;
-                case ("BTRR"):
-                    TopRight = RotateArrayRight(TopRight);
-                    topRight.SetNewPositions(Direction.Right);
-                    Move(topRight, 90);
-                    break;
-                case ("BBLL"):
-                    BotLeft = RotateArrayRight(BotLeft);
-                    botLeft.SetNewPositions(Direction.Right);
-                    Move(botLeft, 90);
-                    break;
-                case ("BBLR"):
-                    BotLeft = RotateArrayLeft(BotLeft);
-                    botLeft.SetNewPositions(Direction.Left);
-                    Move(botLeft, -90);
-                    break;
-                case ("BBRL"):
-                    BotRight = RotateArrayRight(BotRight);
-                    botRight.SetNewPositions(Direction.Right);
-                    Move(botRight, 90);
-                    break;
-                case ("BBRR"):
-                    BotRight = RotateArrayLeft(BotRight);
-                    botRight.SetNewPositions(Direction.Left);
-                    Move(botRight, -90);
-                    break;
-            }
-            Turned = false;
-            SwitchPlayer();
-        }
-        private void Move(GameGrid gameGrid, double angle)
-        {
-            RotateTransform rotateTransformTopLeft = new RotateTransform();
-            rotateTransformTopLeft.Angle = gameGrid.CurrentRotation;
-            rotateTransformTopLeft.CenterX = 155;
-            rotateTransformTopLeft.CenterY = 155;
-            gameGrid.RenderTransform = rotateTransformTopLeft;
-            DoubleAnimation rotationAnimation = new DoubleAnimation();
-            rotationAnimation.From = gameGrid.CurrentRotation;
-            rotationAnimation.To = gameGrid.CurrentRotation + angle;
-            rotationAnimation.Duration = new Duration(TimeSpan.FromSeconds(1));
+        #endregion
 
-            gameGrid.RenderTransform.BeginAnimation(RotateTransform.AngleProperty, rotationAnimation);
 
-            gameGrid.CurrentRotation += angle;
 
-        }
-        private Player[,] RotateArrayRight(Player[,] array)
-        {
-            if (array == null)
-            {
-                return null;
-            }
-            int size = 3;
-            Player[,] tmp = new Player[size, size];
 
-            for (int r = 0; r < size; ++r)
-            {
 
-                for (int c = 0; c < size; ++c)
-                {
-                    tmp[c, size - 1 - r] = array[r, c];
-                }
 
-            }
-            return tmp;
-        }
-        private Player[,] RotateArrayLeft(Player[,] array)
-        {
-            if (array == null)
-            {
-                return null;
-            }
-            int size = 3;
-            Player[,] tmp = new Player[size, size];
 
-            for (int r = 0; r < size; ++r)
-            {
-                for (int c = 0; c < size; ++c)
-                {
-                    tmp[size - 1 - c, r] = array[r, c];
-                }
-            }
-            return tmp;
-        }
-        
+
+
+
+
+
+
+
+
+
     }
 }
 

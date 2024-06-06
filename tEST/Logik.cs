@@ -146,9 +146,9 @@ namespace tEST
         private bool CheckDiagonal(int row, int col)
         {
             WinCondition = 0;
-            for (int r = row; r < board.GetLength(01);)
+            for (int r = row; r < board.GetLength(0);)
             {
-                for (int c = col; c < board.GetLength(0);)
+                for (int c = col; c < board.GetLength(1);)
                 {
                     if (IsMarked(row, col))
                     {
@@ -199,82 +199,104 @@ namespace tEST
 
             return false;
         }
-        public Player[,] RotateArrayRight()
+       
+
+
+
+
+        static Player[,] Rotate3x3(Player[,] tmp, Direction direction )
         {
-            int size = board.GetLength(0) / 2;
-            Player[,] tmp = new Player[6, 6];
-
-            for (int r = 0; r < size; ++r)
+            Player[,] rotated = new Player[3,3];
+            if (direction == Direction.Right)
             {
-
-                for (int c = 0; c < size; ++c)
+                for (int i = 0; i < 3; i++)
                 {
-                    tmp[c, size - 1 - r] = board[r, c];
-                }
-
-            }
-            return tmp;
-        }
-        public Player[,] RotateTopLeftArrayLeft()
-        {
-            
-            int size = board.GetLength(0) / 2;
-            Player[,] tmp = new Player[6, 6];
-
-            for (int r = 0; r < size; ++r)
-            {
-                for (int c = 0; c < size; ++c)
-                {
-                    tmp[size - 1 - c, r] = board[r, c];
+                    for (int j = 0; j < 3; j++)
+                    {
+                        rotated[i, j] = tmp[2 - j, i];
+                    }
                 }
             }
-            return tmp;
+            else if (direction == Direction.Left)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
+                        rotated[i, j] = tmp[j, 2 - i];
+                    }
+                }
+            }
+            else
+            {
+                return null;
+            }
+            return rotated;
         }
-        public void RotateCorner(Corner corner, bool rotateLeft)
+
+        public Player[,] RotateField( Corner corner, Direction direction)
         {
-            int size = board.GetLength(0) / 2;
-            Player[,] tmp = new Player[6, 6];
-
-            int startRow = 0, startCol = 0;
-
+            int rowStart, colStart;
             switch (corner)
             {
                 case Corner.Topleft:
-                    startRow = 0;
-                    startCol = 0;
+                    rowStart = 0;
+                    colStart = 0;
                     break;
                 case Corner.Topright:
-                    startRow = 0;
-                    startCol = size;
+                    rowStart = 0;
+                    colStart = 3;
                     break;
                 case Corner.Botleft:
-                    startRow = size;
-                    startCol = 0;
+                    rowStart = 3;
+                    colStart = 0;
                     break;
                 case Corner.Botright:
-                    startRow = size;
-                    startCol = size;
+                    rowStart = 3;
+                    colStart = 3;
                     break;
+                default:
+                    return null;
             }
-            // Temporäres Array zum Drehen vorbereiten
-            
-            
+
+
+            Player[,] tmp = new Player[3, 3];
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    tmp[i, j] = board[rowStart + i, colStart + j];
+                }
+            }
+
+
+            Player[,] rotatedarray = Rotate3x3(tmp, direction);
+
+
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    board[rowStart + i, colStart + j] = rotatedarray[i, j];
+                }
+            }
+
+            return board;
         }
 
-    
+
 
         public void SetPoint(int x, int y)
         {
             board[x,y] = CurrentPlayer;
         }
-        public void Ausgabe()
+        public void PrintArray()
         {
-            for (int r = 0;r< board.GetLength(0); ++r)
+            for (int i = 0; i < board.GetLength(0); i++)
             {
-                for(int c = 0;c < board.GetLength(1); ++c)
+                for (int j = 0; j < board.GetLength(1); j++)
                 {
-                    Console.Write(board[r, c]);
-                    Console.Write(" ");
+                    Console.Write(board[i, j] + "\t");
                 }
                 Console.WriteLine();
             }
