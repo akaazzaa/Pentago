@@ -26,7 +26,6 @@ namespace Pentago
             InitializeComponent();
             Game = game;
             RotationButtons = new List<Button>();
-            game.GameEnded += OnGameEnded;
             game.GameRestarted += OnGameRestarted;
             game.MoveMade += OnMoveMade;
             SetGrids();
@@ -223,12 +222,19 @@ namespace Pentago
         }
         private void Button_Click_Rotation(object sender, RoutedEventArgs e)
         {
+           
             Button button = (Button)sender;
 
-            ChangePlayerIcon();
+            
             ChangeVisibilityRotationButton();
             RotateAnimation(button);
+            if (Game.IsWin())
+            {
+                Game.GameOver = true;
+                GameEnded();
+            }
             Game.SwitchPlayer();
+            ChangePlayerIcon();
             Game.Turned = false;
         }
         private void OnMoveMade(int row, int col, GameGrid grid)
@@ -239,16 +245,20 @@ namespace Pentago
             Changbuttoncolor(row, col, grid);
             Game.Turned = true;
             ChangeVisibilityRotationButton();
-            
+            if (Game.IsWin())
+            {
+                Game.GameOver = true;
+                GameEnded();
+            }
         }
-        private async void OnGameEnded(GameResult gameResult)
+        private async void GameEnded()
         {
             await Task.Delay(1000);
-            if (gameResult.Winner == Player.None)
+            if (Game.GameResult.Winner == Player.None)
             {
                 EndScreening("Unentschieden", null);
             }
-            else if (gameResult.Winner == Player.Blue)
+            else if (Game.GameResult.Winner == Player.Blue)
             {
                 EndScreening("Winner:", new SolidColorBrush(Colors.Blue));
             }
@@ -265,6 +275,7 @@ namespace Pentago
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             SetGrids();
+            EndScreen.Visibility = Visibility.Hidden;
             Game.Reset();
 
         }

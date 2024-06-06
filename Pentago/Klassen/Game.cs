@@ -263,7 +263,7 @@ namespace Pentago.Klassen
         {
             return TurnsPassed == 36;
         }
-        private bool IsWin()
+        public bool IsWin()
         {
             if (CheckRow())
             {
@@ -303,15 +303,10 @@ namespace Pentago.Klassen
 
             TurnsPassed++;
 
-            if (IsWin())
-            {
-                GameOver = true;
-                GameEnded?.Invoke(GameResult);
-            }
-            else
-            {
-                MoveMade?.Invoke(row, col, grid);
-            }
+            MoveMade?.Invoke(row, col, grid);
+
+            
+           
 
         }
         private bool CanMove(int r, int c)
