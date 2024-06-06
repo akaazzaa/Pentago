@@ -59,22 +59,22 @@ namespace Pentago.Klassen
         {
             return TurnsPassed == 36;
         }
-        //private bool CanMove(int r, int c)
-        //{
-        //    switch (grid.Name)
-        //    {
-        //        case ("GridTopLeft"):
-        //            return !GameOver && Turned == false && TopLeft[r, c] == Player.None;
-        //        case ("GridTopRight"):
-        //            return !GameOver && Turned == false && TopRight[r, c] == Player.None;
-        //        case ("GridBotLeft"):
-        //            return !GameOver && Turned == false && BotLeft[r, c] == Player.None;
-        //        case ("GridBotRight"):
-        //            return !GameOver && Turned == false && BotRight[r, c] == Player.None;
+        private bool CanMove(GameGrid grid, int r, int c)
+        {
+            switch (grid.Name)
+            {
+                case ("GridTopLeft"):
+                    return !GameOver && Turned == false && TopLeft[r, c] == Player.None;
+                case ("GridTopRight"):
+                    return !GameOver && Turned == false && TopRight[r, c] == Player.None;
+                case ("GridBotLeft"):
+                    return !GameOver && Turned == false && BotLeft[r, c] == Player.None;
+                case ("GridBotRight"):
+                    return !GameOver && Turned == false && BotRight[r, c] == Player.None;
 
-        //    }
-        //    return false;
-        //}
+            }
+            return false;
+        }
         public void Changbuttoncolor(int row, int col)
         {
             Button button = GetButtonbyTag(row, col);
@@ -302,7 +302,7 @@ namespace Pentago.Klassen
         }
         public void MakeMove(int row, int col, GameGrid grid, List<Button> buttons)
         {
-            if (!CanMove(row, col))
+            if (!CanMove(grid,row, col))
             {
                 return;
             }
