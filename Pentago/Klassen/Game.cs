@@ -226,15 +226,16 @@ namespace Pentago.Klassen
             }
             return false;
         }
+
         private bool IsDiagonalWin()
         {
-            for (int row = 0; row < GameBoard.GetLength(0); row++)
+            for (int row = 0; row < GameBoard.GetLength(0) / 2 ; row++)
             {
-                for (int col = 0; col < GameBoard.GetLength(1); col++)
+                for (int col = 0; col < GameBoard.GetLength(1) / 2; col++)
                 {
                     if (IsMarked(row, col))
                     {
-                        return (CheckDiagonal(row, col));
+                        return CheckDiagonal(row, col);
                     }
                     else
                     {
@@ -243,13 +244,17 @@ namespace Pentago.Klassen
 
                 }
             }
-            for (int row = 0; row < GameBoard.GetLength(0); row++)
+            for (int row = 0; row < GameBoard.GetLength(0) / 2 ; row++)
             {
-                for (int col = 5; col > GameBoard.GetLength(1); col--)
+                for (int col = 5; col > GameBoard.GetLength(1) / 2 ; col--)
                 {
                     if (IsMarked(row, col))
                     {
-                        return (CheckAntiDiagonal(row, col));
+                        return CheckAntiDiagonal(row, col);
+                    }
+                    else
+                    {
+                        continue;
                     }
                 }
             }
@@ -275,16 +280,16 @@ namespace Pentago.Klassen
                 GameResult = new GameResult { Winner = CurrentPlayer, WinInfo = this.WinInfo };
                 return true;
             }
-            //else if (IsDiagonalWin())
-            //{
-            //    GameResult = new GameResult { Winner = CurrentPlayer, WinInfo = this.WinInfo };
-            //    return true;
-            //}
-            //else if (IsGridFull())
-            //{
-            //    GameResult = new GameResult { Winner = Player.None };
-            //    return true;
-            //}
+            else if (IsDiagonalWin())
+            {
+                GameResult = new GameResult { Winner = CurrentPlayer, WinInfo = this.WinInfo };
+                return true;
+            }
+            else if (IsGridFull())
+            {
+                GameResult = new GameResult { Winner = Player.None };
+                return true;
+            }
 
             GameResult = null;
             return false;

@@ -19,21 +19,34 @@ namespace Pentago
         GameGrid TopRight;
         GameGrid BotLeft;
         GameGrid BotRight;
-        List<Button> RotationButtons;
+        List<Image> RotationButtons;
      
         public Board(Game game)
         {
             InitializeComponent();
             Game = game;
-            RotationButtons = new List<Button>();
+            RotationButtons = new List<Image>();
             game.GameEnded += OnGameEnded;
             game.GameRestarted += OnGameRestarted;
             game.MoveMade += OnMoveMade;
             SetGrids();
-            AddButtons();
+            AddImmageButtonToList();
             ChangePlayerIcon();
             ChangeVisibilityRotationButton(); 
             
+        }
+        private void AddImmageButtonToList()
+        {
+            RotationButtons.Add(BTLL);
+            RotationButtons.Add(BTLR);
+
+            RotationButtons.Add(BTRL);
+            RotationButtons.Add(BTRR);
+
+            RotationButtons.Add(BBLL);
+            RotationButtons.Add(BBLR);
+            RotationButtons.Add(BBRL);
+            RotationButtons.Add(BBRR);
         }
 
         #region Start
@@ -77,22 +90,7 @@ namespace Pentago
             Grid.SetColumn(BotRight, 1);
             GameGrid.Children.Add(BotRight);
         }
-        private void AddButtons()
-        {
-            RotationButtons.Add(BTLL);
-            RotationButtons.Add(BTLR);
-
-            RotationButtons.Add(BTRL);
-            RotationButtons.Add(BTRR);
-
-            RotationButtons.Add(BBLL);
-            RotationButtons.Add(BBLR);
-
-            RotationButtons.Add(BBRL);
-            RotationButtons.Add(BBRR);
-
-
-        }
+        
         private void ChangePlayerIcon()
         {
             if (Game.CurrentPlayer == Player.Blue)
@@ -106,16 +104,16 @@ namespace Pentago
         }
         private void ChangeVisibilityRotationButton()
         {
-            foreach (Button b in RotationButtons)
+            foreach (Image image in RotationButtons)
             {
 
-                if (b.Visibility == Visibility.Visible)
+                if (image.Visibility == Visibility.Visible)
                 {
-                    b.Visibility = Visibility.Hidden;
+                    image.Visibility = Visibility.Hidden;
                 }
                 else
                 {
-                    b.Visibility = Visibility.Visible;
+                    image.Visibility = Visibility.Visible;
                 }
             }
         }
@@ -221,7 +219,7 @@ namespace Pentago
             var grid = (GameGrid)sender;
             Game.MakeMove(e.Row, e.Column, grid);
         }
-        private void Button_Click_Rotation(object sender, RoutedEventArgs e)
+        private void MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Button button = (Button)sender;
 
@@ -231,6 +229,7 @@ namespace Pentago
             Game.SwitchPlayer();
             Game.Turned = false;
         }
+
         private void OnMoveMade(int row, int col, GameGrid grid)
         {
             if (grid == null)
@@ -288,5 +287,7 @@ namespace Pentago
         {
             PrintArray();
         }
+
+     
     }
 }
