@@ -199,11 +199,6 @@ namespace tEST
 
             return false;
         }
-       
-
-
-
-
         static Player[,] Rotate3x3(Player[,] tmp, Direction direction )
         {
             Player[,] rotated = new Player[3,3];
