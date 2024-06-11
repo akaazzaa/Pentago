@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 
@@ -26,13 +27,13 @@ namespace Pentago
             InitializeComponent();
             Game = game;
             RotationButtons = new List<Image>();
-            game.GameEnded += OnGameEnded;
+         
             game.GameRestarted += OnGameRestarted;
             game.MoveMade += OnMoveMade;
             SetGrids();
             AddImmageButtonToList();
             ChangePlayerIcon();
-            ChangeVisibilityRotationButton(); 
+            
             
         }
         private void AddImmageButtonToList()
@@ -58,6 +59,7 @@ namespace Pentago
             TopLeft.HorizontalAlignment = HorizontalAlignment.Right;
             TopLeft.VerticalAlignment = VerticalAlignment.Bottom;
             TopLeft.GridButtonClick += GridButton_Click;
+            TopLeft.Tag = Corner.Topleft;
             Grid.SetRow(TopLeft, 0);
             Grid.SetColumn(TopLeft, 0);
 
@@ -68,6 +70,7 @@ namespace Pentago
             TopRight.HorizontalAlignment = HorizontalAlignment.Left;
             TopRight.VerticalAlignment = VerticalAlignment.Bottom;
             TopRight.GridButtonClick += GridButton_Click;
+            TopRight.Tag = Corner.Topright;
             Grid.SetRow(TopRight, 0);
             Grid.SetColumn(TopRight, 1);
             GameGrid.Children.Add(TopRight);
@@ -77,6 +80,7 @@ namespace Pentago
             BotLeft.HorizontalAlignment = HorizontalAlignment.Right;
             BotLeft.VerticalAlignment = VerticalAlignment.Top;
             BotLeft.GridButtonClick += GridButton_Click;
+            BotLeft.Tag = Corner.Botleft;
             Grid.SetRow(BotLeft, 1);
             Grid.SetColumn(BotLeft, 0);
             GameGrid.Children.Add(BotLeft);
@@ -86,6 +90,7 @@ namespace Pentago
             BotRight.HorizontalAlignment = HorizontalAlignment.Left;
             BotRight.VerticalAlignment = VerticalAlignment.Top;
             BotRight.GridButtonClick += GridButton_Click;
+            BotRight.Tag = Corner.Botright;
             Grid.SetRow(BotRight, 1);
             Grid.SetColumn(BotRight, 1);
             GameGrid.Children.Add(BotRight);
@@ -120,9 +125,9 @@ namespace Pentago
         #endregion
 
         #region Animation 
-        private void RotateAnimation(Button button)
+        private void RotateAnimation(Image imagebutton)
         {
-            switch (button.Name)
+            switch (imagebutton.Name)
             {
                 case "BTLL":
                     Move(TopLeft, Direction.Left);
@@ -173,27 +178,31 @@ namespace Pentago
             {
                 angle = 90;
             }
-                
+
             RotateTransform rotateTransformTopLeft = new RotateTransform();
             rotateTransformTopLeft.Angle = gameGrid.CurrentRotation;
-            rotateTransformTopLeft.CenterX = 155;
-            rotateTransformTopLeft.CenterY = 155;
-            gameGrid.RenderTransform = rotateTransformTopLeft;
+            gameGrid.grid.RenderTransform = rotateTransformTopLeft;
             DoubleAnimation rotationAnimation = new DoubleAnimation();
             rotationAnimation.From = gameGrid.CurrentRotation;
             rotationAnimation.To = gameGrid.CurrentRotation + angle;
             rotationAnimation.Duration = new Duration(TimeSpan.FromSeconds(1));
 
-            gameGrid.RenderTransform.BeginAnimation(RotateTransform.AngleProperty, rotationAnimation);
+            gameGrid.grid.RenderTransform.BeginAnimation(RotateTransform.AngleProperty, rotationAnimation);
 
             gameGrid.CurrentRotation += angle;
 
             gameGrid.SetNewPositions(direction);
 
         }
-        public void Changbuttoncolor(int row, int col, GameGrid grid)
+        public void Changbuttoncolor(int row, int col, Corner quandrant)
         {
-            Button button = grid.GetButtonbyTag(row, col);
+            
+            Button button = GetGridButton(row, col, quandrant);
+            if (button == null)
+            {
+                return;
+            }
+
             if (Game.CurrentPlayer == Player.Blue)
             {
                 button.Background = new SolidColorBrush(Colors.Blue);
@@ -203,6 +212,23 @@ namespace Pentago
                 button.Background = new SolidColorBrush(Colors.Red);
             }
         }
+
+        private Button GetGridButton(int row, int col, Corner quandrant)
+        {
+            switch (quandrant)
+            {
+                case Corner.Topleft:
+                    return TopLeft.GetButtonbyTag(row, col);
+                case Corner.Topright:
+                    return TopRight.GetButtonbyTag(row,col);
+                case Corner.Botleft:
+                    return BotLeft.GetButtonbyTag(row, col);
+                case Corner.Botright:
+                    return BotRight.GetButtonbyTag(row, col);      
+            }
+            return null;
+        }
+
         private void EndScreening(string text, SolidColorBrush colorBrush)
         {
             GameGrid.Visibility = Visibility.Hidden;
@@ -217,16 +243,16 @@ namespace Pentago
         private void GridButton_Click(object sender, GridButtonClickEventArgs e)
         {
             var grid = (GameGrid)sender;
-            Game.MakeMove(e.Row, e.Column, grid);
+            Corner quandrant = (Corner)grid.Tag;
+            Game.MakeMovePlayer(e.Row, e.Column,quandrant);
         }
-        private void MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void Click_MouseDown(object sender, MouseButtonEventArgs e )
         {
-           
-            Button button = (Button)sender;
+            Image image = (Image)sender;
 
-            
+
             ChangeVisibilityRotationButton();
-            RotateAnimation(button);
+            RotateAnimation(image);
             if (Game.IsWin())
             {
                 Game.GameOver = true;
@@ -236,13 +262,9 @@ namespace Pentago
             ChangePlayerIcon();
             Game.Turned = false;
         }
-
-        private void OnMoveMade(int row, int col, GameGrid grid)
+        private void OnMoveMade(int row, int col, Corner corner)
         {
-            if (grid == null)
-                return;
-
-            Changbuttoncolor(row, col, grid);
+            Changbuttoncolor(row, col, corner);
             Game.Turned = true;
             ChangeVisibilityRotationButton();
             if (Game.IsWin())
@@ -300,6 +322,6 @@ namespace Pentago
             PrintArray();
         }
 
-     
+        
     }
 }

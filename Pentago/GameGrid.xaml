@@ -40,21 +40,12 @@
                             <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         </Border>
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsDefaulted" Value="true">
-                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
-                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            <Trigger Property="IsEnabled"  
+             Value="False">
+                                <Setter Property="Background"  
+              Value="{x:Static SystemColors.ControlLightBrush}" />
+                                <Setter Property="Foreground"  
+              Value="{x:Static SystemColors.GrayTextBrush}" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -68,18 +59,7 @@
             <GradientStop Color="#FF00FB8E" Offset="1"/>
         </LinearGradientBrush>
     </UserControl.BorderBrush>
-    <Grid x:Name="grid"  Margin="0,0,0,0"  Width="300" Height="300" RenderTransformOrigin="0.5,0.5" Background="#FF035B3D">
-        <Grid.Effect>
-            <DropShadowEffect/>
-        </Grid.Effect>
-        <Grid.RenderTransform>
-            <TransformGroup>
-                <ScaleTransform/>
-                <SkewTransform/>
-                <RotateTransform Angle="0"/>
-                <TranslateTransform/>
-            </TransformGroup>
-        </Grid.RenderTransform>
+    <Grid x:Name="grid" Width="300" Height="300" RenderTransformOrigin="0.5,0.5" Background="#FF13C8A3">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
@@ -90,6 +70,10 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
+      
+        
+        <Border BorderBrush="Black" BorderThickness="4" Grid.ColumnSpan="3" Grid.RowSpan="3"/>
+
 
 
 

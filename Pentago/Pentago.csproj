@@ -64,6 +64,7 @@
     <Compile Include="Board.xaml.cs">
       <DependentUpon>Board.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Klassen\ComputerGegner.cs" />
     <Compile Include="Klassen\Corner.cs" />
     <Compile Include="Klassen\Direction.cs" />
     <Compile Include="Klassen\GameResult.cs" />
@@ -135,40 +136,10 @@
     <Resource Include="SpielInfo.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="27055.png" />
+    <Resource Include="arrow-Left.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="arrow-27055_1280.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="kisspng-computer-icons-arrow-turn-5adaa8e364c436.8228700815242795234128.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="pngtree-1.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Unbenannt.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="images.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Curved-drawn-arrow-on-transparent-PNG.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Curved_Arrow.svg.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="arrow.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="ArrowLeft.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="arrow-27055_1280%281%29.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="arrow-27467_1280.png" />
+    <Resource Include="arrow-Right.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

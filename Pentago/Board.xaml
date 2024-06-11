@@ -9,9 +9,8 @@
     <Grid x:Name="MainGrid" RenderTransformOrigin="0.506,0.523" HorizontalAlignment="Center" Width="1500" >
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                <GradientStop Color="Black" Offset="0.01"/>
-                <GradientStop Color="#FF18B385" Offset="1"/>
-                <GradientStop Color="#FF004832"/>
+                <GradientStop Color="#FF01563C"/>
+                <GradientStop Color="#FF0DC5A7" Offset="1"/>
             </LinearGradientBrush>
         </Grid.Background>
         <Grid.OpacityMask>
@@ -81,7 +80,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Image HorizontalAlignment="Left" x:Name="BTLR" Visibility="Hidden" Height="120" Margin="150,30,0,0" VerticalAlignment="Top" Width="120" Source="/arrow-27467_1280.png" RenderTransformOrigin="0.5,0.5" MouseDown="MouseDown">
+            <Image HorizontalAlignment="Left" x:Name="BTLR" Visibility="Hidden" Height="120" Margin="150,30,0,0" VerticalAlignment="Top" Width="120" Source="arrow-Right.png" RenderTransformOrigin="0.5,0.5" MouseDown="Click_MouseDown">
                 <Image.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
@@ -91,7 +90,7 @@
                     </TransformGroup>
                 </Image.RenderTransform>
             </Image>
-            <Image HorizontalAlignment="Left" x:Name="BTLL" Visibility="Hidden" Height="120" Margin="30,150,0,0" VerticalAlignment="Top" Width="120" Source="/arrow-27055_1280(1).png" RenderTransformOrigin="0.5,0.5" MouseDown="MouseDown">
+            <Image HorizontalAlignment="Left" x:Name="BTLL" Visibility="Hidden" Height="120" Margin="30,150,0,0" VerticalAlignment="Top" Width="120" Source="arrow-Left.png" RenderTransformOrigin="0.5,0.5" MouseDown="Click_MouseDown">
                 <Image.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
@@ -101,7 +100,7 @@
                     </TransformGroup>
                 </Image.RenderTransform>
             </Image>
-            <Image HorizontalAlignment="Right" Visibility="Hidden" x:Name="BTRR" Height="120" Margin="0,150,30,0" VerticalAlignment="Top" Width="120" Source="/arrow-27055_1280(1).png" RenderTransformOrigin="0.535,0.749" Grid.Column="1" MouseDown="MouseDown">
+            <Image HorizontalAlignment="Right" Visibility="Hidden" x:Name="BTRR" Height="120" Margin="0,150,30,0" VerticalAlignment="Top" Width="120" Source="arrow-Left.png" RenderTransformOrigin="0.535,0.749" Grid.Column="1" MouseDown="Click_MouseDown">
                 <Image.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleX="-1"/>
@@ -111,7 +110,7 @@
                     </TransformGroup>
                 </Image.RenderTransform>
             </Image>
-            <Image Height="120" Margin="0,30,150,0" Visibility="Hidden" x:Name="BTRL" VerticalAlignment="Top" Source="/arrow-27467_1280.png" RenderTransformOrigin="0.5,0.5" Grid.Column="1" HorizontalAlignment="Right" Width="120" MouseDown="MouseDown">
+            <Image Height="120" Margin="0,30,150,0" Visibility="Hidden" x:Name="BTRL" VerticalAlignment="Top" Source="arrow-Right.png" RenderTransformOrigin="0.5,0.5" Grid.Column="1" HorizontalAlignment="Right" Width="120" MouseDown="Click_MouseDown">
                 <Image.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleX="-1"/>
@@ -121,7 +120,7 @@
                     </TransformGroup>
                 </Image.RenderTransform>
             </Image>
-            <Image Height="120" Margin="0,0,30,150" VerticalAlignment="Bottom" Visibility="Hidden" x:Name="BBRR" Source="/arrow-27055_1280(1).png" RenderTransformOrigin="0.5,0.5" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" Width="120" MouseDown="MouseDown">
+            <Image Height="120" Margin="0,0,30,150" VerticalAlignment="Bottom" Visibility="Hidden" x:Name="BBRR" Source="arrow-Left.png" RenderTransformOrigin="0.5,0.5" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" Width="120" MouseDown="Click_MouseDown">
                 <Image.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleX="-1" ScaleY="-1"/>
@@ -131,7 +130,7 @@
                     </TransformGroup>
                 </Image.RenderTransform>
             </Image>
-            <Image Margin="0,0,150,30" Source="/arrow-27467_1280.png" Visibility="Hidden" x:Name="BBRL" RenderTransformOrigin="0.495,0.712" HorizontalAlignment="Right" Width="120" Grid.Row="1" Grid.Column="1" Height="120" VerticalAlignment="Bottom" MouseDown="MouseDown" >
+            <Image Margin="0,0,150,30" Source="arrow-Right.png" Visibility="Hidden" x:Name="BBRL" RenderTransformOrigin="0.495,0.712" HorizontalAlignment="Right" Width="120" Grid.Row="1" Grid.Column="1" Height="120" VerticalAlignment="Bottom" MouseDown="Click_MouseDown" >
                 <Image.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleX="-1" ScaleY="-1"/>
@@ -141,7 +140,7 @@
                     </TransformGroup>
                 </Image.RenderTransform>
             </Image>
-            <Image Margin="150,0,0,28" Source="/arrow-27467_1280.png" Visibility="Hidden" x:Name="BBLR" RenderTransformOrigin="0.5,0.5" Grid.Row="1" HorizontalAlignment="Left" Width="120" Height="120" VerticalAlignment="Bottom" MouseDown="MouseDown">
+            <Image Margin="150,0,0,28" Source="arrow-Right.png" Visibility="Hidden" x:Name="BBLR" RenderTransformOrigin="0.5,0.5" Grid.Row="1" HorizontalAlignment="Left" Width="120" Height="120" VerticalAlignment="Bottom" MouseDown="Click_MouseDown">
                 <Image.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleY="-1"/>
@@ -151,7 +150,7 @@
                     </TransformGroup>
                 </Image.RenderTransform>
             </Image>
-            <Image HorizontalAlignment="Left" Visibility="Hidden" x:Name="BBLL" Margin="30,0,0,150" Width="120" Source="/arrow-27055_1280(1).png" RenderTransformOrigin="0.5,0.5" Grid.Row="1" Height="120" VerticalAlignment="Bottom" MouseDown="MouseDown">
+            <Image HorizontalAlignment="Left" Visibility="Hidden" x:Name="BBLL" Margin="30,0,0,150" Width="120" Source="arrow-Left.png" RenderTransformOrigin="0.5,0.5" Grid.Row="1" Height="120" VerticalAlignment="Bottom" MouseDown="Click_MouseDown">
                 <Image.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleY="-1"/>

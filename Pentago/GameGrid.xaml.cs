@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace Pentago
 {
@@ -16,17 +17,21 @@ namespace Pentago
     {
         public event EventHandler<GridButtonClickEventArgs> GridButtonClick;
         public double CurrentRotation;
-        
         public List<Button> Buttons {get; set; }  
+        private int startRow { get; set; }
+        private int startCol { get; set; }
+
         public GameGrid(int startrow , int startcol)
         {
 
             InitializeComponent();
-            
-             
+            startRow = startrow;
+            startCol = startcol;
             Buttons = new List<Button>();
             CurrentRotation = 0;
-            Process(startrow,startcol);
+
+            LoadVisuals();
+           
 
         }
 
@@ -44,7 +49,6 @@ namespace Pentago
                 }
             }       
         }
-
         private void RotateRight(Button button)
         {
             var currentpos = (Positions)button.Tag;
@@ -61,7 +65,6 @@ namespace Pentago
             button.Tag = new Positions(newRow,newCol);
 
         }
-
         private void RotateLeft(Button button)
         {
 
@@ -78,7 +81,6 @@ namespace Pentago
 
             button.Tag = new Positions(newRow, newCol);
         }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
@@ -101,7 +103,55 @@ namespace Pentago
             }
             return null;
         }
-        private void Process(int r,int c)
+        private void  LoadVisuals()
+        {
+            
+            GenerateElipses();
+            GenerateButtons();
+            GenerateBorder();
+        }
+
+        private void GenerateBorder()
+        {
+            for (int row = 0; row < grid.RowDefinitions.Count; row++)
+            {
+                for (int col = 0; col < grid.ColumnDefinitions.Count; col++)
+                {
+                    Border border = new Border();
+                    border.BorderThickness = new Thickness(1);
+                    border.BorderBrush = new SolidColorBrush(Colors.Black);
+
+                    Grid.SetRow(border, row);
+                    Grid.SetColumn(border, col);
+
+                    grid.Children.Add(border);
+
+                    
+                }
+            }
+
+        }
+
+        private void GenerateElipses()
+        {
+            for (int row = 0; row < grid.RowDefinitions.Count; row++)
+            {
+                for (int col = 0; col < grid.ColumnDefinitions.Count; col++)
+                {
+                    Ellipse ellipse = new Ellipse();
+                    ellipse.Width = 90;
+                    ellipse.Height = 90;
+                    ellipse.HorizontalAlignment = HorizontalAlignment.Center;
+                    ellipse.VerticalAlignment = VerticalAlignment.Center;
+                    ellipse.Fill = new SolidColorBrush(Colors.Aqua);
+
+                    Grid.SetRow(ellipse, row);
+                    Grid.SetColumn(ellipse, col);
+                    grid.Children.Add(ellipse);
+                }
+            }
+        }
+        private void GenerateButtons()
         {
             for (int row = 0; row < grid.RowDefinitions.Count; row++)
             {
@@ -113,8 +163,8 @@ namespace Pentago
                     button.RenderTransformOrigin = new Point(0.5, 0.5);
                     button.Height = 80;
                     button.Width = 80;
-                    button.Name = $"B{row + r}{col +c}";
-                    button.Tag = new Positions(row + r,col + c);
+                    button.Name = $"B{row + startRow}{col + startCol}";
+                    button.Tag = new Positions(row + startRow,col + startCol);
                     button.Content = button.Name;
                     
                     LinearGradientBrush borderBrush = new LinearGradientBrush();

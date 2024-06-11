@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.RightsManagement;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -11,7 +12,6 @@ namespace Pentago.Klassen
     {
         public Player[,] GameBoard { get; set;}
         public Player CurrentPlayer { get; set; }
-        public int depth { get; set; }
         public int WinCondition { get; set; }
         public int TurnsPassed { get; set; }
         public bool GameOver { get; set; }
@@ -19,20 +19,26 @@ namespace Pentago.Klassen
         public WinInfo WinInfo { get; set; }
         public GameResult GameResult { get; set; }
         public bool isSinglePlayer { get; set; }
+        ComputerGegner Computer { get; set; }
 
         public event Action<GameResult> GameEnded;
         public event Action GameRestarted;
-        public event Action<int,int,GameGrid> MoveMade;
+        public event Action<int,int,Corner> MoveMade;
  
         public Game()
         {
+            if (isSinglePlayer)
+            {
+                Computer = new ComputerGegner();
+            }
+
             CurrentPlayer = Player.Blue;
             WinCondition = 0;
             Turned = false;
             GameOver = false;
             GameBoard = new Player[6, 6];
             isSinglePlayer = false; 
-            depth = 3;
+            
         }
 
         #region Rotation
@@ -298,7 +304,7 @@ namespace Pentago.Klassen
         #endregion
 
         #region Gameloop
-        public void MakeMove(int row, int col, GameGrid grid)
+        public void MakeMovePlayer(int row, int col, Corner corner)
         {
             if (!CanMove(row, col))
             {
@@ -306,14 +312,23 @@ namespace Pentago.Klassen
             }
             SetPoint(row, col);
 
+
             TurnsPassed++;
-
-            MoveMade?.Invoke(row, col, grid);
-
-            
-           
-
+            MoveMade?.Invoke(row, col, corner);
         }
+        public void MakeMoveCopmuter(int row,int col, Corner corner,Direction direction)
+        {
+            if(!CanMove(row, col))
+            {
+                return;
+            }
+            SetPoint(row, col);
+
+            RotateField(corner, direction);
+            TurnsPassed++;
+            MoveMade?.Invoke(row, col, corner);
+        }
+
         private bool CanMove(int r, int c)
         {
             return !GameOver && Turned == false && GameBoard[r, c] == Player.None;
@@ -345,21 +360,28 @@ namespace Pentago.Klassen
         }
         #endregion
 
+        private List<Tuple<int, int, Corner, Direction>> GetAllMoves(Player player)
+        {
+            List<Tuple<int, int, Corner, Direction>> moves = new List<Tuple<int, int, Corner, Direction>>();
 
+            for (int r = 0; r < GameBoard.GetLength(0);r++)
+            {
+                for (int c = 0; c < GameBoard.GetLength(0); c++)
+                {
+                    if (GameBoard[r, c] == Player.None)
+                    {
+                        for (int quadrant = 0; quadrant < 4; quadrant++)
+                        {
+                            moves.Add(Tuple.Create(r, c, (Corner)quadrant, Direction.Right));
+                            moves.Add(Tuple.Create(r,c,(Corner)quadrant, Direction.Left));
+                        }
+                    }
+                }
+            }
+            return moves;
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+       
     }
 }
 
