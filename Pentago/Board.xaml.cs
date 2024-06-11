@@ -27,7 +27,7 @@ namespace Pentago
             InitializeComponent();
             Game = game;
             RotationButtons = new List<Image>();
-         
+            game.ComputerMove += ComputerMove;
             game.GameRestarted += OnGameRestarted;
             game.MoveMade += OnMoveMade;
             SetGrids();
@@ -36,6 +36,9 @@ namespace Pentago
             
             
         }
+
+     
+
         private void AddImmageButtonToList()
         {
             RotationButtons.Add(BTLL);
@@ -244,7 +247,7 @@ namespace Pentago
         {
             var grid = (GameGrid)sender;
             Corner quandrant = (Corner)grid.Tag;
-            Game.MakeMovePlayer(e.Row, e.Column,quandrant);
+            Game.MakeMove(e.Row, e.Column,quandrant, Direction.none);
         }
         private void Click_MouseDown(object sender, MouseButtonEventArgs e )
         {
@@ -261,6 +264,7 @@ namespace Pentago
             Game.SwitchPlayer();
             ChangePlayerIcon();
             Game.Turned = false;
+           
         }
         private void OnMoveMade(int row, int col, Corner corner)
         {
@@ -289,6 +293,10 @@ namespace Pentago
                 EndScreening("Winner:", new SolidColorBrush(Colors.Red));
             }
 
+        }
+        private void ComputerMove(int arg1, int arg2, Corner arg3)
+        {
+            
         }
         private void OnGameRestarted()
         {
