@@ -6,12 +6,11 @@
              xmlns:local="clr-namespace:Pentago"
              mc:Ignorable="d" d:DesignHeight="1000" d:DesignWidth="1500">
 
-    <Grid x:Name="MainGrid" RenderTransformOrigin="0.506,0.523" HorizontalAlignment="Left" Width="1500" >
+    <Grid x:Name="MainGrid" RenderTransformOrigin="0.506,0.523" HorizontalAlignment="Center" Width="1500" >
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                <GradientStop Color="Black" Offset="0.01"/>
-                <GradientStop Color="#FF18B385" Offset="1"/>
-                <GradientStop Color="#FF004832"/>
+                <GradientStop Color="#FF01563C"/>
+                <GradientStop Color="#FF0DC5A7" Offset="1"/>
             </LinearGradientBrush>
         </Grid.Background>
         <Grid.OpacityMask>
@@ -27,7 +26,7 @@
         </Grid.RowDefinitions>
         <StackPanel x:Name="PlayerTurnPanel"
                     Orientation="Horizontal"
-                    HorizontalAlignment="Left" Margin="624,10,0,400" Grid.RowSpan="2" Width="288">
+                    HorizontalAlignment="Left" Margin="600,10,0,383" Grid.RowSpan="2" Width="326">
             <TextBlock FontSize="72"
                        Text="Player:" Height="88" Foreground="White" FontFamily="Ink Free"
                        />
@@ -38,73 +37,6 @@
                        RadiusY="40"
                        Fill="Blue"/>
         </StackPanel>
-
-        <Canvas x:Name="GameCanvas" Margin="264,187,215,0" Grid.RowSpan="3" RenderTransformOrigin="0.5,0.5" Height="814" VerticalAlignment="Top">
-            <Canvas.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform AngleY="-0.065"/>
-                    <RotateTransform/>
-                    <TranslateTransform Y="2.316"/>
-                </TransformGroup>
-            </Canvas.RenderTransform>
-            <Grid x:Name="GameGrid"
-                  Width="1015"
-                  Height="818" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="8" Canvas.Top="-13">
-                <Button x:Name="BTLL" Content="Button" Margin="0,0,360,210" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Right" Width="40" Height="20" VerticalAlignment="Bottom" Click="Button_Click_Rotation">
-                    <Button.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform/>
-                            <SkewTransform/>
-                            <RotateTransform Angle="90"/>
-                            <TranslateTransform X="0" Y="0"/>
-                        </TransformGroup>
-                    </Button.RenderTransform>
-                </Button>
-                <Button x:Name="BTLR" Content="Button" Margin="0,0,210,360" RenderTransformOrigin="0.268,0.55" Height="20" Width="40" VerticalAlignment="Bottom" Click="Button_Click_Rotation" HorizontalAlignment="Right"/>
-                <Button x:Name="BBLL" Content="Button" Margin="0,210,360,0" RenderTransformOrigin="0.5,0.5" Grid.Row="1" HorizontalAlignment="Right" Width="40" Height="20" VerticalAlignment="Top" Click="Button_Click_Rotation">
-                    <Button.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform/>
-                            <SkewTransform/>
-                            <RotateTransform Angle="90"/>
-                            <TranslateTransform X="0" Y="0"/>
-                        </TransformGroup>
-                    </Button.RenderTransform>
-                </Button>
-                <Button x:Name="BBLR" Content="Button" Margin="0,360,210,0" RenderTransformOrigin="0.268,0.55" Height="20" VerticalAlignment="Top" Grid.Row="1" HorizontalAlignment="Right" Width="40" Click="Button_Click_Rotation"/>
-                <Button x:Name="BBRL" Content="Button" Margin="210,360,0,0" RenderTransformOrigin="0.268,0.55" Height="20" VerticalAlignment="Top" Grid.Row="1" HorizontalAlignment="Left" Width="40" Grid.Column="1" Click="Button_Click_Rotation"/>
-                <Button x:Name="BBRR" Content="Button" Margin="360,210,0,0" RenderTransformOrigin="0.475,-0.2" Grid.Row="1" Height="20" VerticalAlignment="Top" Grid.Column="1" HorizontalAlignment="Left" Width="40" Click="Button_Click_Rotation" >
-                    <Button.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform/>
-                            <SkewTransform/>
-                            <RotateTransform Angle="90"/>
-                            <TranslateTransform X="15" Y="13"/>
-                        </TransformGroup>
-                    </Button.RenderTransform>
-                </Button>
-                <Button x:Name="BTRL" Content="Button" Margin="210,0,0,360" RenderTransformOrigin="0.268,0.55" HorizontalAlignment="Left" Width="40" Grid.Column="1" Height="20" VerticalAlignment="Bottom" Click="Button_Click_Rotation"/>
-                <Button x:Name="BTRR" Content="Button" Margin="360,0,0,210" RenderTransformOrigin="0.475,-0.2" Height="20" VerticalAlignment="Bottom" Grid.Column="1" HorizontalAlignment="Left" Width="40" Click="Button_Click_Rotation">
-                    <Button.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform/>
-                            <SkewTransform/>
-                            <RotateTransform Angle="90"/>
-                            <TranslateTransform X="15" Y="13"/>
-                        </TransformGroup>
-                    </Button.RenderTransform>
-                </Button>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-            </Grid>
-        </Canvas>
         <Grid x:Name="EndScreen"
               Grid.RowSpan="3"
               Visibility="Hidden"
@@ -116,7 +48,7 @@
                     <TextBlock x:Name="ResultText"
                                FontSize="80"
                                Text="Winner:"
-                               Margin="0,0,0,15"/>
+                               Width="274"/>
                     <Rectangle x:Name="WinnerIcon"
                                Height="80"
                                Width="80"
@@ -130,12 +62,105 @@
                         FontSize="34"
                         Width="300"
                         
-                        Margin="0,20,0,0"
                         Padding="0,0,0,5"
                         BorderBrush="Black"
-                        Click="Button_Click"
+                        Click="Button_Click" Height="50"
                         />
             </StackPanel>
+        </Grid>
+        <Button Content="Debug" HorizontalAlignment="Left" Margin="58,138,0,0" Grid.Row="2" VerticalAlignment="Top" Width="74" Height="44" Click="Button_Click_1"/>
+        <TextBlock x:Name="Debugtext" HorizontalAlignment="Left" Margin="26,268,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Height="224" Width="270"/>
+        <Grid x:Name="GameGrid"
+                  Width="900" HorizontalAlignment="Left" Margin="296,100,0,0" Grid.Row="1" Grid.RowSpan="2" Height="900">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Image HorizontalAlignment="Left" x:Name="BTLR" Visibility="Hidden" Height="120" Margin="150,30,0,0" VerticalAlignment="Top" Width="120" Source="arrow-Right.png" RenderTransformOrigin="0.5,0.5" MouseDown="Click_MouseDown">
+                <Image.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="-60"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Image.RenderTransform>
+            </Image>
+            <Image HorizontalAlignment="Left" x:Name="BTLL" Visibility="Hidden" Height="120" Margin="30,150,0,0" VerticalAlignment="Top" Width="120" Source="arrow-Left.png" RenderTransformOrigin="0.5,0.5" MouseDown="Click_MouseDown">
+                <Image.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="-30"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Image.RenderTransform>
+            </Image>
+            <Image HorizontalAlignment="Right" Visibility="Hidden" x:Name="BTRR" Height="120" Margin="0,150,30,0" VerticalAlignment="Top" Width="120" Source="arrow-Left.png" RenderTransformOrigin="0.535,0.749" Grid.Column="1" MouseDown="Click_MouseDown">
+                <Image.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="-1"/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="30"/>
+                        <TranslateTransform X="-22.769" Y="-6.096"/>
+                    </TransformGroup>
+                </Image.RenderTransform>
+            </Image>
+            <Image Height="120" Margin="0,30,150,0" Visibility="Hidden" x:Name="BTRL" VerticalAlignment="Top" Source="arrow-Right.png" RenderTransformOrigin="0.5,0.5" Grid.Column="1" HorizontalAlignment="Right" Width="120" MouseDown="Click_MouseDown">
+                <Image.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="-1"/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="60"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Image.RenderTransform>
+            </Image>
+            <Image Height="120" Margin="0,0,30,150" VerticalAlignment="Bottom" Visibility="Hidden" x:Name="BBRR" Source="arrow-Left.png" RenderTransformOrigin="0.5,0.5" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" Width="120" MouseDown="Click_MouseDown">
+                <Image.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="-1" ScaleY="-1"/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="-30"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Image.RenderTransform>
+            </Image>
+            <Image Margin="0,0,150,30" Source="arrow-Right.png" Visibility="Hidden" x:Name="BBRL" RenderTransformOrigin="0.495,0.712" HorizontalAlignment="Right" Width="120" Grid.Row="1" Grid.Column="1" Height="120" VerticalAlignment="Bottom" MouseDown="Click_MouseDown" >
+                <Image.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="-1" ScaleY="-1"/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="-60"/>
+                        <TranslateTransform X="1.2" Y="-50.88"/>
+                    </TransformGroup>
+                </Image.RenderTransform>
+            </Image>
+            <Image Margin="150,0,0,28" Source="arrow-Right.png" Visibility="Hidden" x:Name="BBLR" RenderTransformOrigin="0.5,0.5" Grid.Row="1" HorizontalAlignment="Left" Width="120" Height="120" VerticalAlignment="Bottom" MouseDown="Click_MouseDown">
+                <Image.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleY="-1"/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="60"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Image.RenderTransform>
+            </Image>
+            <Image HorizontalAlignment="Left" Visibility="Hidden" x:Name="BBLL" Margin="30,0,0,150" Width="120" Source="arrow-Left.png" RenderTransformOrigin="0.5,0.5" Grid.Row="1" Height="120" VerticalAlignment="Bottom" MouseDown="Click_MouseDown">
+                <Image.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleY="-1"/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="30"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Image.RenderTransform>
+            </Image>
+
         </Grid>
     </Grid>
 

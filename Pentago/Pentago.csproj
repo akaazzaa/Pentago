@@ -64,6 +64,8 @@
     <Compile Include="Board.xaml.cs">
       <DependentUpon>Board.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Klassen\ComputerGegner.cs" />
+    <Compile Include="Klassen\Corner.cs" />
     <Compile Include="Klassen\Direction.cs" />
     <Compile Include="Klassen\GameResult.cs" />
     <Compile Include="Klassen\GridButtonClickEventArgs.cs" />
@@ -104,7 +106,6 @@
       <DependentUpon>Menu.xaml</DependentUpon>
     </Compile>
     <Compile Include="Klassen\Player.cs" />
-    <Compile Include="Modifyer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -133,6 +134,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="SpielInfo.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="arrow-Left.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="arrow-Right.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

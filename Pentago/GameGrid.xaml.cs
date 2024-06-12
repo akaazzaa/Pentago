@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace Pentago
 {
@@ -17,12 +18,20 @@ namespace Pentago
         public event EventHandler<GridButtonClickEventArgs> GridButtonClick;
         public double CurrentRotation;
         public List<Button> Buttons {get; set; }  
-        public GameGrid()
+        private int startRow { get; set; }
+        private int startCol { get; set; }
+
+        public GameGrid(int startrow , int startcol)
         {
+
             InitializeComponent();
+            startRow = startrow;
+            startCol = startcol;
             Buttons = new List<Button>();
             CurrentRotation = 0;
-            Process();
+
+            LoadVisuals();
+           
 
         }
 
@@ -40,22 +49,38 @@ namespace Pentago
                 }
             }       
         }
-
         private void RotateRight(Button button)
         {
-            int size = 3;
-            var pos = (Positions)button.Tag;
-            button.Tag = new Positions(pos.Column, size - 1 - pos.Row);
+            var currentpos = (Positions)button.Tag;
+
+            int translateRow = currentpos.Row % 3;
+            int translateCol = currentpos.Column % 3;
+
+            int newrotateRow = translateCol;
+            int newrotateCol = 2 - translateRow;
+
+            int newRow = (currentpos.Row / 3) * 3 + newrotateRow;
+            int newCol = (currentpos.Column / 3) * 3 + newrotateCol;
+
+            button.Tag = new Positions(newRow,newCol);
 
         }
-
         private void RotateLeft(Button button)
         {
-            int size = 3;
-            var pos = (Positions)button.Tag;
-            button.Tag = new Positions(size - 1 - pos.Column, pos.Row);
-        }
 
+            var currentpos = (Positions)button.Tag;
+
+            int translateRow = currentpos.Row % 3;
+            int translateCol = currentpos.Column % 3;
+
+            int newrotateRow = 2 - translateCol;
+            int newrotateCol = translateRow;
+
+            int newRow = (currentpos.Row / 3) * 3 + newrotateRow;
+            int newCol = (currentpos.Column / 3) * 3 + newrotateCol;
+
+            button.Tag = new Positions(newRow, newCol);
+        }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
@@ -65,7 +90,68 @@ namespace Pentago
             GridButtonClick?.Invoke(this, new GridButtonClickEventArgs(row, column,Buttons));
 
         }
-        private void Process()
+        public Button GetButtonbyTag(int row, int col)
+        {
+            foreach (var button in Buttons)
+            {
+                var pos = (Positions)button.Tag;
+
+                if (pos.Row == row && pos.Column == col)
+                    return button;
+
+
+            }
+            return null;
+        }
+        private void  LoadVisuals()
+        {
+            
+            GenerateElipses();
+            GenerateButtons();
+            GenerateBorder();
+        }
+
+        private void GenerateBorder()
+        {
+            for (int row = 0; row < grid.RowDefinitions.Count; row++)
+            {
+                for (int col = 0; col < grid.ColumnDefinitions.Count; col++)
+                {
+                    Border border = new Border();
+                    border.BorderThickness = new Thickness(1);
+                    border.BorderBrush = new SolidColorBrush(Colors.Black);
+
+                    Grid.SetRow(border, row);
+                    Grid.SetColumn(border, col);
+
+                    grid.Children.Add(border);
+
+                    
+                }
+            }
+
+        }
+
+        private void GenerateElipses()
+        {
+            for (int row = 0; row < grid.RowDefinitions.Count; row++)
+            {
+                for (int col = 0; col < grid.ColumnDefinitions.Count; col++)
+                {
+                    Ellipse ellipse = new Ellipse();
+                    ellipse.Width = 90;
+                    ellipse.Height = 90;
+                    ellipse.HorizontalAlignment = HorizontalAlignment.Center;
+                    ellipse.VerticalAlignment = VerticalAlignment.Center;
+                    ellipse.Fill = new SolidColorBrush(Colors.Aqua);
+
+                    Grid.SetRow(ellipse, row);
+                    Grid.SetColumn(ellipse, col);
+                    grid.Children.Add(ellipse);
+                }
+            }
+        }
+        private void GenerateButtons()
         {
             for (int row = 0; row < grid.RowDefinitions.Count; row++)
             {
@@ -77,8 +163,8 @@ namespace Pentago
                     button.RenderTransformOrigin = new Point(0.5, 0.5);
                     button.Height = 80;
                     button.Width = 80;
-                    button.Name = $"B{row}{col}";
-                    button.Tag = new Positions(row, col);
+                    button.Name = $"B{row + startRow}{col + startCol}";
+                    button.Tag = new Positions(row + startRow,col + startCol);
                     button.Content = button.Name;
                     
                     LinearGradientBrush borderBrush = new LinearGradientBrush();
@@ -104,8 +190,9 @@ namespace Pentago
 
                     button.Click += Button_Click;
                     Buttons.Add(button);
+                    
                 }
-
+                
             }
         }
         public void Reset()
