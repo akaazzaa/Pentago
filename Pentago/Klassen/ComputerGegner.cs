@@ -41,23 +41,6 @@ namespace Pentago.Klassen
             return moves;
         }
    
-       private void Maximieren(int tiefe)
-        {
-
-                
-
-
-            foreach( var moves in GetAllMoves() )
-            {
-
-                Minimieren(tiefe - 1);
-
-            }
-        }
-
-        private void Minimieren(int v)
-        {
-            
-        }
+        
     }
 }
