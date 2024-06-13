@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Pentago
 {
-    public enum Corner
+    public enum Quadrant
     {
         Topleft,
         Topright,
