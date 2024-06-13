@@ -12,5 +12,6 @@ namespace Pentago
         Topright,
         Botleft,
         Botright,
+        None,
     }
 }

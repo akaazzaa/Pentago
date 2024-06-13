@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Security.RightsManagement;
 using System.Windows;
 using System.Windows.Controls;
@@ -125,140 +126,98 @@ namespace Pentago.Klassen
         private bool CheckDiagonal(int row, int col)
         {
             WinCondition = 0;
-            for (int r = row; r < GameBoard.GetLength(0);)
+            for (int r = row, c = col; r < GameBoard.GetLength(0) && c < GameBoard.GetLength(1); r++, c++)
             {
-                for (int c = col; c < GameBoard.GetLength(1);)
+                if (IsMarked(r, c))
                 {
-                    if (IsMarked(row, col))
+                    WinCondition++;
+                    if (WinCondition == 5)
                     {
-                        WinCondition++;
-                        if (WinCondition == 5)
-                        {
-
-                            return true;
-                        }
+                        return true;
                     }
-                    else
-                    {
-                        WinCondition = 0;
-                        return false;
-                    }
-                    row++;
-                    col++;
+                }
+                else
+                {
+                    return false;
                 }
             }
-
             return false;
         }
         private bool CheckAntiDiagonal(int row, int col)
         {
             WinCondition = 0;
-            for (int r = row; r < GameBoard.GetLength(0);)
+            for (int r = row, c = col; r < GameBoard.GetLength(0) && c >= 0; r++, c--)
             {
-                for (int c = col; c >= 0;)
+                if (IsMarked(r, c))
                 {
-                    if (IsMarked(r, c))
+                    WinCondition++;
+                    if (WinCondition == 5)
                     {
-                        WinCondition++;
-                        if (WinCondition == 5)
-                        {
-
-                            return true;
-                        }
+                        return true;
                     }
-                    else
-                    {
-                        WinCondition = 0;
-                        return false;
-                    }
-                    r++;
-                    c--;
+                }
+                else
+                {
+                    return false;
                 }
             }
-
             return false;
         }
         private bool CheckRow()
         {
-            WinCondition = 0;
             for (int r = 0; r < GameBoard.GetLength(0); r++)
             {
+                WinCondition = 0;
                 for (int c = 0; c < GameBoard.GetLength(1); c++)
                 {
                     if (IsMarked(r, c))
                     {
                         WinCondition++;
-
                         if (WinCondition == 5)
                         {
-
                             return true;
                         }
-
                     }
                     else
                     {
                         WinCondition = 0;
                     }
                 }
-                WinCondition = 0;
             }
             return false;
         }
         private bool CheckColumn()
         {
-            WinCondition = 0;
-            for (int c = 0; c < GameBoard.GetLength(0); c++)
+            for (int c = 0; c < GameBoard.GetLength(1); c++)
             {
-                for (int r = 0; r < GameBoard.GetLength(1); r++)
+                WinCondition = 0;
+                for (int r = 0; r < GameBoard.GetLength(0); r++)
                 {
                     if (IsMarked(r, c))
                     {
                         WinCondition++;
                         if (WinCondition == 5)
                         {
-
                             return true;
                         }
                     }
                     else
                     {
                         WinCondition = 0;
-
                     }
                 }
-                WinCondition = 0;
             }
             return false;
         }
         private bool IsDiagonalWin()
         {
-            for (int row = 0; row < GameBoard.GetLength(0) / 2 ; row++)
+            for (int row = 0; row < GameBoard.GetLength(0); row++)
             {
-                for (int col = 0; col < GameBoard.GetLength(1) / 2; col++)
+                for (int col = 0; col < GameBoard.GetLength(1); col++)
                 {
-                    if (IsMarked(row, col))
+                    if (CheckDiagonal(row, col) || CheckAntiDiagonal(row, col))
                     {
-                        return CheckDiagonal(row, col);
-                    }
-                    else
-                    {
-                        continue;
-                    }
-
-                }
-            }
-            for (int row = 0; row < GameBoard.GetLength(0) / 2 ; row++)
-            {
-                for (int col = 5; col > GameBoard.GetLength(1) / 2 ; col--)
-                {
-                    if (IsMarked(row, col))
-                    {
-                        return CheckAntiDiagonal(row, col);
-                    }
-                    else
-                    {
-                        continue;
+                        return true;
                     }
                 }
             }
@@ -270,23 +229,13 @@ namespace Pentago.Klassen
         }
         private bool IsGridFull()
         {
-            return TurnsPassed == 36;
+            return TurnsPassed == GameBoard.GetLength(0) * GameBoard.GetLength(1);
         }
         public bool IsWin()
         {
-            if (CheckRow())
+            if (CheckRow() || CheckColumn() || IsDiagonalWin())
             {
-                GameResult = new GameResult { Winner = CurrentPlayer, WinInfo = this.WinInfo };
-                return true;
-            }
-            else if (CheckColumn())
-            {
-                GameResult = new GameResult { Winner = CurrentPlayer, WinInfo = this.WinInfo };
-                return true;
-            }
-            else if (IsDiagonalWin())
-            {
-                GameResult = new GameResult { Winner = CurrentPlayer, WinInfo = this.WinInfo };
+                GameResult = new GameResult { Winner = CurrentPlayer };
                 return true;
             }
             else if (IsGridFull())
@@ -297,7 +246,6 @@ namespace Pentago.Klassen
 
             GameResult = null;
             return false;
-
         }
         #endregion
 
@@ -319,10 +267,10 @@ namespace Pentago.Klassen
                 return;
             }
             SetPoint(row,col);
-            if (!IsWin())
-            {
-                RotateField(corner, direction);
-            }
+            
+            
+            RotateField(corner, direction);
+            
             TurnsPassed++;
             ComputerMove?.Invoke(row, col, corner,direction);
         }
@@ -358,9 +306,6 @@ namespace Pentago.Klassen
         }
         #endregion
 
-
-
-
         #region Computer
         public List<Tuple<int, int, Quadrant, Direction>> GetAllMoves()
         {
@@ -372,15 +317,31 @@ namespace Pentago.Klassen
                 {
                     if (GameBoard[r, c] == Player.None)
                     {
-                        for (int quadrant = 0; quadrant < 4; quadrant++)
-                        {
-                            moves.Add(Tuple.Create(r, c, (Quadrant)quadrant, Direction.Right));
-                            moves.Add(Tuple.Create(r, c, (Quadrant)quadrant, Direction.Left));
-                        }
+                           
+
+                            for (int quadrant = 0; quadrant < 4; quadrant++)
+                            {
+                                moves.Add(Tuple.Create(r, c, (Quadrant)quadrant, Direction.Right));
+                                moves.Add(Tuple.Create(r, c, (Quadrant)quadrant, Direction.Left));
+                            }
+
                     }
                 }
             }
             return moves;
+        }
+
+        private Quadrant GetRightQuadrant(int r, int c)
+        {
+            if (r < 3 && c < 3) return Quadrant.Topleft;
+
+            if (r < 3 && c > 2) return Quadrant.Topright;
+
+            if (r > 2 && c < 3) return Quadrant.Botleft;
+
+            if (r > 2 && c > 2) return Quadrant.Botright;
+
+            return Quadrant.None;
         }
 
         public Tuple<int, int, Quadrant, Direction> GetBestMove(int depth)
@@ -537,20 +498,6 @@ namespace Pentago.Klassen
             // Check rows, columns, and diagonals for the current state
             score += EvaluateAllLines(board);
 
-            // Check all possible rotations
-            for (int quadrant = 0; quadrant < 4; quadrant++)
-            {
-                Player[,] tempBoard = (Player[,])board.Clone();
-
-                // Rotate right
-                SimulateRotation(tempBoard, (Quadrant)quadrant, Direction.Right);
-                score += EvaluateAllLines(tempBoard);
-
-                // Rotate left
-                SimulateRotation(tempBoard, (Quadrant)quadrant, Direction.Left);
-                score += EvaluateAllLines(tempBoard);
-            }
-
             return score;
         }
 
@@ -563,7 +510,7 @@ namespace Pentago.Klassen
             {
                 for (int c = 0; c < board.GetLength(1) - 4; c++)
                 {
-                    score += EvaluateLine(board, r, c, 0, 1);
+                    score += EvaluateLine(board,r,c,0,1);
                 }
             }
 
@@ -572,7 +519,7 @@ namespace Pentago.Klassen
             {
                 for (int r = 0; r < board.GetLength(0) - 4; r++)
                 {
-                    score += EvaluateLine(board, r, c, 1, 0);
+                    score += EvaluateLine(board,r, c,1,0);
                 }
             }
 
@@ -581,16 +528,16 @@ namespace Pentago.Klassen
             {
                 for (int c = 0; c < board.GetLength(1) - 4; c++)
                 {
-                    score += EvaluateLine(board, r, c, 1, 1);
+                    score += EvaluateLine(board,r, c,1,1);
                 }
             }
 
             // Check diagonals (bottom-left to top-right)
-            for (int r = 4; r < board.GetLength(0); r++)
+            for (int r = 5; r < board.GetLength(0); r++)
             {
                 for (int c = 0; c < board.GetLength(1) - 4; c++)
                 {
-                    score += EvaluateLine(board, r, c, -1, 1);
+                    score += EvaluateLine(board,r,c,-1,1);
                 }
             }
 
@@ -599,37 +546,37 @@ namespace Pentago.Klassen
 
         private int EvaluateLine(Player[,] board, int startRow, int startCol, int rowDir, int colDir)
         {
-            int player1Count = 0;
-            int player2Count = 0;
+            int playerBlueCount = 0;
+            int playerRedCount = 0;
 
             for (int i = 0; i < 5; i++)
             {
-                Player cell = board[startRow + i * rowDir, startCol + i * colDir];
-                if (cell == Player.Blue)
+                Player field = board[startRow + i * rowDir, startCol + i * colDir];
+                if (field == Player.Blue)
                 {
-                    player1Count++;
+                    playerBlueCount++;
                 }
-                else if (cell == Player.Red)
+                else if (field == Player.Red)
                 {
-                    player2Count++;
+                    playerRedCount++;
                 }
             }
 
-            if (player1Count == 5)
-            {
-                return int.MaxValue;
-            }
-            else if (player2Count == 5)
+            if (playerBlueCount == 5)
             {
                 return int.MinValue;
             }
-            else if (player1Count > 0 && player2Count == 0)
+            else if (playerRedCount == 5)
             {
-                return player1Count;
+                return int.MaxValue;
             }
-            else if (player2Count > 0 && player1Count == 0)
+            else if (playerBlueCount > 0 && playerRedCount == 0)
             {
-                return -player2Count;
+                return -playerBlueCount;
+            }
+            else if (playerRedCount > 0 && playerBlueCount == 0)
+            {
+                return playerRedCount;
             }
             else
             {

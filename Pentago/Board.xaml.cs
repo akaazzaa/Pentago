@@ -206,6 +206,7 @@ namespace Pentago
         private void Move(Quadrant quadrant, Direction direction)
         {
             GameGrid gameGrid = GetGridByQuadrant(quadrant); 
+            if (gameGrid == null) { return; }
             int angle = 0;
             if (direction == Direction.Left)
             {
@@ -244,10 +245,10 @@ namespace Pentago
             return null;
         }
 
-        public void Changbuttoncolor(int row, int col, Quadrant quandrant)
+        public void Changbuttoncolor(int row, int col)
         {
             
-            Button button = GetGridButton(row, col, quandrant);
+            Button button = GetGridButton(row, col);
             if (button == null)
             {
                 return;
@@ -263,19 +264,18 @@ namespace Pentago
             }
         }
 
-        private Button GetGridButton(int row, int col, Quadrant quandrant)
+        private Button GetGridButton(int row, int col)
         {
-            switch (quandrant)
-            {
-                case Quadrant.Topleft:
-                    return TopLeft.GetButtonbyTag(row, col);
-                case Quadrant.Topright:
-                    return TopRight.GetButtonbyTag(row,col);
-                case Quadrant.Botleft:
-                    return BotLeft.GetButtonbyTag(row, col);
-                case Quadrant.Botright:
-                    return BotRight.GetButtonbyTag(row, col);      
-            }
+
+            if (row < 3 && col < 3) return TopLeft.GetButtonbyTag(row, col);
+
+            if (row < 3 && col > 2) return TopRight.GetButtonbyTag(row, col);
+
+            if (row > 2 && col < 3) return BotLeft.GetButtonbyTag(row, col);
+
+            if (row > 2 && col > 2) return BotRight.GetButtonbyTag(row, col);
+                
+            
             return null;
         }
 
@@ -302,24 +302,26 @@ namespace Pentago
 
             ChangeVisibilityRotationButton();
             RotateAnimation(image);
+
             if (Game.IsWin())
             {
                 Game.GameOver = true;
                 GameEnded();
             }
+
             Game.SwitchPlayer();
             ChangePlayerIcon();
             Game.Turned = false;
-            if (Game.isSinglePlayer && Game.CurrentPlayer == Player.Red)
+            if(Game.isSinglePlayer && Game.CurrentPlayer == Player.Red)
             {
-               var move =  Game.GetBestMove(3);
-               Game.MakeMoveComputer(move.Item1,move.Item2,move.Item3,move.Item4);
+               var move = Game.GetBestMove(2);
+                Game.MakeMoveComputer(move.Item1,move.Item2,move.Item3,move.Item4);
             }
            
         }
         private void OnMoveMade(int row, int col, Quadrant corner)
         {
-            Changbuttoncolor(row, col, corner);
+            Changbuttoncolor(row,col);
             Game.Turned = true;
             ChangeVisibilityRotationButton();
             if (Game.IsWin())
@@ -345,17 +347,20 @@ namespace Pentago
             }
 
         }
-        private void OnComputerMove(int r,int c,Quadrant quadrant,Direction direction)
+        private async void OnComputerMove(int r,int c,Quadrant quadrant,Direction direction)
         {
-            Changbuttoncolor(r, c, quadrant);
-            ChangeVisibilityRotationButton();
+            await Task.Delay(1000);
+
+            Changbuttoncolor(r, c);
+            
+            ChangePlayerIcon();
             Move(quadrant, direction);
             if (Game.IsWin())
             {
                 Game.GameOver = true;
                 GameEnded();
             }
-
+            Game.SwitchPlayer();
         }
         private void OnGameRestarted()
         {
