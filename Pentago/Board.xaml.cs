@@ -232,10 +232,9 @@ namespace Pentago
             gameGrid.SetNewPositions(direction);
 
         }
-
         private GameGrid GetGridByQuadrant(Quadrant quadrant)
         {
-            for (int i = 0;i< Grids.Count - 1;i++)
+            for (int i = 0;i< Grids.Count;i++)
             {
                 if ((Quadrant)Grids[i].Tag == quadrant)
                 {
@@ -303,6 +302,7 @@ namespace Pentago
             ChangeVisibilityRotationButton();
             RotateAnimation(image);
 
+            PrintArray();
             if (Game.IsWin())
             {
                 Game.GameOver = true;
@@ -311,11 +311,15 @@ namespace Pentago
 
             Game.SwitchPlayer();
             ChangePlayerIcon();
-            Game.Turned = false;
-            if(Game.isSinglePlayer && Game.CurrentPlayer == Player.Red)
+            
+            if (!Game.isSinglePlayer)
+                Game.Turned = false;
+
+            if (Game.isSinglePlayer && Game.CurrentPlayer == Player.Red && Game.GameOver == false)
             {
-               var move = Game.GetBestMove(2);
-                Game.MakeMoveComputer(move.Item1,move.Item2,move.Item3,move.Item4);
+               var move = Game.GetBestMove(3);
+               Game.MakeMoveComputer(move.Item1, move.Item2, move.Item3, move.Item4);
+                
             }
            
         }
@@ -355,12 +359,15 @@ namespace Pentago
             
             ChangePlayerIcon();
             Move(quadrant, direction);
+            PrintArray();
             if (Game.IsWin())
             {
                 Game.GameOver = true;
                 GameEnded();
             }
+         
             Game.SwitchPlayer();
+            Game.Turned = false;
         }
         private void OnGameRestarted()
         {

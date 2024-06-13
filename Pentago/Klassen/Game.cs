@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.RightsManagement;
 using System.Windows;
 using System.Windows.Controls;
@@ -71,9 +72,12 @@ namespace Pentago.Klassen
             }
             return rotated;
         }
-        public Player[,] RotateField(Quadrant corner, Direction direction)
+        public void RotateField(Quadrant corner, Direction direction)
         {
-            int rowStart, colStart;
+
+
+            int rowStart = 0;
+            int colStart = 0;
             switch (corner)
             {
                 case Quadrant.Topleft:
@@ -92,10 +96,9 @@ namespace Pentago.Klassen
                     rowStart = 3;
                     colStart = 3;
                     break;
-                default:
-                    return null;
+                
+                   
             }
-
 
             Player[,] tmp = new Player[3, 3];
             for (int r = 0; r < 3; r++)
@@ -118,7 +121,7 @@ namespace Pentago.Klassen
                 }
             }
 
-            return GameBoard;
+           
         }
         #endregion
 
@@ -138,7 +141,7 @@ namespace Pentago.Klassen
                 }
                 else
                 {
-                    return false;
+                    WinCondition = 0;
                 }
             }
             return false;
@@ -158,7 +161,7 @@ namespace Pentago.Klassen
                 }
                 else
                 {
-                    return false;
+                    WinCondition = 0;
                 }
             }
             return false;
@@ -244,7 +247,7 @@ namespace Pentago.Klassen
                 return true;
             }
 
-            GameResult = null;
+            
             return false;
         }
         #endregion
@@ -262,10 +265,7 @@ namespace Pentago.Klassen
         }
         public void MakeMoveComputer(int row, int col, Quadrant corner, Direction direction)
         {
-            if (!CanMove(row, col))
-            {
-                return;
-            }
+            
             SetPoint(row,col);
             
             
@@ -394,7 +394,7 @@ namespace Pentago.Klassen
         private int Maximieren(int depth, int alpha, int beta)
         {
             int score = EvaluateBoard(GameBoardCopy);
-            if (score == int.MaxValue || score == int.MinValue || depth == 0)
+            if (depth == 0 || score == int.MaxValue || score == int.MinValue)
                 return score;
 
             List<Tuple<int, int, Quadrant, Direction>> moves = GetAllMoves();
@@ -416,7 +416,7 @@ namespace Pentago.Klassen
         private int Minimieren(int depth, int alpha, int beta)
         {
             int score = EvaluateBoard(GameBoardCopy);
-            if (score == int.MaxValue || score == int.MinValue || depth == 0)
+            if (depth == 0 || score == int.MaxValue || score == int.MinValue)
                 return score;
 
             List<Tuple<int, int, Quadrant, Direction>> moves = GetAllMoves();
@@ -494,50 +494,30 @@ namespace Pentago.Klassen
         private int EvaluateBoard(Player[,] board)
         {
             int score = 0;
+            int rows = board.GetLength(0);
+            int cols = board.GetLength(1);
 
-            // Check rows, columns, and diagonals for the current state
-            score += EvaluateAllLines(board);
-
-            return score;
-        }
-
-        private int EvaluateAllLines(Player[,] board)
-        {
-            int score = 0;
-
-            // Check rows
-            for (int r = 0; r < board.GetLength(0); r++)
+            // Check rows, columns, and diagonals
+            for (int r = 0; r < rows; r++)
             {
-                for (int c = 0; c < board.GetLength(1) - 4; c++)
+                for (int c = 0; c < cols; c++)
                 {
-                    score += EvaluateLine(board,r,c,0,1);
-                }
-            }
-
-            // Check columns
-            for (int c = 0; c < board.GetLength(1); c++)
-            {
-                for (int r = 0; r < board.GetLength(0) - 4; r++)
-                {
-                    score += EvaluateLine(board,r, c,1,0);
-                }
-            }
-
-            // Check diagonals (top-left to bottom-right)
-            for (int r = 0; r < board.GetLength(0) - 4; r++)
-            {
-                for (int c = 0; c < board.GetLength(1) - 4; c++)
-                {
-                    score += EvaluateLine(board,r, c,1,1);
-                }
-            }
-
-            // Check diagonals (bottom-left to top-right)
-            for (int r = 5; r < board.GetLength(0); r++)
-            {
-                for (int c = 0; c < board.GetLength(1) - 4; c++)
-                {
-                    score += EvaluateLine(board,r,c,-1,1);
+                    if (c <= cols - 5)
+                    {
+                        score += EvaluateLine(board, r, c, 0, 1); // Check rows
+                    }
+                    if (r <= rows - 5)
+                    {
+                        score += EvaluateLine(board, r, c, 1, 0); // Check columns
+                    }
+                    if (r <= rows - 5 && c <= cols - 5)
+                    {
+                        score += EvaluateLine(board, r, c, 1, 1); // Check diagonals (top-left to bottom-right)
+                    }
+                    if (r >= 4 && c <= cols - 5)
+                    {
+                        score += EvaluateLine(board, r, c, -1, 1); // Check diagonals (bottom-left to top-right)
+                    }
                 }
             }
 
@@ -546,47 +526,72 @@ namespace Pentago.Klassen
 
         private int EvaluateLine(Player[,] board, int startRow, int startCol, int rowDir, int colDir)
         {
-            int playerBlueCount = 0;
-            int playerRedCount = 0;
+            int bluePoints = 0;
+            int redPoints = 0;
 
             for (int i = 0; i < 5; i++)
             {
                 Player field = board[startRow + i * rowDir, startCol + i * colDir];
                 if (field == Player.Blue)
                 {
-                    playerBlueCount++;
+                    bluePoints++;
                 }
                 else if (field == Player.Red)
                 {
-                    playerRedCount++;
+                    redPoints++;
                 }
             }
 
-            if (playerBlueCount == 5)
+            // Gewinnszenarien
+            if (bluePoints == 5)
             {
-                return int.MinValue;
+                return int.MinValue; // Blue gewinnt
             }
-            else if (playerRedCount == 5)
+            if (redPoints == 5)
             {
-                return int.MaxValue;
+                return int.MaxValue; // Red gewinnt
             }
-            else if (playerBlueCount > 0 && playerRedCount == 0)
+
+            // Bewertung für Blue
+            int blueScore = 0;
+            switch (bluePoints)
             {
-                return -playerBlueCount;
+                case 4:
+                    blueScore = -100; // Sehr nah am Gewinnen
+                    break;
+                case 3:
+                    blueScore = -10; // Gute Position
+                    break;
+                case 2:
+                    blueScore = -1; // Anfang eines möglichen Zuges
+                    break;
             }
-            else if (playerRedCount > 0 && playerBlueCount == 0)
+
+            // Bewertung für Red
+            int redScore = 0;
+            switch (redPoints)
             {
-                return playerRedCount;
+                case 4:
+                    redScore = 100; // Sehr nah am Gewinnen
+                    break;
+                case 3:
+                    redScore = 10; // Gute Position
+                    break;
+                case 2:
+                    redScore = 1; // Anfang eines möglichen Zuges
+                    break;
             }
-            else
-            {
-                return 0;
-            }
+
+            // Balancierte Bewertung
+            return blueScore + redScore;
         }
+
+    
         #endregion
 
 
     }
 }
+    
 
 
