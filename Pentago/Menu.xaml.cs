@@ -1,4 +1,5 @@
 ﻿using Pentago.Klassen;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -23,11 +24,10 @@ namespace Pentago
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            ComputerGegner computerGegner = new ComputerGegner();
-            computerGegner.GetAllMoves();
-            //Game game = new Game();
-            //game.isSinglePlayer = true;
-            //MainModel.SetNewContent(new Board(game));
+            
+            Game game = new Game();
+            game.isSinglePlayer = true;
+            MainModel.SetNewContent(new Board(game));
         }
     }
 }
