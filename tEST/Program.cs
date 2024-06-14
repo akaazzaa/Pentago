@@ -14,16 +14,17 @@ namespace tEST
         static void Main(string[] args)
         {
            Logik logik = new Logik();
-
-            logik.SetPoint(0, 2);
-            logik.SetPoint(0, 3);
-
             logik.PrintArray();
-            logik.RotateField(Corner.Topright, Direction.Right);
-            Console.WriteLine("");
-            logik.PrintArray();
+            logik.SetPoint(0,0);
+            logik.SetPoint(1, 0);
+            logik.SetPoint(2, 0);
+            logik.SetPoint(3, 0);
+            logik.SetPoint(4, 0);
+            
 
-                Console.ReadLine();
+            Console.WriteLine(logik.Auswertung(logik.CurrentPlayer));
+
+            Console.ReadLine();
         }
     }
 }

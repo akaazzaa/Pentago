@@ -6,6 +6,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Schema;
 
 namespace tEST
 {
@@ -15,24 +16,34 @@ namespace tEST
         public Player CurrentPlayer;
         public Player[,] board;
         public int TurnsPassed;
-
+        public int[,] werte;
         public Logik() 
         {
             WinCondition = 0;
             CurrentPlayer = Player.Blue;
             TurnsPassed = 0;
             board =  new Player[6, 6];
+            werte = new int[,]
+            {
+                { 3,3,1  ,1,3,3 }, 
+                { 3,3,1  ,1,3,3 }, 
+                { 1,1,0  ,0,1,1 }, 
+
+                { 1,1,0  ,0,1,1 },
+                { 3,3,1  ,1,3,3 },
+                { 3,3,1  ,1,3,3 },
+            };      
         }
 
-        private bool IsDiagonalWin()
+        private bool IsDiagonalWin(Player player)
         {
             for (int row = 0; row < board.GetLength(0); row++)
             {
                 for (int col = 0; col < board.GetLength(1); col++)
                 {
-                    if (IsMarked(row, col))
+                    if (IsMarked(row, col, player))
                     {
-                        return (CheckDiagonal(row, col));
+                        return (CheckDiagonal(row, col,player) || CheckAntiDiagonal(row,col,player));
                     }
                     else
                     {
@@ -41,57 +52,21 @@ namespace tEST
 
                 }
             }
-            for (int row = 0; row < board.GetLength(0); row++)
-            {
-                for (int col = 5; col > board.GetLength(1); col--)
-                {
-                    if (IsMarked(row, col))
-                    {
-                        return (CheckAntiDiagonal(row, col));
-                    }
-                }
-            }
+        
             return false;
-        }
-        private bool IsWin()
-        {
-            if (CheckRow())
-            {
-                
-                return true;
-            }
-            else if (CheckColumn())
-            {
-               
-                return true;
-            }
-            else if (IsDiagonalWin())
-            {
-               
-                return true;
-            }
-            else if (IsGridFull())
-            {
-               
-                return true;
-            }
-
-            
-            return false;
-
         }
         private bool IsGridFull()
         {
             return TurnsPassed == 36;
         }
-        private bool CheckRow()
+        private bool CheckRow(Player player)
         {
             WinCondition = 0;
             for (int r = 0; r < board.GetLength(0); r++)
             {
                 for (int c = 0; c < board.GetLength(1); c++)
                 {
-                    if (IsMarked(r, c))
+                    if (IsMarked(r, c,player))
                     {
                         WinCondition++;
 
@@ -111,14 +86,14 @@ namespace tEST
             }
             return false;
         }
-        private bool CheckColumn()
+        private bool CheckColumn(Player player)
         {
             WinCondition = 0;
             for (int c = 0; c < board.GetLength(0); c++)
             {
                 for (int r = 0; r < board.GetLength(1); r++)
                 {
-                    if (IsMarked(r, c))
+                    if (IsMarked(r, c, player))
                     {
                         WinCondition++;
                         if (WinCondition == 5)
@@ -137,20 +112,20 @@ namespace tEST
             }
             return false;
         }
-        private bool IsMarked(int r, int c)
+        private bool IsMarked(int r, int c,Player player)
         {
 
-           return board[r, c] == CurrentPlayer;
+           return board[r, c] == player;
 
     }
-        private bool CheckDiagonal(int row, int col)
+        private bool CheckDiagonal(int row, int col,Player player)
         {
             WinCondition = 0;
             for (int r = row; r < board.GetLength(0);)
             {
                 for (int c = col; c < board.GetLength(1);)
                 {
-                    if (IsMarked(row, col))
+                    if (IsMarked(row, col, player))
                     {
                         WinCondition++;
                         if (WinCondition == 5)
@@ -171,14 +146,14 @@ namespace tEST
 
             return false;
         }
-        private bool CheckAntiDiagonal(int row, int col)
+        private bool CheckAntiDiagonal(int row, int col,Player player)
         {
             WinCondition = 0;
             for (int r = row; r < board.GetLength(0);)
             {
                 for (int c = col; c >= 0;)
                 {
-                    if (IsMarked(r, c))
+                    if (IsMarked(r, c, player))
                     {
                         WinCondition++;
                         if (WinCondition == 5)
@@ -232,24 +207,24 @@ namespace tEST
             return rotated;
         }
 
-        public Player[,] RotateField( Corner corner, Direction direction)
+        public Player[,] RotateField( Quadrant corner, Direction direction)
         {
             int rowStart, colStart;
             switch (corner)
             {
-                case Corner.Topleft:
+                case Quadrant.Topleft:
                     rowStart = 0;
                     colStart = 0;
                     break;
-                case Corner.Topright:
+                case Quadrant.Topright:
                     rowStart = 0;
                     colStart = 3;
                     break;
-                case Corner.Botleft:
+                case Quadrant.Botleft:
                     rowStart = 3;
                     colStart = 0;
                     break;
-                case Corner.Botright:
+                case Quadrant.Botright:
                     rowStart = 3;
                     colStart = 3;
                     break;
@@ -267,7 +242,7 @@ namespace tEST
                 }
             }
 
-            }
+           
 
             Player[,] rotatedarray = Rotate3x3(tmp, direction);
 
@@ -283,8 +258,6 @@ namespace tEST
             return board;
         }
 
-
-
         public void SetPoint(int x, int y)
         {
             board[x,y] = CurrentPlayer;
@@ -296,9 +269,58 @@ namespace tEST
                 for (int j = 0; j < board.GetLength(1); j++)
                 {
                     Console.Write(board[i, j] + "\t");
+                    
                 }
+                
                 Console.WriteLine();
+                Console.WriteLine();    
             }
         }
+        public int Auswertung(Player player)
+        {
+           if (CheckRow(player)|| CheckColumn(player) || IsDiagonalWin(player))
+           {
+                if (player == Player.Blue)
+                {
+                    return -1;
+                }
+                else
+                {
+                    return 1;
+                }
+            }
+            return 0;
+
+        }
+        private int Bewertung()
+        {
+            int wert = 1; 
+            for (int r = 0;r < board.GetLength(0); r++)
+            {
+                for (int c = 0; c < board.GetLength(1); c++)
+                {
+                    if (board[r,c] == Player.Blue)
+                    {
+                        wert = wert - werte[r,c];
+                    }
+                    if (board[r,c] == Player.Red)
+                    {
+                        wert = wert + werte[r,c];
+                    }
+                }
+               
+            }
+            return wert;
+        }
+
+        //private int Max(int depth)
+        //{
+        //    if (depth == 0)
+        //    {
+        //        return Bewertung();
+        //    }
+        //    int maxvalue = -999;
+
+        //}
     }
 }

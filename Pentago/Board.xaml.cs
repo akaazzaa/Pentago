@@ -317,7 +317,7 @@ namespace Pentago
 
             if (Game.isSinglePlayer && Game.CurrentPlayer == Player.Red && Game.GameOver == false)
             {
-               var move = Game.GetBestMove(3);
+               var move = Game.GetBestMove(2);
                Game.MakeMoveComputer(move.Item1, move.Item2, move.Item3, move.Item4);
                 
             }
@@ -360,14 +360,15 @@ namespace Pentago
             ChangePlayerIcon();
             Move(quadrant, direction);
             PrintArray();
+
+            Game.SwitchPlayer();
+
+            Game.Turned = false;
             if (Game.IsWin())
             {
                 Game.GameOver = true;
                 GameEnded();
             }
-         
-            Game.SwitchPlayer();
-            Game.Turned = false;
         }
         private void OnGameRestarted()
         {

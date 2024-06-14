@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace tEST
 {
-    public enum Corner
+    public enum Quadrant
     {
         Topleft,
         Topright,
         Botleft,
         Botright,
+        None,
     }
 }

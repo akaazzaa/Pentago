@@ -24,7 +24,7 @@ namespace Pentago
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            
+
             Game game = new Game();
             game.isSinglePlayer = true;
             MainModel.SetNewContent(new Board(game));

@@ -22,7 +22,7 @@ namespace Pentago.Klassen
         public WinInfo WinInfo { get; set; }
         public GameResult GameResult { get; set; }
         public bool isSinglePlayer { get; set; }
-        ComputerGegner Computer { get; set; }
+       
 
         public event Action<GameResult> GameEnded;
         public event Action GameRestarted;
@@ -520,8 +520,29 @@ namespace Pentago.Klassen
                     }
                 }
             }
-
+            score += EvaluateCentralControl(board);
             return score;
+        }
+        private int EvaluateCentralControl(Player[,] board)
+        {
+            int centralControlScore = 0;
+            // Assuming central positions are more valuable
+            (int,int)[] centralPositions = { ( 2, 2 ), ( 2, 3 ), ( 3, 2 ), ( 3, 3 ) };
+
+            foreach (var pos in centralPositions)
+            {
+                
+                if (board[pos.Item1, pos.Item1] == Player.Red)
+                {
+                    centralControlScore += 3; // Increase value for controlling the center
+                }
+                else if (board[pos.Item1, pos.Item2] == Player.Blue)
+                {
+                    centralControlScore -= 3;
+                }
+            }
+
+            return centralControlScore;
         }
 
         private int EvaluateLine(Player[,] board, int startRow, int startCol, int rowDir, int colDir)

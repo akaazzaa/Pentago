@@ -64,7 +64,6 @@
     <Compile Include="Board.xaml.cs">
       <DependentUpon>Board.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Klassen\ComputerGegner.cs" />
     <Compile Include="Klassen\Quadrant.cs" />
     <Compile Include="Klassen\Direction.cs" />
     <Compile Include="Klassen\GameResult.cs" />
