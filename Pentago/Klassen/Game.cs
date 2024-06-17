@@ -370,7 +370,7 @@ namespace Pentago.Klassen
         public Tuple<int, int, Quadrant, Direction> GetBestMove(int depth)
         {
             List<Tuple<int, int, Quadrant, Direction>> moves = GetAllMoves();
-            moves = SortMovesByHeuristic(moves);
+            
             Tuple<int, int, Quadrant, Direction> bestMove = null;
             int bestValue = int.MinValue;
 
@@ -389,42 +389,7 @@ namespace Pentago.Klassen
 
             return bestMove;
         }
-        private List<Tuple<int, int, Quadrant, Direction>> SortMovesByHeuristic(List<Tuple<int, int, Quadrant, Direction>> moves)
-        {
-            return moves.OrderByDescending(move => EvaluateMoveHeuristic(move)).ToList();
-        }
-
-        private int EvaluateMoveHeuristic(Tuple<int, int, Quadrant, Direction> move)
-        {
-            int heuristicValue = 0;
-            // Simuliere den Zug, um die Heuristik zu bewerten
-            SimulateMove(move, Player.Red);
-
-            heuristicValue += EvaluateBoard();
-            // Assuming central positions are more valuable
-            (int, int)[] centralPositions = { (2, 2), (2, 3), (3, 2), (3, 3) };
-
-            foreach (var pos in centralPositions)
-            {
-
-                if (GameBoard[pos.Item1, pos.Item1] == Player.Red)
-                {
-                    heuristicValue += 3; // Increase value for controlling the center
-                }
-                else if (GameBoard[pos.Item1, pos.Item2] == Player.Blue)
-                {
-                    heuristicValue -= 3;
-                }
-            }
-
-            UndoMove(move);
-
-            return heuristicValue;
-        }
-
-       
-
-
+  
         private int Maximieren(int depth, int alpha, int beta, Player player)
         {
             int score = EvaluateBoard();

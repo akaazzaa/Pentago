@@ -317,7 +317,7 @@ namespace Pentago
 
             if (Game.isSinglePlayer && Game.CurrentPlayer == Player.Red && Game.GameOver == false)
             {
-               var move = Game.GetBestMove(3);
+               var move = Game.GetBestMove(4);
                Game.MakeMoveComputer(move.Item1, move.Item2, move.Item3, move.Item4);
                 
             }
