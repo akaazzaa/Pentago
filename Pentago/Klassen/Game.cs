@@ -13,7 +13,6 @@ namespace Pentago.Klassen
     public class Game
     {
         public Player[,] GameBoard { get; set;}
-        public Player[,] GameBoardCopy { get; set;}
         public Player CurrentPlayer { get; set; }
         public int WinCondition { get; set; }
         public int TurnsPassed { get; set; }
@@ -32,7 +31,7 @@ namespace Pentago.Klassen
         public Game()
         {
             
-            GameBoardCopy = new Player[6, 6];
+           
             CurrentPlayer = Player.Blue;
             WinCondition = 0;
             Turned = false;
@@ -265,7 +264,9 @@ namespace Pentago.Klassen
         }
         public void MakeMoveComputer(int row, int col, Quadrant corner, Direction direction)
         {
+
             
+
             SetPoint(row,col);
             
             
@@ -344,39 +345,13 @@ namespace Pentago.Klassen
             return Quadrant.None;
         }
 
-        public Tuple<int, int, Quadrant, Direction> GetBestMove(int depth)
-        {
-            List<Tuple<int, int, Quadrant, Direction>> moves = GetAllMoves();
-
-            Tuple<int, int, Quadrant, Direction> bestMove = null;
-
-            Array.Copy(GameBoard, GameBoardCopy, GameBoard.Length);
-
-            int bestValue = int.MinValue;
-
-            foreach (var move in moves)
-            {
-                SimulateMove(move);
-
-                int moveValue = Minimieren(depth - 1, int.MinValue, int.MaxValue);
-
-                UndoMove(move);
-
-
-                if (moveValue > bestValue)
-                {
-                    bestMove = move;
-                    bestValue = moveValue;
-                }
-            }
-
-            return bestMove;
-        }
+     
 
         private void UndoMove(Tuple<int, int, Quadrant, Direction> move)
         {
-            GameBoardCopy[move.Item1, move.Item2] = Player.None;
-            SimulateRotation(GameBoardCopy,move.Item3, OppositeDirection(move.Item4));
+            SimulateRotation(GameBoard, move.Item3, OppositeDirection(move.Item4));
+            GameBoard[move.Item1, move.Item2] = Player.None;
+           
         }
 
         private Direction OppositeDirection(Direction direction)
@@ -391,9 +366,31 @@ namespace Pentago.Klassen
             }
         }
 
-        private int Maximieren(int depth, int alpha, int beta)
+        public Tuple<int, int, Quadrant, Direction> GetBestMove(int depth)
         {
-            int score = EvaluateBoard(GameBoardCopy);
+            List<Tuple<int, int, Quadrant, Direction>> moves = GetAllMoves();
+            Tuple<int, int, Quadrant, Direction> bestMove = null;
+            int bestValue = int.MinValue;
+
+            foreach (var move in moves)
+            {
+                SimulateMove(move, Player.Red);
+                int moveValue = Minimieren(depth - 1, int.MinValue, int.MaxValue, Player.Blue);
+                UndoMove(move);
+
+                if (moveValue > bestValue)
+                {
+                    bestMove = move;
+                    bestValue = moveValue;
+                }
+            }
+
+            return bestMove;
+        }
+
+        private int Maximieren(int depth, int alpha, int beta, Player player)
+        {
+            int score = EvaluateBoard();
             if (depth == 0 || score == int.MaxValue || score == int.MinValue)
                 return score;
 
@@ -402,9 +399,10 @@ namespace Pentago.Klassen
 
             foreach (var move in moves)
             {
-                SimulateMove(move);
-                int eval = Minimieren(depth - 1, alpha, beta);
+                SimulateMove(move, player);
+                int eval = Minimieren(depth - 1, alpha, beta, Player.Blue);
                 UndoMove(move);
+
                 maxEval = Math.Max(maxEval, eval);
                 alpha = Math.Max(alpha, eval);
                 if (beta <= alpha)
@@ -413,9 +411,9 @@ namespace Pentago.Klassen
             return maxEval;
         }
 
-        private int Minimieren(int depth, int alpha, int beta)
+        private int Minimieren(int depth, int alpha, int beta, Player player)
         {
-            int score = EvaluateBoard(GameBoardCopy);
+            int score = EvaluateBoard();
             if (depth == 0 || score == int.MaxValue || score == int.MinValue)
                 return score;
 
@@ -424,9 +422,10 @@ namespace Pentago.Klassen
 
             foreach (var move in moves)
             {
-                SimulateMove(move);
-                int eval = Maximieren(depth - 1, alpha, beta);
+                SimulateMove(move, player);
+                int eval = Maximieren(depth - 1, alpha, beta, Player.Red);
                 UndoMove(move);
+
                 minEval = Math.Min(minEval, eval);
                 beta = Math.Min(beta, eval);
                 if (beta <= alpha)
@@ -435,10 +434,10 @@ namespace Pentago.Klassen
             return minEval;
         }
 
-        private void SimulateMove(Tuple<int, int, Quadrant, Direction> move)
+        private void SimulateMove(Tuple<int, int, Quadrant, Direction> move,Player player)
         {
-            GameBoardCopy[move.Item1, move.Item2] = CurrentPlayer;
-            SimulateRotation(GameBoardCopy ,move.Item3, move.Item4);
+            GameBoard[move.Item1, move.Item2] = player;
+            SimulateRotation(GameBoard ,move.Item3, move.Item4);
         }
 
         private void SimulateRotation(Player[,] tmpboard,Quadrant quadrant, Direction direction)
@@ -491,11 +490,11 @@ namespace Pentago.Klassen
 
         }
 
-        private int EvaluateBoard(Player[,] board)
+        private int EvaluateBoard()
         {
             int score = 0;
-            int rows = board.GetLength(0);
-            int cols = board.GetLength(1);
+            int rows = GameBoard.GetLength(0);
+            int cols = GameBoard.GetLength(1);
 
             // Check rows, columns, and diagonals
             for (int r = 0; r < rows; r++)
@@ -504,34 +503,34 @@ namespace Pentago.Klassen
                 {
                     if (c <= cols - 5)
                     {
-                        score += EvaluateLine(board, r, c, 0, 1); // Check rows
+                        score += EvaluateLine(GameBoard, r, c, 0, 1); // Check rows
                     }
                     if (r <= rows - 5)
                     {
-                        score += EvaluateLine(board, r, c, 1, 0); // Check columns
+                        score += EvaluateLine(GameBoard, r, c, 1, 0); // Check columns
                     }
                     if (r <= rows - 5 && c <= cols - 5)
                     {
-                        score += EvaluateLine(board, r, c, 1, 1); // Check diagonals (top-left to bottom-right)
+                        score += EvaluateLine(GameBoard, r, c, 1, 1); // Check diagonals (top-left to bottom-right)
                     }
                     if (r >= 4 && c <= cols - 5)
                     {
-                        score += EvaluateLine(board, r, c, -1, 1); // Check diagonals (bottom-left to top-right)
+                        score += EvaluateLine(GameBoard, r, c, -1, 1); // Check diagonals (bottom-left to top-right)
                     }
                 }
             }
-            score += EvaluateCentralControl(board);
+            score += EvaluateCentralControl(GameBoard);
             return score;
         }
         private int EvaluateCentralControl(Player[,] board)
         {
             int centralControlScore = 0;
             // Assuming central positions are more valuable
-            (int,int)[] centralPositions = { ( 2, 2 ), ( 2, 3 ), ( 3, 2 ), ( 3, 3 ) };
+            (int, int)[] centralPositions = { (2, 2), (2, 3), (3, 2), (3, 3) };
 
             foreach (var pos in centralPositions)
             {
-                
+
                 if (board[pos.Item1, pos.Item1] == Player.Red)
                 {
                     centralControlScore += 3; // Increase value for controlling the center
@@ -607,7 +606,7 @@ namespace Pentago.Klassen
             return blueScore + redScore;
         }
 
-    
+
         #endregion
 
 
