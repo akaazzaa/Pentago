@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Pentago
 {
+    
     public enum Player
     {
       None,Blue,Red

@@ -8,7 +8,8 @@ namespace Pentago
 {
     public class GameResult
     {
+        // Speichert Gewinner 
         public Player Winner {  get; set; }
-        public WinInfo WinInfo { get; set; }    
+       
     }
 }

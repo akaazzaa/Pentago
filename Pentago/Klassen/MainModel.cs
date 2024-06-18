@@ -18,7 +18,7 @@ namespace Pentago
         {
             FormLoader = grid;
         }
-
+        // Ändert das usercontrol
         public static void SetNewContent(UserControl content)
         {
             _content = content;

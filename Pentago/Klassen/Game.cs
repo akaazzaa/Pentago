@@ -19,7 +19,6 @@ namespace Pentago.Klassen
         public int TurnsPassed { get; set; }
         public bool GameOver { get; set; }
         public bool Turned { get; set; }
-        public WinInfo WinInfo { get; set; }
         public GameResult GameResult { get; set; }
         public bool isSinglePlayer { get; set; }
        
@@ -30,8 +29,6 @@ namespace Pentago.Klassen
   
         public Game()
         {
-            
-           
             CurrentPlayer = Player.Blue;
             WinCondition = 0;
             Turned = false;
@@ -42,9 +39,16 @@ namespace Pentago.Klassen
         }
 
         #region Rotation
+        /// <summary>
+        /// Bekommt ein 3x3 array und eine Richtung und dreht das array um 90°
+        /// </summary>
+        /// <param name="tmp"></param>
+        /// <param name="direction"></param>
+        /// <returns></returns>
         private Player[,] Rotate3x3(Player[,] tmp, Direction direction)
         {
             Player[,] rotated = new Player[3, 3];
+            // drehen nach rechts
             if (direction == Direction.Right)
             {
                 for (int r = 0; r < 3; r++)
@@ -54,7 +58,7 @@ namespace Pentago.Klassen
                         rotated[r, c] = tmp[2 - c, r];
                     }
                 }
-            }
+            }// dehen nach links
             else if (direction == Direction.Left)
             {
                 for (int r = 0; r < 3; r++)
@@ -71,6 +75,13 @@ namespace Pentago.Klassen
             }
             return rotated;
         }
+        /// <summary>
+        /// Entscheidet welcher Qudrant gedreht werden soll.
+        /// Macht aus dem 6x6 ein 3x3 und ruft Rotate 3x3 auf.
+        /// Fügt das gedrehte array wieder dem 6x6 hinzu.
+        /// </summary>
+        /// <param name="corner"></param>
+        /// <param name="direction"></param>
         public void RotateField(Quadrant corner, Direction direction)
         {
 
@@ -125,14 +136,23 @@ namespace Pentago.Klassen
         #endregion
 
         #region WinCkeck
+        /// <summary>
+        /// Beckommt eine Row und eine Col als startPunkt und Prüft dann ob der Spieler
+        /// Diagonal gewonnen hat.
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="col"></param>
+        /// <returns></returns>
         private bool CheckDiagonal(int row, int col)
         {
             WinCondition = 0;
+            // Feld länge such Diagonal
             for (int r = row, c = col; r < GameBoard.GetLength(0) && c < GameBoard.GetLength(1); r++, c++)
-            {
+            {// Wennn der stein nich None ist = True;
                 if (IsMarked(r, c))
                 {
                     WinCondition++;
+                    // WinCondition == 5 = Gewonnen;
                     if (WinCondition == 5)
                     {
                         return true;
@@ -145,6 +165,12 @@ namespace Pentago.Klassen
             }
             return false;
         }
+        /// <summary>
+        /// Prüft die gegegesetzte Diagonale 
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="col"></param>
+        /// <returns></returns>
         private bool CheckAntiDiagonal(int row, int col)
         {
             WinCondition = 0;
@@ -165,6 +191,10 @@ namespace Pentago.Klassen
             }
             return false;
         }
+        /// <summary>
+        /// Prüft die Reihen auf Sieg
+        /// </summary>
+        /// <returns></returns>
         private bool CheckRow()
         {
             for (int r = 0; r < GameBoard.GetLength(0); r++)
@@ -188,6 +218,10 @@ namespace Pentago.Klassen
             }
             return false;
         }
+        /// <summary>
+        /// Prüft die Spalten auf Sieg
+        /// </summary>
+        /// <returns></returns>
         private bool CheckColumn()
         {
             for (int c = 0; c < GameBoard.GetLength(1); c++)
@@ -211,6 +245,10 @@ namespace Pentago.Klassen
             }
             return false;
         }
+        /// <summary>
+        /// Prüft Diagonal
+        /// </summary>
+        /// <returns></returns>
         private bool IsDiagonalWin()
         {
             for (int row = 0; row < GameBoard.GetLength(0); row++)
@@ -225,14 +263,28 @@ namespace Pentago.Klassen
             }
             return false;
         }
+        /// <summary>
+        /// return true wenn das anzuschauende Feld = aktueller Speieler
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="c"></param>
+        /// <returns></returns>
         private bool IsMarked(int r, int c)
         {
             return GameBoard[r, c] == CurrentPlayer;
         }
+        /// <summary>
+        ///  Gibt zurück ob das Spielfeld voll ist
+        /// </summary>
+        /// <returns></returns>
         private bool IsGridFull()
         {
             return TurnsPassed == GameBoard.GetLength(0) * GameBoard.GetLength(1);
         }
+        /// <summary>
+        ///  Gewinnprüfung
+        /// </summary>
+        /// <returns></returns>
         public bool IsWin()
         {
             if (CheckRow() || CheckColumn() || IsDiagonalWin())
@@ -252,6 +304,13 @@ namespace Pentago.Klassen
         #endregion
 
         #region Gameloop
+        /// <summary>
+        ///  Fürt den Spielerzug aus triggert ein event
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="col"></param>
+        /// <param name="corner"></param>
+        /// <param name="direction"></param>
         public void MakeMove(int row,int col, Quadrant corner,Direction direction)
         {
             if(!CanMove(row, col))
@@ -262,6 +321,13 @@ namespace Pentago.Klassen
                 TurnsPassed++;
                 MoveMade?.Invoke(row, col, corner);
         }
+        /// <summary>
+        /// Fürt den Computerzug aus und triggert ein Event
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="col"></param>
+        /// <param name="corner"></param>
+        /// <param name="direction"></param>
         public void MakeMoveComputer(int row, int col, Quadrant corner, Direction direction)
         {
 
@@ -275,14 +341,28 @@ namespace Pentago.Klassen
             TurnsPassed++;
             ComputerMove?.Invoke(row, col, corner,direction);
         }
+        /// <summary>
+        /// Prüft ob ein stein gesetzt werden kann. 
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="c"></param>
+        /// <returns>bool</returns>
         private bool CanMove(int r, int c)
         {
             return !GameOver && Turned == false && GameBoard[r, c] == Player.None;
         }
+        /// <summary>
+        /// Setzt einen Sein in das Feld.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public void SetPoint(int x, int y)
         {
             GameBoard[x, y] = CurrentPlayer;
         }
+        /// <summary>
+        /// Wechselt den aktuellen Spieler 
+        /// </summary>
         public void SwitchPlayer()
         {
             if (CurrentPlayer == Player.Blue)
@@ -296,6 +376,9 @@ namespace Pentago.Klassen
             }
 
         }
+        /// <summary>
+        /// Setz alles zurück.
+        /// </summary>
         public void Reset()
         {
             GameBoard = new Player[6, 6];
@@ -308,6 +391,10 @@ namespace Pentago.Klassen
         #endregion
 
         #region Computer
+        /// <summary>
+        /// Geht das Feld durch und für jedes nicht belegte Feld erstelt eine 2 Tuple mit allen möglcihen Zügen.
+        /// </summary>
+        /// <returns>Liste der Züge</returns>
         public List<Tuple<int, int, Quadrant, Direction>> GetAllMoves()
         {
             List<Tuple<int, int, Quadrant, Direction>> moves = new List<Tuple<int, int, Quadrant, Direction>>();
@@ -331,29 +418,21 @@ namespace Pentago.Klassen
             }
             return moves;
         }
-
-        private Quadrant GetRightQuadrant(int r, int c)
-        {
-            if (r < 3 && c < 3) return Quadrant.Topleft;
-
-            if (r < 3 && c > 2) return Quadrant.Topright;
-
-            if (r > 2 && c < 3) return Quadrant.Botleft;
-
-            if (r > 2 && c > 2) return Quadrant.Botright;
-
-            return Quadrant.None;
-        }
-
-     
-
+        /// <summary>
+        /// Macht einen ausgeführten Zug wieder rückgängig
+        /// </summary>
+        /// <param name="move"></param>
         private void UndoMove(Tuple<int, int, Quadrant, Direction> move)
         {
             SimulateRotation(GameBoard, move.Item3, OppositeDirection(move.Item4));
             GameBoard[move.Item1, move.Item2] = Player.None;
            
         }
-
+        /// <summary>
+        /// Bekommt eine Richtung und gibt die gegengesetzte Richtung zurück.
+        /// </summary>
+        /// <param name="direction"></param>
+        /// <returns></returns>
         private Direction OppositeDirection(Direction direction)
         {
             if (direction == Direction.Left)
@@ -365,7 +444,12 @@ namespace Pentago.Klassen
                 return direction = Direction.Left;
             }
         }
-
+        /// <summary>
+        /// Start der Minmax algorithmus
+        /// Bekommt eine Suchtiefe und geht alle Züge durch und füht dise aus, testet die Züge bewertet die Züge und gibt einen wert zurück.
+        /// </summary>
+        /// <param name="depth"></param>
+        /// <returns>bester Zug</returns>
         public Tuple<int, int, Quadrant, Direction> GetBestMove(int depth)
         {
             List<Tuple<int, int, Quadrant, Direction>> moves = GetAllMoves();
@@ -388,7 +472,14 @@ namespace Pentago.Klassen
 
             return bestMove;
         }
-  
+        /// <summary>
+        ///  Minmax Algorithmus 
+        /// </summary>
+        /// <param name="depth">Tiefe </param>
+        /// <param name="alpha">untergrnze</param>
+        /// <param name="beta">obergrenze</param>
+        /// <param name="player">Spieler</param>
+        /// <returns></returns>
         private int Maximieren(int depth, int alpha, int beta, Player player)
         {
             int score = EvaluateBoard();
@@ -411,7 +502,14 @@ namespace Pentago.Klassen
             }
             return maxEval;
         }
-
+        /// <summary>
+        /// Minmax Algorithmus 
+        /// </summary>
+        /// <param name="depth"></param>
+        /// <param name="alpha"></param>
+        /// <param name="beta"></param>
+        /// <param name="player"></param>
+        /// <returns></returns>
         private int Minimieren(int depth, int alpha, int beta, Player player)
         {
             int score = EvaluateBoard();
@@ -434,13 +532,22 @@ namespace Pentago.Klassen
             }
             return minEval;
         }
-
+        /// <summary>
+        /// Führt einen Zug aus
+        /// </summary>
+        /// <param name="move"></param>
+        /// <param name="player"></param>
         private void SimulateMove(Tuple<int, int, Quadrant, Direction> move,Player player)
         {
             GameBoard[move.Item1, move.Item2] = player;
             SimulateRotation(GameBoard ,move.Item3, move.Item4);
         }
-
+        /// <summary>
+        /// Rotiert das Array
+        /// </summary>
+        /// <param name="tmpboard"></param>
+        /// <param name="quadrant"></param>
+        /// <param name="direction"></param>
         private void SimulateRotation(Player[,] tmpboard,Quadrant quadrant, Direction direction)
         {
             int rowStart, colStart;
@@ -490,41 +597,51 @@ namespace Pentago.Klassen
 
 
         }
-
+        /// <summary>
+        ///  Bewertet die aktuelle positionen auf dem Feld
+        /// </summary>
+        /// <returns></returns>
         private int EvaluateBoard()
         {
             int score = 0;
             int rows = GameBoard.GetLength(0);
             int cols = GameBoard.GetLength(1);
 
-            // Check rows, columns, and diagonals
+            
             for (int r = 0; r < rows; r++)
             {
                 for (int c = 0; c < cols; c++)
                 {
                     if (c <= cols - 5)
                     {
-                        score += EvaluateLine(GameBoard, r, c, 0, 1); // Check rows
+                        score += EvaluateLine(GameBoard, r, c, 0, 1);
                     }
                     if (r <= rows - 5)
                     {
-                        score += EvaluateLine(GameBoard, r, c, 1, 0); // Check columns
+                        score += EvaluateLine(GameBoard, r, c, 1, 0); 
                     }
                     if (r <= rows - 5 && c <= cols - 5)
                     {
-                        score += EvaluateLine(GameBoard, r, c, 1, 1); // Check diagonals (top-left to bottom-right)
+                        score += EvaluateLine(GameBoard, r, c, 1, 1); 
                     }
                     if (r >= 4 && c <= cols - 5)
                     {
-                        score += EvaluateLine(GameBoard, r, c, -1, 1); // Check diagonals (bottom-left to top-right)
+                        score += EvaluateLine(GameBoard, r, c, -1, 1); 
                     }
                 }
             }
             
             return score;
         }
-       
-
+        /// <summary>
+        ///  zählt die Stein in einer Reihe und verteilt Punkte.
+        /// </summary>
+        /// <param name="board"></param>
+        /// <param name="startRow"></param>
+        /// <param name="startCol"></param>
+        /// <param name="rowDir"></param>
+        /// <param name="colDir"></param>
+        /// <returns></returns>
         private int EvaluateLine(Player[,] board, int startRow, int startCol, int rowDir, int colDir)
         {
             int bluePoints = 0;
@@ -543,47 +660,47 @@ namespace Pentago.Klassen
                 }
             }
 
-            // Gewinnszenarien
+        
             if (bluePoints == 5)
             {
-                return int.MinValue; // Blue gewinnt
+                return int.MinValue;
             }
             if (redPoints == 5)
             {
-                return int.MaxValue; // Red gewinnt
+                return int.MaxValue; 
             }
 
-            // Bewertung für Blue
+         
             int blueScore = 0;
             switch (bluePoints)
             {
                 case 4:
-                    blueScore = -100; // Sehr nah am Gewinnen
+                    blueScore = -100;
                     break;
                 case 3:
-                    blueScore = -10; // Gute Position
+                    blueScore = -10; 
                     break;
                 case 2:
-                    blueScore = -1; // Anfang eines möglichen Zuges
+                    blueScore = -1; 
                     break;
             }
 
-            // Bewertung für Red
+           
             int redScore = 0;
             switch (redPoints)
             {
                 case 4:
-                    redScore = 100; // Sehr nah am Gewinnen
+                    redScore = 100;
                     break;
                 case 3:
-                    redScore = 10; // Gute Position
+                    redScore = 10; 
                     break;
                 case 2:
-                    redScore = 1; // Anfang eines möglichen Zuges
+                    redScore = 1;
                     break;
             }
 
-            // Balancierte Bewertung
+            
             return blueScore + redScore;
         }
 

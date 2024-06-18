@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Pentago
 {
+    // Unterscheidung der Quadranten
     public enum Quadrant
     {
         Topleft,

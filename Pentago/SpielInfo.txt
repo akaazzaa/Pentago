@@ -6,7 +6,8 @@ Der Spieler platziert einen Punkt und darf dann eines der Vier Kästchen auswäh
 Danach ist der nächste dran.
 
 Gewinner ist der Spieler, der es als erster schafft, fünf seiner Spielsteine waagerecht, senkrecht oder diagonal in eine Linie zu bringen. 
-Das Spiel endet unentschieden, wenn durch Drehen eines Quadranten beide Spieler fünf Spielsteine in einer Reihe erhalten, oder wenn das Spielbrett komplett gefüllt ist, ohne dass ein Spieler gewonnen hat.
+Das Spiel endet unentschieden, wenn durch Drehen eines Quadranten beide Spieler fünf Spielsteine in einer Reihe erhalten, oder wenn das Spielbrett komplett gefüllt ist, 
+ohne dass ein Spieler gewonnen hat.
 
 
 Oberfläche: 
@@ -20,8 +21,22 @@ Spiel Logik einbauen. Pro Zug ein Punkt + Drehung
 Überprüfung der Reihen in alle Richtungen 
 Gewinn oder Verloren Logik 
 
-Coputer:
-Einzelspierlermodus gegen einen Algoryhtmus einabuen 
+Computer:
+Einzelspierlermodus(Algorithmus) 
+
+Quellen:
+StackOverFlow:
+
+Youtube: 
+https://www.youtube.com/watch?v=OHRWRpT9WcE&t=1888s
+https://www.youtube.com/watch?v=3ufcmCpKb6w&t=170s
+https://www.youtube.com/watch?v=ZJg5fOHSM5c&t=1419s
+https://www.youtube.com/watch?v=dQPztr3ILTc&t=729s
+
+Sonstiges:
+https://www.mathematik.uni-muenchen.de/~spielth/artikel/VierGewinnt.pdf
+
+
 
 
 

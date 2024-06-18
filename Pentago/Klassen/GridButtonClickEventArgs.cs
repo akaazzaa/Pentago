@@ -12,7 +12,7 @@ namespace Pentago
         public int Row { get; }
         public int Column { get; }
         public List<Button> Buttons { get; }
-
+        // Übergit Button und desen posi.
         public GridButtonClickEventArgs(int row, int column,List<Button> button)
         {
             Row = row;

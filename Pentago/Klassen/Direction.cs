@@ -7,6 +7,7 @@ using System.Windows.Forms;
 
 namespace Pentago
 {
+    // Enum für die Drehrichtungen 
     public enum Direction
     {
         Left = 1,

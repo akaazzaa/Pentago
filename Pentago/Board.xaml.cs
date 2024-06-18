@@ -11,9 +11,7 @@ using System.Windows.Media.Animation;
 
 namespace Pentago
 {
-    /// <summary>
-    /// Interaktionslogik für Board.xaml
-    /// </summary>
+ 
     public partial class Board : UserControl
     {
         Game Game;
@@ -38,6 +36,12 @@ namespace Pentago
             AddImmageButtonToList();
             ChangePlayerIcon();
         }
+
+
+        #region Start
+        /// <summary>
+        /// Fügt die Pfeilimages einer Liste hinzu
+        /// </summary>
         private void AddImmageButtonToList()
         {
             RotationButtons.Add(BTLL);
@@ -51,8 +55,9 @@ namespace Pentago
             RotationButtons.Add(BBRL);
             RotationButtons.Add(BBRR);
         }
-
-        #region Start
+        /// <summary>
+        /// Erzeugt die Grids und fügt sie dem MainGrid hinzu.
+        /// </summary>
         private void SetGrids()
         {
             
@@ -102,7 +107,9 @@ namespace Pentago
             GameGrid.Children.Add(BotRight);
             Grids.Add(BotRight);
         }
-        
+        /// <summary>
+        /// ändert das Icon zu dem Spieler der am zug ist.
+        /// </summary>
         private void ChangePlayerIcon()
         {
             LinearGradientBrush backgroundBrush = new LinearGradientBrush();
