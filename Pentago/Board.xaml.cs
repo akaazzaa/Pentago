@@ -121,7 +121,6 @@ namespace Pentago
                 backgroundBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0x0D, 0x32, 0xC5), 1));
                 backgroundBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0x8F, 0x96, 0xD6), 0));
                 PlayerIcon.Fill = backgroundBrush;
-
             }
             else
             {
@@ -130,6 +129,9 @@ namespace Pentago
                 PlayerIcon.Fill = backgroundBrush;
             }
         }
+        /// <summary>
+        /// Vesteckt oder zeigt die Images  zum drehen an.
+        /// </summary>
         private void ChangeVisibilityRotationButton()
         {
             foreach (Image image in RotationButtons)
@@ -148,6 +150,10 @@ namespace Pentago
         #endregion
 
         #region Animation 
+        /// <summary>
+        /// Dreht das richtig UserControl
+        /// </summary>
+        /// <param name="imagebutton"></param>
         private void RotateAnimation(Image imagebutton)
         {
             switch (imagebutton.Name)
@@ -155,13 +161,11 @@ namespace Pentago
                 case "BTLL":
                     Move(TopLeft, Direction.Left);
                     Game.RotateField(Quadrant.Topleft, Direction.Left);
-
                     break;
                 case "BTLR":
                     Move(TopLeft, Direction.Right);
                     Game.RotateField(Quadrant.Topleft, Direction.Right);
                     break;
-
                 case "BTRL":
                     Move(TopRight, Direction.Left);
                     Game.RotateField(Quadrant.Topright, Direction.Left);
@@ -170,7 +174,6 @@ namespace Pentago
                     Move(TopRight, Direction.Right);
                     Game.RotateField(Quadrant.Topright, Direction.Right);
                     break;
-
                 case "BBLL":
                     Move(BotLeft, Direction.Right);
                     Game.RotateField(Quadrant.Botleft, Direction.Right);
@@ -179,7 +182,6 @@ namespace Pentago
                     Move(BotLeft, Direction.Left);
                     Game.RotateField(Quadrant.Botleft, Direction.Left);
                     break;
-
                 case "BBRL":
                     Move(BotRight, Direction.Right);
                     Game.RotateField(Quadrant.Botright, Direction.Right);
@@ -190,6 +192,11 @@ namespace Pentago
                     break;
             }
         }
+        /// <summary>
+        /// Dreh Animation
+        /// </summary>
+        /// <param name="gameGrid"></param>
+        /// <param name="direction"></param>
         private void Move(GameGrid gameGrid, Direction direction)
         {
             int angle = 0;
@@ -217,6 +224,11 @@ namespace Pentago
             gameGrid.SetNewPositions(direction);
 
         }
+        /// <summary>
+        /// Dreh animaton ohne Grid übergabe
+        /// </summary>
+        /// <param name="quadrant"></param>
+        /// <param name="direction"></param>
         private void Move(Quadrant quadrant, Direction direction)
         {
             GameGrid gameGrid = GetGridByQuadrant(quadrant); 
@@ -246,6 +258,11 @@ namespace Pentago
             gameGrid.SetNewPositions(direction);
 
         }
+        /// <summary>
+        /// Sucht das richtige grid anhand des Enums
+        /// </summary>
+        /// <param name="quadrant"></param>
+        /// <returns></returns>
         private GameGrid GetGridByQuadrant(Quadrant quadrant)
         {
             for (int i = 0;i< Grids.Count;i++)
@@ -257,7 +274,11 @@ namespace Pentago
             }
             return null;
         }
-
+        /// <summary>
+        /// Ändert die Buttonfarbe in Spielerfrabe
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="col"></param>
         public void Changbuttoncolor(int row, int col)
         {
 
@@ -286,7 +307,12 @@ namespace Pentago
                 button.Background = backgroundBrush;
             }
         }
-
+        /// <summary>
+        /// Gibt mir den richtigen Button anhand der Row und Col
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="col"></param>
+        /// <returns></returns>
         private Button GetGridButton(int row, int col)
         {
 
@@ -301,24 +327,46 @@ namespace Pentago
             
             return null;
         }
-
+        /// <summary>
+        /// Zeigt den Endscreen an 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="colorBrush"></param>
         private void EndScreening(string text, LinearGradientBrush colorBrush)
         {
-            GameGrid.Visibility = Visibility.Hidden;
             ResultText.Text = text;
             WinnerIcon.Fill = colorBrush;
             EndScreen.Visibility = Visibility.Visible;
+        }
+        /// <summary>
+        /// Wechselt das Usercontrol 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            MainModel.SetNewContent(new Menu());
         }
 
         #endregion
 
         #region Events
+        /// <summary>
+        /// ButtonClick event fürt den Zug aus
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void GridButton_Click(object sender, GridButtonClickEventArgs e)
         {
             var grid = (GameGrid)sender;
             Quadrant quandrant = (Quadrant)grid.Tag;
             Game.MakeMove(e.Row, e.Column,quandrant, Direction.none);
         }
+        /// <summary>
+        /// Fürt die Drehung aus
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Click_MouseDown(object sender, MouseButtonEventArgs e )
         {
             Image image = (Image)sender;
@@ -338,7 +386,7 @@ namespace Pentago
             
             if (!Game.isSinglePlayer)
                 Game.Turned = false;
-
+            // Singleplayermodus
             if (Game.isSinglePlayer && Game.CurrentPlayer == Player.Red && Game.GameOver == false)
             {
                var move = Game.GetBestMove(2);
@@ -347,6 +395,12 @@ namespace Pentago
             }
            
         }
+        /// <summary>
+        /// wenn der Zug gemacht wurde. Visuele änderung. Gewinn prüfen
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="col"></param>
+        /// <param name="corner"></param>
         private void OnMoveMade(int row, int col, Quadrant corner)
         {
             Changbuttoncolor(row,col);
@@ -358,8 +412,12 @@ namespace Pentago
                 GameEnded();
             }
         }
+        /// <summary>
+        /// pürft wer gewonnen hat und zeigt dies im EndScreen
+        /// </summary>
         private async void GameEnded()
         {
+            GetWinPosi();
             LinearGradientBrush backgroundBrush = new LinearGradientBrush();
             backgroundBrush.StartPoint = new Point(0.5, 0);
             backgroundBrush.EndPoint = new Point(0.5, 1);
@@ -388,6 +446,13 @@ namespace Pentago
             }
 
         }
+        /// <summary>
+        /// Visuele änderung, Spielerwechsel,Gewinnprüfung
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="c"></param>
+        /// <param name="quadrant"></param>
+        /// <param name="direction"></param>
         private async void OnComputerMove(int r,int c,Quadrant quadrant,Direction direction)
         {
             
@@ -407,14 +472,18 @@ namespace Pentago
                 GameEnded();
             }
         }
-    
+        /// <summary>
+        /// Game neustart 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Game.Reset();
             ChangePlayerIcon();
-            EndScreen.Visibility = Visibility.Hidden;
-            GameGrid.Visibility = Visibility.Visible;
             
+            EndScreen.Visibility = Visibility.Hidden;
+
             GameGrid.Children.Remove(TopLeft);
             GameGrid.Children.Remove(TopRight);
             GameGrid.Children.Remove(BotLeft);
@@ -441,9 +510,28 @@ namespace Pentago
             PrintArray();
         }
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        private void GetWinPosi()
         {
-            MainModel.SetNewContent(new Menu());
+            foreach (var pos in  Game.Winposi)
+            {
+                if (pos.Item1 < 3 && pos.Item2 < 3)
+                {
+                    TopLeft.GetEllipsebyTag(pos.Item1 % 3, pos.Item2 % 3).Fill = new SolidColorBrush(Colors.Yellow);
+                }
+                else if (pos.Item1 < 3 && pos.Item2 > 2)
+                {
+                    TopRight.GetEllipsebyTag(pos.Item1 % 3, pos.Item2 % 3).Fill = new SolidColorBrush(Colors.Yellow);
+                }
+                else if (pos.Item1 > 2 && pos.Item2 < 3)
+                {
+                    BotLeft.GetEllipsebyTag(pos.Item1 % 3, pos.Item2 % 3).Fill = new SolidColorBrush(Colors.Yellow);
+                }
+                else if (pos.Item1 > 2 && pos.Item2 > 2)
+                {
+                    BotRight.GetEllipsebyTag(pos.Item1 % 3, pos.Item2 % 3).Fill = new SolidColorBrush(Colors.Yellow);
+                }
+            }
         }
+
     }
 }

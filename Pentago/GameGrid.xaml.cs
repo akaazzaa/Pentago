@@ -3,6 +3,7 @@ using Pentago.Klassen;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -17,6 +18,7 @@ namespace Pentago
     {
         public event EventHandler<GridButtonClickEventArgs> GridButtonClick;
         public double CurrentRotation;
+        public List<Ellipse> EllipseList {  get; set; } 
         public List<Button> Buttons {get; set; }  
         private int startRow { get; set; }
         private int startCol { get; set; }
@@ -28,6 +30,7 @@ namespace Pentago
             InitializeComponent();
             startRow = startrow;
             startCol = startcol;
+            EllipseList = new List<Ellipse>();
             Buttons = new List<Button>();
             CurrentRotation = 0;
             
@@ -105,6 +108,19 @@ namespace Pentago
             }
             return null;
         }
+        public Ellipse GetEllipsebyTag(int row,int col)
+        {
+            foreach(var ellipse in EllipseList)
+            {
+                var pos = (Positions)ellipse.Tag;
+                if (pos.Row == row && pos.Column == col)
+                {
+                    return ellipse;
+                }
+                
+            }
+            return null;
+        }
         private void  LoadVisuals()
         {
             
@@ -146,9 +162,11 @@ namespace Pentago
                     ellipse.HorizontalAlignment = HorizontalAlignment.Center;
                     ellipse.VerticalAlignment = VerticalAlignment.Center;
                     ellipse.Fill = new SolidColorBrush(Colors.Aqua);
+                    ellipse.Tag = new Positions(row, col);
 
                     Grid.SetRow(ellipse, row);
                     Grid.SetColumn(ellipse, col);
+                    EllipseList.Add(ellipse);
                     grid.Children.Add(ellipse);
                 }
             }

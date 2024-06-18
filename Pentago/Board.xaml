@@ -44,63 +44,10 @@
                 </Rectangle.Fill>
             </Rectangle>
         </StackPanel>
-        <Grid x:Name="EndScreen"
-              Grid.RowSpan="3"
-              Visibility="Hidden">
-            <Grid.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#FF01563C"/>
-                    <GradientStop Color="#FF0DC5A7" Offset="1"/>
-                </LinearGradientBrush>
-            </Grid.Background>
-            <StackPanel Orientation="Vertical"
-                        VerticalAlignment="Center">
-                <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Center">
-                    <TextBlock x:Name="ResultText"
-                               FontSize="80"
-                               Text="Winner:"
-                               Width="274"/>
-                    <Rectangle x:Name="WinnerIcon"
-                               Height="80"
-                               Width="80"
-                               RadiusX="40"
-                               RadiusY="40"
-                               Margin="15,10,0,0">
-                        <Rectangle.Fill>
-                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                <GradientStop Color="#FF0D32C5" Offset="1"/>
-                                <GradientStop Color="#FFBDC0DA" Offset="0"/>
-                            </LinearGradientBrush>
-                        </Rectangle.Fill>
-                    </Rectangle>
-                      
-                        
-                </StackPanel>
-                <Button Content="Play Again"
-                        Background="Gray"
-                        FontSize="34"
-                        Width="300"
-                        
-                        Padding="0,0,0,5"
-                        BorderBrush="Black"
-                        Click="Button_Click" Height="50"
-                        />
-                <Button Content="Menu"
-                        Background="Gray"
-                        FontSize="34"
-                        Width="300"
-
-                        Padding="0,0,0,5"
-                        BorderBrush="Black"
-                        Height="50" Click="Button_Click_2"
-                        ></Button>
-            </StackPanel>
-        </Grid>
         <Button Content="Debug" Visibility="Hidden" HorizontalAlignment="Left" Margin="58,138,0,0" Grid.Row="2" VerticalAlignment="Top" Width="74" Height="44" Click="Button_Click_1"/>
         <TextBlock x:Name="Debugtext" Visibility="Hidden" HorizontalAlignment="Left" Margin="26,268,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Height="224" Width="270"/>
         <Grid x:Name="GameGrid"
-                  Width="900" HorizontalAlignment="Left" Margin="296,100,0,0" Grid.Row="1" Grid.RowSpan="2" Height="900">
+                  Width="900" HorizontalAlignment="Left" Margin="313,100,0,0" Grid.Row="1" Height="900" Grid.RowSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -190,6 +137,54 @@
                 </Image.RenderTransform>
             </Image>
 
+        </Grid>
+        <Grid x:Name="EndScreen"
+              Grid.RowSpan="3"
+              Visibility="Hidden">
+            <StackPanel Orientation="Vertical"
+                        VerticalAlignment="Top" Margin="0,105,0,0">
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Center">
+                    <TextBlock x:Name="ResultText"
+                               Foreground="White"
+                               FontSize="80"
+                               Text="Winner:"
+                               Width="274" FontFamily="Comic Sans MS"/>
+                    <Rectangle x:Name="WinnerIcon"
+                               Height="80"
+                               Width="80"
+                               RadiusX="40"
+                               RadiusY="40"
+                               Margin="15,10,0,0">
+                        <Rectangle.Fill>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="#FF0D32C5" Offset="1"/>
+                                <GradientStop Color="#FFBDC0DA" Offset="0"/>
+                            </LinearGradientBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
+
+
+                </StackPanel>
+                <Button Content="Play Again"
+                        Background="Gray"
+                        FontSize="34"
+                        Width="300"
+                        
+                        Padding="0,0,0,5"
+                        BorderBrush="Black"
+                        Click="Button_Click" Height="50"
+                        />
+                <Button Content="Menu"
+                        Background="Gray"
+                        FontSize="34"
+                        Width="300"
+
+                        Padding="0,0,0,5"
+                        BorderBrush="Black"
+                        Height="50" Click="Button_Click_2"
+                        />
+            </StackPanel>
         </Grid>
     </Grid>
 

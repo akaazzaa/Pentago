@@ -21,6 +21,7 @@ namespace Pentago.Klassen
         public bool Turned { get; set; }
         public GameResult GameResult { get; set; }
         public bool isSinglePlayer { get; set; }
+        public (int, int)[] Winposi { get; set; }
        
 
         public event Action<GameResult> GameEnded;
@@ -34,8 +35,8 @@ namespace Pentago.Klassen
             Turned = false;
             GameOver = false;
             GameBoard = new Player[6, 6];
-            isSinglePlayer = false; 
-            
+            isSinglePlayer = false;
+            Winposi = new (int, int)[5];
         }
 
         #region Rotation
@@ -151,6 +152,7 @@ namespace Pentago.Klassen
             {// Wennn der stein nich None ist = True;
                 if (IsMarked(r, c))
                 {
+                    Winposi[WinCondition] = (r, c);
                     WinCondition++;
                     // WinCondition == 5 = Gewonnen;
                     if (WinCondition == 5)
@@ -173,11 +175,13 @@ namespace Pentago.Klassen
         /// <returns></returns>
         private bool CheckAntiDiagonal(int row, int col)
         {
+            
             WinCondition = 0;
             for (int r = row, c = col; r < GameBoard.GetLength(0) && c >= 0; r++, c--)
             {
                 if (IsMarked(r, c))
                 {
+                    Winposi[WinCondition] = (r, c);
                     WinCondition++;
                     if (WinCondition == 5)
                     {
@@ -204,14 +208,18 @@ namespace Pentago.Klassen
                 {
                     if (IsMarked(r, c))
                     {
+                        Winposi[WinCondition] = (r, c);
                         WinCondition++;
+                        
                         if (WinCondition == 5)
                         {
+
                             return true;
                         }
                     }
                     else
                     {
+                        
                         WinCondition = 0;
                     }
                 }
@@ -231,6 +239,7 @@ namespace Pentago.Klassen
                 {
                     if (IsMarked(r, c))
                     {
+                        Winposi[WinCondition] = (r, c);
                         WinCondition++;
                         if (WinCondition == 5)
                         {
@@ -330,14 +339,9 @@ namespace Pentago.Klassen
         /// <param name="direction"></param>
         public void MakeMoveComputer(int row, int col, Quadrant corner, Direction direction)
         {
-
-            
-
             SetPoint(row,col);
-            
-            
             RotateField(corner, direction);
-            
+ 
             TurnsPassed++;
             ComputerMove?.Invoke(row, col, corner,direction);
         }
@@ -706,6 +710,8 @@ namespace Pentago.Klassen
 
 
         #endregion
+
+       
 
 
     }
