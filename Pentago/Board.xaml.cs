@@ -30,12 +30,15 @@ namespace Pentago
             Game = game;
             RotationButtons = new List<Image>();
             Grids = new List<GameGrid>();
+            game.GameEnded += GameEnded;
             game.ComputerMove += OnComputerMove;
             game.MoveMade += OnMoveMade;
             SetGrids();
             AddImmageButtonToList();
             ChangePlayerIcon();
         }
+
+        
 
 
         #region Start
@@ -61,7 +64,6 @@ namespace Pentago
         private void SetGrids()
         {
             
-
             TopLeft = new GameGrid(0, 0);
             TopLeft.Name = "GridTopLeft";
             TopLeft.HorizontalAlignment = HorizontalAlignment.Right;
@@ -373,19 +375,21 @@ namespace Pentago
 
             ChangeVisibilityRotationButton();
             RotateAnimation(image);
-
-            PrintArray();
             if (Game.IsWin())
             {
                 Game.GameOver = true;
                 GameEnded();
             }
+                
 
+            PrintArray();
+          
             Game.SwitchPlayer();
             ChangePlayerIcon();
             
             if (!Game.isSinglePlayer)
                 Game.Turned = false;
+                
             // Singleplayermodus
             if (Game.isSinglePlayer && Game.CurrentPlayer == Player.Red && Game.GameOver == false)
             {
@@ -406,11 +410,7 @@ namespace Pentago
             Changbuttoncolor(row,col);
             Game.Turned = true;
             ChangeVisibilityRotationButton();
-            if (Game.IsWin())
-            {
-                Game.GameOver = true;
-                GameEnded();
-            }
+         
         }
         /// <summary>
         /// pürft wer gewonnen hat und zeigt dies im EndScreen
@@ -455,22 +455,20 @@ namespace Pentago
         /// <param name="direction"></param>
         private async void OnComputerMove(int r,int c,Quadrant quadrant,Direction direction)
         {
-            
-            await Task.Delay(1000);
+            if (Game.GameOver == true)
+            {
+                Changbuttoncolor(r, c);
+                Move(quadrant, direction);
+                GameEnded();
+            }
+
             Changbuttoncolor(r, c);
-            
-            
+            await Task.Delay(1000);
             Move(quadrant, direction);
             PrintArray();
-
             Game.SwitchPlayer();
             ChangePlayerIcon();
             Game.Turned = false;
-            if (Game.IsWin())
-            {
-                Game.GameOver = true;
-                GameEnded();
-            }
         }
         /// <summary>
         /// Game neustart 
@@ -483,6 +481,13 @@ namespace Pentago
             ChangePlayerIcon();
             
             EndScreen.Visibility = Visibility.Hidden;
+
+            foreach (Image image in RotationButtons)
+            {
+                if (image.Visibility == Visibility.Visible)
+                  image.Visibility = Visibility.Hidden;
+            }
+
 
             GameGrid.Children.Remove(TopLeft);
             GameGrid.Children.Remove(TopRight);
@@ -516,19 +521,19 @@ namespace Pentago
             {
                 if (pos.Item1 < 3 && pos.Item2 < 3)
                 {
-                    TopLeft.GetEllipsebyTag(pos.Item1 % 3, pos.Item2 % 3).Fill = new SolidColorBrush(Colors.Yellow);
+                    TopLeft.GetEllipsebyTag(pos.Item1,pos.Item2 ).Fill = new SolidColorBrush(Colors.Yellow);
                 }
                 else if (pos.Item1 < 3 && pos.Item2 > 2)
                 {
-                    TopRight.GetEllipsebyTag(pos.Item1 % 3, pos.Item2 % 3).Fill = new SolidColorBrush(Colors.Yellow);
+                    TopRight.GetEllipsebyTag(pos.Item1,pos.Item2 ).Fill = new SolidColorBrush(Colors.Yellow);
                 }
                 else if (pos.Item1 > 2 && pos.Item2 < 3)
                 {
-                    BotLeft.GetEllipsebyTag(pos.Item1 % 3, pos.Item2 % 3).Fill = new SolidColorBrush(Colors.Yellow);
+                    BotLeft.GetEllipsebyTag(pos.Item1,pos.Item2 ).Fill = new SolidColorBrush(Colors.Yellow);
                 }
                 else if (pos.Item1 > 2 && pos.Item2 > 2)
                 {
-                    BotRight.GetEllipsebyTag(pos.Item1 % 3, pos.Item2 % 3).Fill = new SolidColorBrush(Colors.Yellow);
+                    BotRight.GetEllipsebyTag(pos.Item1,pos.Item2 ).Fill = new SolidColorBrush(Colors.Yellow);
                 }
             }
         }

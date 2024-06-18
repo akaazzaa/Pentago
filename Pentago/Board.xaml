@@ -140,9 +140,9 @@
         </Grid>
         <Grid x:Name="EndScreen"
               Grid.RowSpan="3"
-              Visibility="Hidden">
+              Visibility="Hidden" Margin="10,-10,-10,10">
             <StackPanel Orientation="Vertical"
-                        VerticalAlignment="Top" Margin="0,105,0,0">
+                        VerticalAlignment="Top" Margin="546,412,546,0" Height="253">
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Center">
                     <TextBlock x:Name="ResultText"

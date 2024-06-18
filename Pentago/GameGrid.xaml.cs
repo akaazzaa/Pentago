@@ -39,20 +39,67 @@ namespace Pentago
            
 
         }
+      
 
         public void SetNewPositions(Direction direction)
-        {    foreach (var button in Buttons)
+        {
+            foreach (var ellipse in EllipseList)
             {
                 switch (direction)
                 {
                     case Direction.Left:
-                        RotateLeft(button);
+                        RotateLeft(ellipse);
                         break;
                     case Direction.Right:
-                        RotateRight(button);
+                        RotateRight(ellipse);
                         break;
                 }
+            }
+
+            foreach (var button in Buttons)
+            {  
+                    switch (direction)
+                    {
+                        case Direction.Left:
+                            RotateLeft(button);
+                            break;
+                        case Direction.Right:
+                            RotateRight(button);
+                            break;
+                    }
             }       
+        }
+        private void RotateRight(Ellipse ellipse)
+        {
+            var currentpos = (Positions)ellipse.Tag;
+
+            int translateRow = currentpos.Row % 3;
+            int translateCol = currentpos.Column % 3;
+
+            int newrotateRow = translateCol;
+            int newrotateCol = 2 - translateRow;
+
+            int newRow = (currentpos.Row / 3) * 3 + newrotateRow;
+            int newCol = (currentpos.Column / 3) * 3 + newrotateCol;
+
+            ellipse.Tag = new Positions(newRow, newCol);
+
+        }
+        private void RotateLeft(Ellipse ellipse)
+        {
+
+            var currentpos = (Positions)ellipse.Tag;
+
+            int translateRow = currentpos.Row % 3;
+            int translateCol = currentpos.Column % 3;
+
+            int newrotateRow = 2 - translateCol;
+            int newrotateCol = translateRow;
+
+            int newRow = (currentpos.Row / 3) * 3 + newrotateRow;
+            int newCol = (currentpos.Column / 3) * 3 + newrotateCol;
+
+            ellipse.Tag = new Positions(newRow, newCol);
         }
         private void RotateRight(Button button)
         {
@@ -162,7 +209,7 @@ namespace Pentago
                     ellipse.HorizontalAlignment = HorizontalAlignment.Center;
                     ellipse.VerticalAlignment = VerticalAlignment.Center;
                     ellipse.Fill = new SolidColorBrush(Colors.Aqua);
-                    ellipse.Tag = new Positions(row, col);
+                    ellipse.Tag = new Positions(row + startRow, col + startCol);
 
                     Grid.SetRow(ellipse, row);
                     Grid.SetColumn(ellipse, col);

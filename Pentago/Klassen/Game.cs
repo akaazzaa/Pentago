@@ -24,7 +24,7 @@ namespace Pentago.Klassen
         public (int, int)[] Winposi { get; set; }
        
 
-        public event Action<GameResult> GameEnded;
+        public event Action GameEnded;
         public event Action<int,int,Quadrant> MoveMade;
         public event Action<int, int, Quadrant,Direction> ComputerMove;
   
@@ -327,6 +327,11 @@ namespace Pentago.Klassen
                 return;
             }
                 SetPoint(row, col);
+            if (IsWin())
+            {
+                GameOver = true;
+                GameEnded?.Invoke();
+            }
                 TurnsPassed++;
                 MoveMade?.Invoke(row, col, corner);
         }
@@ -340,7 +345,17 @@ namespace Pentago.Klassen
         public void MakeMoveComputer(int row, int col, Quadrant corner, Direction direction)
         {
             SetPoint(row,col);
+            if(IsWin())
+            {
+                GameOver = true;
+                GameEnded?.Invoke();
+            }
             RotateField(corner, direction);
+            if (IsWin())
+            {
+                GameOver = true;
+                GameEnded?.Invoke();
+            }
  
             TurnsPassed++;
             ComputerMove?.Invoke(row, col, corner,direction);
