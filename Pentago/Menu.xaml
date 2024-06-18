@@ -9,12 +9,14 @@
     <Grid x:Name="Maingrid">
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                <GradientStop Color="#FFDE1A1A"/>
-                <GradientStop Color="#FF134098" Offset="1"/>
+                <GradientStop Color="#FF01563C"/>
+                <GradientStop Color="#FF0DC5A7" Offset="1"/>
             </LinearGradientBrush>
         </Grid.Background>
-        <Button Content="MultiPlayer" HorizontalAlignment="Center" Margin="0,526,0,0" VerticalAlignment="Top" Width="84" Height="24" RenderTransformOrigin="0.525,1.568" Click="Button_Click" />
-        <Button Content="SinglePlayer" HorizontalAlignment="Center" Margin="0,580,0,0" VerticalAlignment="Top" Width="84" Click="Button_Click_1"/>
+        <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Singleplayer" VerticalAlignment="Top" Height="56" Width="228" FontFamily="Comic Sans MS" FontSize="36" TextAlignment="Center" Background="#FF01A288" Margin="0,444,0,0" MouseDown="TextBlock_MouseDown"/>
+        <TextBlock HorizontalAlignment="Center" Margin="0,534,0,0" TextWrapping="Wrap" Text="Mulitplayer" VerticalAlignment="Top" Height="56" Width="228" TextAlignment="Center" FontSize="36" FontFamily="Comic Sans MS" Background="#FF01A288" MouseDown="TextBlock_MouseDown_1"/>
+        <TextBlock HorizontalAlignment="Center" Margin="0,67,0,0" Text="Pentago"  VerticalAlignment="Top" Height="123" Width="448" FontSize="72" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" />
+
 
     </Grid>
 </UserControl>

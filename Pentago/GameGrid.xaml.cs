@@ -21,6 +21,7 @@ namespace Pentago
         private int startRow { get; set; }
         private int startCol { get; set; }
 
+
         public GameGrid(int startrow , int startcol)
         {
 
@@ -29,6 +30,7 @@ namespace Pentago
             startCol = startcol;
             Buttons = new List<Button>();
             CurrentRotation = 0;
+            
 
             LoadVisuals();
            

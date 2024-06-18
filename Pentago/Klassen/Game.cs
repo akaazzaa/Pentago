@@ -25,7 +25,6 @@ namespace Pentago.Klassen
        
 
         public event Action<GameResult> GameEnded;
-        public event Action GameRestarted;
         public event Action<int,int,Quadrant> MoveMade;
         public event Action<int, int, Quadrant,Direction> ComputerMove;
   
@@ -303,8 +302,8 @@ namespace Pentago.Klassen
             WinCondition = 0;
             CurrentPlayer = Player.Blue;
             TurnsPassed = 0;
+            Turned = false;
             GameOver = false;
-            GameRestarted?.Invoke();
         }
         #endregion
 

@@ -1,6 +1,7 @@
 ﻿using Pentago.Klassen;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,6 +23,8 @@ namespace Pentago
         GameGrid BotRight;
         List<Image> RotationButtons;
         List<GameGrid> Grids;
+
+      
      
         public Board(Game game)
         {
@@ -30,17 +33,11 @@ namespace Pentago
             RotationButtons = new List<Image>();
             Grids = new List<GameGrid>();
             game.ComputerMove += OnComputerMove;
-            game.GameRestarted += OnGameRestarted;
             game.MoveMade += OnMoveMade;
             SetGrids();
             AddImmageButtonToList();
             ChangePlayerIcon();
-            
-            
         }
-
-     
-
         private void AddImmageButtonToList()
         {
             RotationButtons.Add(BTLL);
@@ -58,6 +55,7 @@ namespace Pentago
         #region Start
         private void SetGrids()
         {
+            
 
             TopLeft = new GameGrid(0, 0);
             TopLeft.Name = "GridTopLeft";
@@ -107,13 +105,22 @@ namespace Pentago
         
         private void ChangePlayerIcon()
         {
+            LinearGradientBrush backgroundBrush = new LinearGradientBrush();
+            backgroundBrush.StartPoint = new Point(0.5, 0);
+            backgroundBrush.EndPoint = new Point(0.5, 1);
+
             if (Game.CurrentPlayer == Player.Blue)
             {
-                PlayerIcon.Fill = new SolidColorBrush(Colors.Blue);
+                backgroundBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0x0D, 0x32, 0xC5), 1));
+                backgroundBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0x8F, 0x96, 0xD6), 0));
+                PlayerIcon.Fill = backgroundBrush;
+
             }
             else
             {
-                PlayerIcon.Fill = new SolidColorBrush(Colors.Red);
+                backgroundBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0xDA, 0xBD, 0xC9), 1));
+                backgroundBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0xF1, 0x02, 0x02), 0));
+                PlayerIcon.Fill = backgroundBrush;
             }
         }
         private void ChangeVisibilityRotationButton()
@@ -246,7 +253,11 @@ namespace Pentago
 
         public void Changbuttoncolor(int row, int col)
         {
-            
+
+            LinearGradientBrush backgroundBrush = new LinearGradientBrush();
+            backgroundBrush.StartPoint = new Point(0.5, 0);
+            backgroundBrush.EndPoint = new Point(0.5, 1);
+
             Button button = GetGridButton(row, col);
             if (button == null)
             {
@@ -255,11 +266,17 @@ namespace Pentago
 
             if (Game.CurrentPlayer == Player.Blue)
             {
-                button.Background = new SolidColorBrush(Colors.Blue);
+
+                backgroundBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0x0D, 0x32, 0xC5), 1));
+                backgroundBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0x8F, 0x96, 0xD6), 0));
+                button.Background = backgroundBrush;
             }
             else
             {
-                button.Background = new SolidColorBrush(Colors.Red);
+             
+                backgroundBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0xF1, 0x02, 0x02), 1));
+                backgroundBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0xDA, 0xBD, 0xC9), 0));
+                button.Background = backgroundBrush;
             }
         }
 
@@ -278,7 +295,7 @@ namespace Pentago
             return null;
         }
 
-        private void EndScreening(string text, SolidColorBrush colorBrush)
+        private void EndScreening(string text, LinearGradientBrush colorBrush)
         {
             GameGrid.Visibility = Visibility.Hidden;
             ResultText.Text = text;
@@ -317,7 +334,7 @@ namespace Pentago
 
             if (Game.isSinglePlayer && Game.CurrentPlayer == Player.Red && Game.GameOver == false)
             {
-               var move = Game.GetBestMove(4);
+               var move = Game.GetBestMove(2);
                Game.MakeMoveComputer(move.Item1, move.Item2, move.Item3, move.Item4);
                 
             }
@@ -336,33 +353,46 @@ namespace Pentago
         }
         private async void GameEnded()
         {
+            LinearGradientBrush backgroundBrush = new LinearGradientBrush();
+            backgroundBrush.StartPoint = new Point(0.5, 0);
+            backgroundBrush.EndPoint = new Point(0.5, 1);
+
             await Task.Delay(1000);
+
             if (Game.GameResult.Winner == Player.None)
             {
                 EndScreening("Unentschieden", null);
             }
             else if (Game.GameResult.Winner == Player.Blue)
             {
-                EndScreening("Winner:", new SolidColorBrush(Colors.Blue));
+
+                backgroundBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0x0D, 0x32, 0xC5), 1));
+                backgroundBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0x8F, 0x96, 0xD6), 0));
+
+                EndScreening("Winner:", backgroundBrush);
             }
             else
             {
-                EndScreening("Winner:", new SolidColorBrush(Colors.Red));
+
+                backgroundBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0xF1, 0x02, 0x02), 1));
+                backgroundBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0xDA, 0xBD, 0xC9), 0));
+
+                EndScreening("Winner:", backgroundBrush);
             }
 
         }
         private async void OnComputerMove(int r,int c,Quadrant quadrant,Direction direction)
         {
+            
             await Task.Delay(1000);
-
             Changbuttoncolor(r, c);
             
-            ChangePlayerIcon();
+            
             Move(quadrant, direction);
             PrintArray();
 
             Game.SwitchPlayer();
-
+            ChangePlayerIcon();
             Game.Turned = false;
             if (Game.IsWin())
             {
@@ -370,19 +400,22 @@ namespace Pentago
                 GameEnded();
             }
         }
-        private void OnGameRestarted()
-        {
-
-        }
+    
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            SetGrids();
-            EndScreen.Visibility = Visibility.Hidden;
             Game.Reset();
-
+            ChangePlayerIcon();
+            EndScreen.Visibility = Visibility.Hidden;
+            GameGrid.Visibility = Visibility.Visible;
+            
+            GameGrid.Children.Remove(TopLeft);
+            GameGrid.Children.Remove(TopRight);
+            GameGrid.Children.Remove(BotLeft);
+            GameGrid.Children.Remove(BotRight);
+            Grids.Clear();
+            SetGrids();
         }
         #endregion
-
 
         public void PrintArray()
         {
@@ -396,12 +429,14 @@ namespace Pentago
                 Debugtext.Text += "\n";
             }
         }
-
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             PrintArray();
         }
 
-        
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            MainModel.SetNewContent(new Menu());
+        }
     }
 }

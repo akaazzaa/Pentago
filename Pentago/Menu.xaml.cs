@@ -16,17 +16,16 @@ namespace Pentago
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void TextBlock_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Game game = new Game();
+            game.isSinglePlayer = true;
             MainModel.SetNewContent(new Board(game));
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void TextBlock_MouseDown_1(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-
             Game game = new Game();
-            game.isSinglePlayer = true;
             MainModel.SetNewContent(new Board(game));
         }
     }
