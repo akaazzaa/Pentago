@@ -336,6 +336,7 @@ namespace Pentago
         /// <param name="colorBrush"></param>
         private void EndScreening(string text, LinearGradientBrush colorBrush)
         {
+            PlayerTurnPanel.Visibility = Visibility.Hidden;
             ResultText.Text = text;
             WinnerIcon.Fill = colorBrush;
             EndScreen.Visibility = Visibility.Visible;
@@ -375,32 +376,45 @@ namespace Pentago
 
             ChangeVisibilityRotationButton();
             RotateAnimation(image);
-            if (Game.IsWin())
+            if (Game.IsWin(Player.Red)|| Game.IsWin(Player.Blue)|| Game.GridFull())
             {
                 Game.GameOver = true;
                 GameEnded();
+                return;
             }
                 
 
-            PrintArray();
+            //PrintArray();
           
             Game.SwitchPlayer();
             ChangePlayerIcon();
             
-            if (!Game.isSinglePlayer)
+            
                 Game.Turned = false;
                 
             // Singleplayermodus
             if (Game.isSinglePlayer && Game.CurrentPlayer == Player.Red && Game.GameOver == false)
             {
-               var move = Game.GetBestMove(2);
-               Game.MakeMoveComputer(move.Item1, move.Item2, move.Item3, move.Item4);
+                foreach (var move in Game.GetAllMoves())
+                {
+                    int best value = 0;
+                    int test = Game.MinMax(3, int.MinValue, int.MaxValue, true);
+
+
+                    
+                }
+                   
+                if (test == 1)
+                {
+                    
+                }
+               Game.MakeMoveComputer(Game.BestMove.Item1, Game.BestMove.Item2, Game.BestMove.Item3, Game.BestMove.Item4);
                 
             }
            
         }
         /// <summary>
-        /// wenn der Zug gemacht wurde. Visuele änderung. Gewinn prüfen
+        /// wenn der Zug gemacht wurde. Visuele änderung. 
         /// </summary>
         /// <param name="row"></param>
         /// <param name="col"></param>
@@ -417,7 +431,7 @@ namespace Pentago
         /// </summary>
         private async void GameEnded()
         {
-            GetWinPosi();
+            
             LinearGradientBrush backgroundBrush = new LinearGradientBrush();
             backgroundBrush.StartPoint = new Point(0.5, 0);
             backgroundBrush.EndPoint = new Point(0.5, 1);
@@ -430,7 +444,7 @@ namespace Pentago
             }
             else if (Game.GameResult.Winner == Player.Blue)
             {
-
+                GetWinPosi();
                 backgroundBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0x0D, 0x32, 0xC5), 1));
                 backgroundBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0x8F, 0x96, 0xD6), 0));
 
@@ -438,7 +452,7 @@ namespace Pentago
             }
             else
             {
-
+                GetWinPosi();
                 backgroundBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0xF1, 0x02, 0x02), 1));
                 backgroundBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0xDA, 0xBD, 0xC9), 0));
 
@@ -458,8 +472,7 @@ namespace Pentago
             if (Game.GameOver == true)
             {
                 Changbuttoncolor(r, c);
-                Move(quadrant, direction);
-                GameEnded();
+                return;
             }
 
             Changbuttoncolor(r, c);
@@ -481,14 +494,13 @@ namespace Pentago
             ChangePlayerIcon();
             
             EndScreen.Visibility = Visibility.Hidden;
-
+            PlayerTurnPanel.Visibility = Visibility.Visible;
             foreach (Image image in RotationButtons)
             {
                 if (image.Visibility == Visibility.Visible)
                   image.Visibility = Visibility.Hidden;
             }
-
-
+            
             GameGrid.Children.Remove(TopLeft);
             GameGrid.Children.Remove(TopRight);
             GameGrid.Children.Remove(BotLeft);
@@ -517,23 +529,23 @@ namespace Pentago
 
         private void GetWinPosi()
         {
-            foreach (var pos in  Game.Winposi)
+            foreach (var pos in Game.Winposi)
             {
                 if (pos.Item1 < 3 && pos.Item2 < 3)
                 {
-                    TopLeft.GetEllipsebyTag(pos.Item1,pos.Item2 ).Fill = new SolidColorBrush(Colors.Yellow);
+                    TopLeft.GetEllipsebyTag(pos.Item1, pos.Item2).Fill = new SolidColorBrush(Colors.Yellow);
                 }
                 else if (pos.Item1 < 3 && pos.Item2 > 2)
                 {
-                    TopRight.GetEllipsebyTag(pos.Item1,pos.Item2 ).Fill = new SolidColorBrush(Colors.Yellow);
+                    TopRight.GetEllipsebyTag(pos.Item1, pos.Item2).Fill = new SolidColorBrush(Colors.Yellow);
                 }
                 else if (pos.Item1 > 2 && pos.Item2 < 3)
                 {
-                    BotLeft.GetEllipsebyTag(pos.Item1,pos.Item2 ).Fill = new SolidColorBrush(Colors.Yellow);
+                    BotLeft.GetEllipsebyTag(pos.Item1, pos.Item2).Fill = new SolidColorBrush(Colors.Yellow);
                 }
                 else if (pos.Item1 > 2 && pos.Item2 > 2)
                 {
-                    BotRight.GetEllipsebyTag(pos.Item1,pos.Item2 ).Fill = new SolidColorBrush(Colors.Yellow);
+                    BotRight.GetEllipsebyTag(pos.Item1, pos.Item2).Fill = new SolidColorBrush(Colors.Yellow);
                 }
             }
         }
