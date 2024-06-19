@@ -22,8 +22,6 @@ namespace Pentago
         List<Image> RotationButtons;
         List<GameGrid> Grids;
 
-      
-     
         public Board(Game game)
         {
             InitializeComponent();
@@ -37,9 +35,6 @@ namespace Pentago
             AddImmageButtonToList();
             ChangePlayerIcon();
         }
-
-        
-
 
         #region Start
         /// <summary>
@@ -531,6 +526,7 @@ namespace Pentago
         }
         #endregion
 
+        // Debug
         public void PrintArray()
         {
             Debugtext.Text = " ";

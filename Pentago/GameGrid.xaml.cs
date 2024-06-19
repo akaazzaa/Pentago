@@ -40,7 +40,10 @@ namespace Pentago
 
         }
       
-
+        /// <summary>
+        /// Button und Ellipsen positiontag ändern. Tag = pos row , pos col 
+        /// </summary>
+        /// <param name="direction"></param>
         public void SetNewPositions(Direction direction)
         {
             foreach (var ellipse in EllipseList)
@@ -133,6 +136,7 @@ namespace Pentago
 
             button.Tag = new Positions(newRow, newCol);
         }
+        //Event des Button übergibt den Tag des buttons
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
@@ -142,6 +146,7 @@ namespace Pentago
             GridButtonClick?.Invoke(this, new GridButtonClickEventArgs(row, column,Buttons));
 
         }
+        // Gibt den Button anhand der posi 
         public Button GetButtonbyTag(int row, int col)
         {
             foreach (var button in Buttons)
@@ -153,6 +158,7 @@ namespace Pentago
             }
             return null;
         }
+        // Gibt die Ellipse anhan der posi
         public Ellipse GetEllipsebyTag(int row,int col)
         {
             foreach(var ellipse in EllipseList)
@@ -166,14 +172,14 @@ namespace Pentago
             }
             return null;
         }
+        // Fürt die Visuele darstellung der Button, Ellipse und Feldgrenze
         private void  LoadVisuals()
-        {
-            
+        {         
             GenerateElipses();
             GenerateButtons();
             GenerateBorder();
         }
-
+        // Zeichnet Feldgrenze
         private void GenerateBorder()
         {
             for (int row = 0; row < grid.RowDefinitions.Count; row++)
@@ -194,7 +200,7 @@ namespace Pentago
             }
 
         }
-
+        // Zeichnet Ellipse in das Grid
         private void GenerateElipses()
         {
             for (int row = 0; row < grid.RowDefinitions.Count; row++)
@@ -216,6 +222,7 @@ namespace Pentago
                 }
             }
         }
+        // Zeichnet Button in das Grid
         private void GenerateButtons()
         {
             for (int row = 0; row < grid.RowDefinitions.Count; row++)
@@ -259,32 +266,7 @@ namespace Pentago
                 
             }
         }
-        public void Reset()
-        {
-            foreach(Button button in Buttons)
-            {
-                button.HorizontalAlignment = HorizontalAlignment.Center;
-                button.VerticalAlignment = VerticalAlignment.Center;
-                button.RenderTransformOrigin = new Point(0.5, 0.5);
-                button.Content = button.Name;
-
-                // BorderBrush setzen
-                LinearGradientBrush borderBrush = new LinearGradientBrush();
-                borderBrush.StartPoint = new Point(0.5, 0);
-                borderBrush.EndPoint = new Point(0.5, 1);
-                borderBrush.GradientStops.Add(new GradientStop(Colors.Black, 0));
-                borderBrush.GradientStops.Add(new GradientStop(Colors.Black, 1));
-                button.BorderBrush = borderBrush;
-
-                // Background setzen
-                LinearGradientBrush backgroundBrush = new LinearGradientBrush();
-                backgroundBrush.StartPoint = new Point(0.5, 0);
-                backgroundBrush.EndPoint = new Point(0.5, 1);
-                backgroundBrush.GradientStops.Add(new GradientStop(Colors.Black, 1));
-                backgroundBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0x67, 0x67, 0x67), 0));
-                button.Background = backgroundBrush;
-            }
-        }
+       
 
         
         

@@ -1,4 +1,4 @@
-﻿Projekt : Pentago Spiel 
+﻿Projekt : Pentago 
 
 Regeln: Das Spiel besteht aus einem Board das in Vier Kästhen aufgeteilt ist. In den Kästhen sind Punkte aufgeteilt in 3x3.
 2 Spieler : Jeder Spieler darf einen Zug machen bevor der nächste dran ist.
@@ -24,7 +24,7 @@ Gewinn oder Verloren Logik
 Computer:
 Einzelspierlermodus(Algorithmus) 
 
-Quellen:
+Quellen und Recherche:
 StackOverFlow:
 
 Youtube: 
