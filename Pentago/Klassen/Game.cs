@@ -492,107 +492,91 @@ namespace Pentago.Klassen
             }
         }
         /// <summary>
-        /// Start der Minmax algorithmus
-        /// Bekommt eine Suchtiefe und geht alle Züge durch und füht dise aus,bewertet die Züge und gibt einen wert zurück.
+        /// Start der Alpha Beta Susche. Geht die Liste der züge durch und speichert den erhaltenen wert bis es ein besserer gefunden wurde. 
         /// </summary>
         /// <param name="depth"></param>
-        /// <returns>bester Zug</returns>
-        //public Tuple<int, int, Quadrant, Direction> GetBestMove(int depth)
-        //{
-        //    List<Tuple<int, int, Quadrant, Direction>> moves = GetAllMoves();
-
-        //    Tuple<int, int, Quadrant, Direction> bestMove = null;
-        //    int bestValue = int.MinValue;
-
-        //    foreach (var move in moves)
-        //    {
-        //        SimulateMove(move, Player.Red);
-        //        int moveValue = Minimieren(depth - 1, int.MinValue, int.MaxValue, Player.Blue);
-        //        UndoMove(move);
-
-        //        if (moveValue > bestValue)
-        //        {
-        //            bestMove = move;
-        //            bestValue = moveValue;
-        //        }
-        //    }
-
-        //    return bestMove;
-        //}
-        /// <summary>
-        ///  Minmax Algorithmus 
-        /// </summary>
-        /// <param name="depth">Tiefe </param>
-        /// <param name="alpha">untergrnze</param>
-        /// <param name="beta">obergrenze</param>
-        /// <param name="player">Spieler</param>
         /// <returns></returns>
-        public int Maximieren(int depth, int alpha, int beta, Player player)
+        public Tuple<int, int, Quadrant, Direction> GetBestMove(int depth)
         {
-            
-            if (depth == 0)
-                return EvaluateBoard();
-            int maxEval = alpha;
-            List<Tuple<int, int, Quadrant, Direction>> moves = GetAllMoves();
-            foreach (var move in moves)
+            Tuple<int, int, Quadrant, Direction> bestMove = null;
+            int alpha = int.MinValue;
+            int beta = int.MaxValue;
+            int bestValue = int.MinValue;
+
+            foreach (var move in GetAllMoves())
             {
-                SimulateMove(move, player);
-                int eval = Minimieren(depth - 1, maxEval, beta, Player.Blue);
+                SimulateMove(move,Player.Red);
+                int moveValue = Min(depth - 1, alpha, beta);
                 UndoMove(move);
 
-                if(eval > maxEval)
+                if (moveValue > bestValue)
                 {
-                    maxEval = eval;
+                    bestValue = moveValue;
+                    bestMove = move;
                 }
-                if (depth == Searchdepth)
-                    BestMove = move;
-                if (maxEval >= beta)
-                    break;
+
+                alpha = Math.Max(alpha, bestValue);
             }
-            return maxEval;
+
+            return bestMove;
         }
         /// <summary>
-        /// Minmax Algorithmus 
+        ///   Durchläuft alle Züge,führt den Zug der maxSpielers aus,rekusiver aufruf der Methoden Max und Min,SpielerMax und Min wechseln so Züge bis einer gewonnen hat oder die die Tiefe gleich 0 ist
+        ///   dann wird der Zug Bewertet. Der beste wert wird der nächste Zug des Computers.
         /// </summary>
         /// <param name="depth"></param>
         /// <param name="alpha"></param>
         /// <param name="beta"></param>
-        /// <param name="player"></param>
         /// <returns></returns>
-        private int Minimieren(int depth, int alpha, int beta, Player player)
+        private int Max(int depth, int alpha, int beta)
         {
-            if (depth == 0)
+            if (depth == 0 )
                 return EvaluateBoard();
 
-            int minEval = beta;
-            List<Tuple<int, int, Quadrant, Direction>> moves = GetAllMoves();
-            
+            int value = int.MinValue;
 
-            foreach (var move in moves)
+            foreach (var move in GetAllMoves())
             {
-                SimulateMove(move, player);
-                int eval = Maximieren(depth - 1, alpha, minEval, Player.Red);
+                SimulateMove(move, Player.Red);
+                value = Math.Max(value, Min(depth - 1, alpha, beta));
                 UndoMove(move);
 
-                if (eval < minEval)
-                {
-                    minEval = eval;
-                }
-                if (beta <= alpha)
-                    break;
+                if (value >= beta)
+                    return value;
+
+                alpha = Math.Max(alpha, value);
             }
-            return minEval;
+
+            return value;
         }
 
+        private int Min(int depth, int alpha, int beta)
+        {
+            if (depth == 0 )
+                return EvaluateBoard();
 
+            int value = int.MaxValue;
 
+            foreach (var move in GetAllMoves())
+            {
+                SimulateMove(move, Player.Blue);
+                value = Math.Min(value, Max(depth - 1, alpha, beta));
+                UndoMove(move);
 
-        /// <summary>
-        /// Führt einen Zug aus
-        /// </summary>
-        /// <param name="move"></param>
-        /// <param name="player"></param>
-        private void SimulateMove(Tuple<int, int, Quadrant, Direction> move,Player player)
+                if (value <= alpha)
+                    return value;
+
+                beta = Math.Min(beta, value);
+            }
+
+            return value;
+        }
+    /// <summary>
+    /// Führt einen Zug aus
+    /// </summary>
+    /// <param name="move"></param>
+    /// <param name="player"></param>
+    private void SimulateMove(Tuple<int, int, Quadrant, Direction> move,Player player)
         {
             GameBoard[move.Item1, move.Item2] = player;
             SimulateRotation(GameBoard ,move.Item3, move.Item4);
@@ -690,6 +674,7 @@ namespace Pentago.Klassen
         }
         /// <summary>
         ///  zählt die Stein in einer Reihe und verteilt Punkte.
+        ///  für 5 gib es die maximale Punktzahl und dann absteigend
         /// </summary>
         /// <param name="board"></param>
         /// <param name="startRow"></param>
@@ -715,7 +700,6 @@ namespace Pentago.Klassen
                 }
             }
 
-        
             if (bluePoints == 5)
             {
                 return int.MinValue;
@@ -725,38 +709,33 @@ namespace Pentago.Klassen
                 return int.MaxValue; 
             }
 
-         
-            int blueScore = 0;
             switch (bluePoints)
             {
                 case 4:
-                    blueScore = -100;
-                    break;
+                    return -100;
+                    
                 case 3:
-                    blueScore = -10; 
-                    break;
+                    return -10; 
+                   
                 case 2:
-                    blueScore = -1; 
-                    break;
+                    return -1; 
+                    
             }
 
-           
-            int redScore = 0;
             switch (redPoints)
             {
                 case 4:
-                    redScore = 100;
-                    break;
+                    return 100;
+                    
                 case 3:
-                    redScore = 10; 
-                    break;
+                    return 10; 
+                    
                 case 2:
-                    redScore = 1;
-                    break;
+                    return 1;
+                    
             }
 
-            
-            return blueScore + redScore;
+            return redPoints;
         }
 
 

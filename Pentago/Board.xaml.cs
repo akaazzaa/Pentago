@@ -195,6 +195,31 @@ namespace Pentago
             }
         }
         /// <summary>
+        /// Zeigt die Gewinnreihe an
+        /// </summary>
+        private void GetWinPosi()
+        {
+            foreach (var pos in Game.Winposi)
+            {
+                if (pos.Item1 < 3 && pos.Item2 < 3)
+                {
+                    TopLeft.GetEllipsebyTag(pos.Item1, pos.Item2).Fill = new SolidColorBrush(Colors.Yellow);
+                }
+                else if (pos.Item1 < 3 && pos.Item2 > 2)
+                {
+                    TopRight.GetEllipsebyTag(pos.Item1, pos.Item2).Fill = new SolidColorBrush(Colors.Yellow);
+                }
+                else if (pos.Item1 > 2 && pos.Item2 < 3)
+                {
+                    BotLeft.GetEllipsebyTag(pos.Item1, pos.Item2).Fill = new SolidColorBrush(Colors.Yellow);
+                }
+                else if (pos.Item1 > 2 && pos.Item2 > 2)
+                {
+                    BotRight.GetEllipsebyTag(pos.Item1, pos.Item2).Fill = new SolidColorBrush(Colors.Yellow);
+                }
+            }
+        }
+        /// <summary>
         /// Dreh Animation
         /// </summary>
         /// <param name="gameGrid"></param>
@@ -361,6 +386,10 @@ namespace Pentago
         /// <param name="e"></param>
         private void GridButton_Click(object sender, GridButtonClickEventArgs e)
         {
+            if (Game.isSinglePlayer && Game.CurrentPlayer == Player.Red)
+            {
+                return;
+            }
             var grid = (GameGrid)sender;
             Quadrant quandrant = (Quadrant)grid.Tag;
             Game.MakeMove(e.Row, e.Column,quandrant, Direction.none);
@@ -395,10 +424,9 @@ namespace Pentago
             // Singleplayermodus
             if (Game.isSinglePlayer && Game.CurrentPlayer == Player.Red && Game.GameOver == false)
             {
-                Game.Searchdepth = 3;
-                Game.Maximieren(Game.Searchdepth, int.MinValue, int.MaxValue, Player.Red);
+                
+                Game.BestMove = Game.GetBestMove(3);
 
-                if (Game.BestMove == null) return;
                
                  Game.MakeMoveComputer(Game.BestMove.Item1, Game.BestMove.Item2, Game.BestMove.Item3, Game.BestMove.Item4);
                 
@@ -464,6 +492,7 @@ namespace Pentago
             if (Game.GameOver == true)
             {
                 Changbuttoncolor(r, c);
+                Move(quadrant, direction);
                 return;
             }
 
@@ -519,28 +548,7 @@ namespace Pentago
             PrintArray();
         }
 
-        private void GetWinPosi()
-        {
-            foreach (var pos in Game.Winposi)
-            {
-                if (pos.Item1 < 3 && pos.Item2 < 3)
-                {
-                    TopLeft.GetEllipsebyTag(pos.Item1, pos.Item2).Fill = new SolidColorBrush(Colors.Yellow);
-                }
-                else if (pos.Item1 < 3 && pos.Item2 > 2)
-                {
-                    TopRight.GetEllipsebyTag(pos.Item1, pos.Item2).Fill = new SolidColorBrush(Colors.Yellow);
-                }
-                else if (pos.Item1 > 2 && pos.Item2 < 3)
-                {
-                    BotLeft.GetEllipsebyTag(pos.Item1, pos.Item2).Fill = new SolidColorBrush(Colors.Yellow);
-                }
-                else if (pos.Item1 > 2 && pos.Item2 > 2)
-                {
-                    BotRight.GetEllipsebyTag(pos.Item1, pos.Item2).Fill = new SolidColorBrush(Colors.Yellow);
-                }
-            }
-        }
+        
 
     }
 }
