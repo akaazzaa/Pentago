@@ -395,20 +395,12 @@ namespace Pentago
             // Singleplayermodus
             if (Game.isSinglePlayer && Game.CurrentPlayer == Player.Red && Game.GameOver == false)
             {
-                foreach (var move in Game.GetAllMoves())
-                {
-                    int best value = 0;
-                    int test = Game.MinMax(3, int.MinValue, int.MaxValue, true);
+                Game.Searchdepth = 3;
+                Game.Maximieren(Game.Searchdepth, int.MinValue, int.MaxValue, Player.Red);
 
-
-                    
-                }
-                   
-                if (test == 1)
-                {
-                    
-                }
-               Game.MakeMoveComputer(Game.BestMove.Item1, Game.BestMove.Item2, Game.BestMove.Item3, Game.BestMove.Item4);
+                if (Game.BestMove == null) return;
+               
+                 Game.MakeMoveComputer(Game.BestMove.Item1, Game.BestMove.Item2, Game.BestMove.Item3, Game.BestMove.Item4);
                 
             }
            

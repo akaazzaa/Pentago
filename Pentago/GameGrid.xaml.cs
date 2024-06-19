@@ -150,8 +150,6 @@ namespace Pentago
 
                 if (pos.Row == row && pos.Column == col)
                     return button;
-
-
             }
             return null;
         }
@@ -230,7 +228,6 @@ namespace Pentago
                     button.RenderTransformOrigin = new Point(0.5, 0.5);
                     button.Height = 80;
                     button.Width = 80;
-                    button.Name = $"B{row + startRow}{col + startCol}";
                     button.Tag = new Positions(row + startRow,col + startCol);
                     button.Content = button.Name;
                     

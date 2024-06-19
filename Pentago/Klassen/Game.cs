@@ -23,6 +23,7 @@ namespace Pentago.Klassen
         public GameResult GameResult { get; set; }
         public bool isSinglePlayer { get; set; }
         public (int, int)[] Winposi { get; set; }
+        public int Searchdepth { get; set; }
         public Tuple<int, int, Quadrant, Direction> BestMove {  get; set; }
         
 
@@ -496,51 +497,96 @@ namespace Pentago.Klassen
         /// </summary>
         /// <param name="depth"></param>
         /// <returns>bester Zug</returns>
-        
-        
-        public int MinMax(int depth, int alpha, int beta, bool isMaximizingPlayer)
+        //public Tuple<int, int, Quadrant, Direction> GetBestMove(int depth)
+        //{
+        //    List<Tuple<int, int, Quadrant, Direction>> moves = GetAllMoves();
+
+        //    Tuple<int, int, Quadrant, Direction> bestMove = null;
+        //    int bestValue = int.MinValue;
+
+        //    foreach (var move in moves)
+        //    {
+        //        SimulateMove(move, Player.Red);
+        //        int moveValue = Minimieren(depth - 1, int.MinValue, int.MaxValue, Player.Blue);
+        //        UndoMove(move);
+
+        //        if (moveValue > bestValue)
+        //        {
+        //            bestMove = move;
+        //            bestValue = moveValue;
+        //        }
+        //    }
+
+        //    return bestMove;
+        //}
+        /// <summary>
+        ///  Minmax Algorithmus 
+        /// </summary>
+        /// <param name="depth">Tiefe </param>
+        /// <param name="alpha">untergrnze</param>
+        /// <param name="beta">obergrenze</param>
+        /// <param name="player">Spieler</param>
+        /// <returns></returns>
+        public int Maximieren(int depth, int alpha, int beta, Player player)
+        {
+            
+            if (depth == 0)
+                return EvaluateBoard();
+            int maxEval = alpha;
+            List<Tuple<int, int, Quadrant, Direction>> moves = GetAllMoves();
+            foreach (var move in moves)
+            {
+                SimulateMove(move, player);
+                int eval = Minimieren(depth - 1, maxEval, beta, Player.Blue);
+                UndoMove(move);
+
+                if(eval > maxEval)
+                {
+                    maxEval = eval;
+                }
+                if (depth == Searchdepth)
+                    BestMove = move;
+                if (maxEval >= beta)
+                    break;
+            }
+            return maxEval;
+        }
+        /// <summary>
+        /// Minmax Algorithmus 
+        /// </summary>
+        /// <param name="depth"></param>
+        /// <param name="alpha"></param>
+        /// <param name="beta"></param>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        private int Minimieren(int depth, int alpha, int beta, Player player)
         {
             if (depth == 0)
                 return EvaluateBoard();
-            int besteval = 0;
+
+            int minEval = beta;
             List<Tuple<int, int, Quadrant, Direction>> moves = GetAllMoves();
             
-            if (isMaximizingPlayer)
+
+            foreach (var move in moves)
             {
-                besteval = int.MinValue;
-                foreach (var move in moves)
+                SimulateMove(move, player);
+                int eval = Maximieren(depth - 1, alpha, minEval, Player.Red);
+                UndoMove(move);
+
+                if (eval < minEval)
                 {
-                    SimulateMove(move, Player.Red);
-                    int eval = MinMax(depth -1, alpha, beta, false);
-                    UndoMove(move);
-                    besteval = Math.Max(besteval, eval);
-                    alpha = Math.Max(alpha, besteval);
-                    if (beta <= alpha)
-
-                        break;
+                    minEval = eval;
                 }
+                if (beta <= alpha)
+                    break;
             }
-            else
-            {
-                besteval = int.MaxValue;
-
-                foreach (var move in moves)
-                {
-                    SimulateMove(move, Player.Red);
-                    int eval = MinMax(depth - 1, alpha, beta, true);
-                    UndoMove(move);
-                    besteval = Math.Min(besteval, eval);
-                    beta = Math.Min(beta, besteval);
-                    if (beta <= alpha)
-
-                        break;
-                }
-            }
-           
-            return besteval;
+            return minEval;
         }
-        
-        
+
+
+
+
         /// <summary>
         /// Führt einen Zug aus
         /// </summary>
